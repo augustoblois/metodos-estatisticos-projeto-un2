@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Cartaz · IDEB, renda e salário: PB × RN</title>
+<!--
+  MODELO do cartaz. Não edite o cartaz.html (ele é gerado). Edite este arquivo e rode:
+      python cartaz\montar_cartaz.py
+  Os campos marcados com cifrão e chaves são preenchidos com os números de saida/resultados.json.
+  Tamanho: A2 (420 x 594 mm) = 4 folhas A4 (quadrantes q1 a q4) = 2 folhas A3.
+-->
+<style>
+  @page { size: 420mm 594mm; margin: 0; }
+  :root {
+    --tinta: #171716; --tinta-2: #4e4d49; --mudo: #77756e;
+    --linha: #d9d7cf; --linha-forte: #bdbbb2; --suave: #f4f3ef;
+    --pb: #2a78d6; --rn: #eb6834;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    width: 420mm; height: 594mm; position: relative; overflow: hidden; background: #fff; color: var(--tinta);
+    font-family: "Segoe UI", system-ui, sans-serif; font-size: 12pt; line-height: 1.38;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  p, ul, dl, dd, figure, h1, h2, h3 { margin: 0; }
+  sub { font-size: 0.7em; line-height: 0; }
+
+  /* Quatro quadrantes A4. Nenhum conteúdo cruza as emendas: cada um pode ser impresso sozinho. */
+  .quadrante { position: absolute; width: 210mm; height: 297mm; padding: 8mm; overflow: hidden; }
+  .q1 { left: 0; top: 0; } .q2 { left: 210mm; top: 0; }
+  .q3 { left: 0; top: 297mm; } .q4 { left: 210mm; top: 297mm; }
+  .cartao {
+    width: 100%; height: 100%; border: 0.35mm solid var(--linha); border-radius: 3mm;
+    padding: 7.5mm 9mm; display: flex; flex-direction: column; gap: 4.5mm;
+  }
+  .bloco { display: flex; flex-direction: column; gap: 2.8mm; }
+
+  /* Cabeçalho */
+  .sobretitulo { font-size: 9.5pt; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--tinta-2); }
+  h1 { font-size: 34pt; line-height: 1.08; font-weight: 700; letter-spacing: -0.012em; margin-top: 2.5mm; text-wrap: balance; }
+  .subtitulo { font-size: 15pt; line-height: 1.3; color: var(--tinta-2); margin-top: 2.5mm; text-wrap: balance; }
+  .faixa { display: flex; height: 2.2mm; margin: 4mm 0 3.5mm; border-radius: 1.1mm; overflow: hidden; }
+  .faixa span { flex: 1; } .faixa span:first-child { background: var(--pb); } .faixa span:last-child { background: var(--rn); }
+  .ident { font-size: 11pt; line-height: 1.45; color: var(--tinta-2); }
+  .ident b { color: var(--tinta); font-weight: 600; }
+  .ident + .ident { margin-top: 1.2mm; }
+
+  /* Títulos de seção */
+  .secao {
+    display: flex; align-items: center; gap: 3mm; font-size: 18pt; line-height: 1.15; font-weight: 700;
+    padding-bottom: 2mm; border-bottom: 0.35mm solid var(--linha);
+  }
+  .num {
+    flex: none; min-width: 8.5mm; height: 8.5mm; padding: 0 2mm; border-radius: 4.25mm; background: var(--tinta);
+    color: #fff; font-size: 12.5pt; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;
+  }
+  .continua { font-size: 9.5pt; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mudo); margin-bottom: -1mm; }
+  h3 { font-size: 13pt; line-height: 1.25; font-weight: 700; }
+  .nota { font-size: 9.8pt; line-height: 1.38; color: var(--tinta-2); }
+  .lead { color: var(--tinta-2); font-size: 11pt; }
+
+  /* Metodologia */
+  .fluxo { display: flex; flex-direction: column; gap: 1.8mm; }
+  .passos { display: flex; align-items: center; gap: 2mm; font-size: 11pt; }
+  .uf { flex: none; width: 12mm; font-weight: 700; display: inline-flex; align-items: center; gap: 1.6mm; }
+  .cor { display: inline-block; width: 3.2mm; height: 3.2mm; border-radius: 0.6mm; }
+  .cor.pb { background: var(--pb); } .cor.rn { background: var(--rn); }
+  .passo { flex: 1; text-align: center; padding: 1.4mm 2mm; border: 0.3mm solid var(--linha-forte); border-radius: 2mm; white-space: nowrap; }
+  .passo.fim { background: var(--tinta); border-color: var(--tinta); color: #fff; font-weight: 600; }
+  .seta { flex: none; color: var(--mudo); }
+  .ficha { display: grid; grid-template-columns: 25mm 1fr; column-gap: 4mm; row-gap: 1.8mm; font-size: 11.5pt; }
+  .ficha dt { font-weight: 700; }
+  .ficha ul { padding-left: 5mm; margin-top: 0.6mm; }
+  .ficha li + li { margin-top: 0.4mm; }
+  .dados { display: flex; align-items: center; gap: 5mm; padding: 3.5mm 4mm; background: var(--suave); border-radius: 2.5mm; margin-top: 0.5mm; }
+  .qr { flex: none; width: 25mm; height: 25mm; background: #fff; padding: 1.5mm; border-radius: 1.5mm; }
+  .qr svg { width: 100%; height: 100%; display: block; }
+  .qr.vazio { border: 0.5mm dashed var(--rn); display: flex; align-items: center; justify-content: center; text-align: center; font-size: 9pt; color: var(--tinta-2); }
+  .dados-titulo { font-weight: 700; font-size: 11.5pt; }
+  .dados-link { font-size: 10.5pt; word-break: break-all; }
+
+  /* Tabelas */
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  .descritiva { font-size: 11.5pt; line-height: 1.2; }
+  .descritiva th, .descritiva td { padding: 1.45mm 1.5mm; }
+  .descritiva thead th { font-weight: 600; color: var(--tinta-2); text-align: right; vertical-align: bottom; border-bottom: 0.35mm solid var(--tinta); }
+  .descritiva tbody th { text-align: left; font-weight: 600; white-space: nowrap; }
+  .descritiva tbody th .cor { margin-right: 1.8mm; vertical-align: -0.2mm; }
+  .descritiva td { text-align: right; }
+  .descritiva td.media { font-weight: 700; }
+  .descritiva tbody tr { border-bottom: 0.2mm solid #ebe9e3; }
+  .descritiva tr.amostra th, .descritiva tr.amostra td { background: var(--suave); }
+  .descritiva tr.grupo th { padding-top: 3.2mm; font-weight: 700; border-bottom: 0.35mm solid var(--linha-forte); }
+
+  .testes { font-size: 10.3pt; line-height: 1.28; }
+  .testes th, .testes td { padding: 1.3mm 1.8mm; text-align: left; vertical-align: top; }
+  .testes thead th { font-weight: 600; color: var(--tinta-2); border-bottom: 0.35mm solid var(--tinta); }
+  .testes tbody tr { border-bottom: 0.2mm solid #ebe9e3; }
+  .testes tr.var-f td { color: var(--tinta-2); }
+  .testes tr.var-f td b { color: var(--tinta-2); }
+  .testes .h0 { display: block; font-size: 9.6pt; color: var(--tinta-2); }
+  .testes tr.rejeita td.decisao { font-weight: 700; }
+
+  /* Leituras e listas */
+  .leitura { background: var(--suave); border-radius: 2.5mm; padding: 3.5mm 4.5mm; display: flex; flex-direction: column; gap: 1.8mm; font-size: 11.5pt; }
+  .leitura h3 { font-size: 12pt; }
+  .leitura ul, .conclusao { padding-left: 5mm; display: flex; flex-direction: column; gap: 1.4mm; }
+  .formula { font-size: 11pt; color: var(--tinta-2); }
+  .formula b { color: var(--tinta); }
+  figure svg.grafico { width: 100%; height: auto; display: block; }
+  .conclusao { gap: 1.8mm; }
+  .q2 .leitura { font-size: 12pt; }
+  .assinatura { margin-top: auto; font-size: 9pt; color: var(--mudo); }
+</style>
+</head>
+<body>
+
+<!-- ===================== Quadrante 1 (superior esquerdo) ===================== -->
+<section class="quadrante q1"><div class="cartao" data-nome="1 (superior esquerdo)">
+  <header>
+    <p class="sobretitulo">Universidade Federal da Paraíba · Departamento de Estatística</p>
+    <h1>IDEB, renda e salário: Paraíba × Rio Grande do Norte</h1>
+    <p class="subtitulo">Comparação estatística entre amostras aleatórias de 30 municípios de cada estado</p>
+    <div class="faixa"><span></span><span></span></div>
+    <p class="ident"><b>Disciplina:</b> Métodos Estatísticos Aplicados às Ciências Tecnológicas<br>
+      <b>Docente:</b> Renilma Pereira · Atividade Avaliativa da Unidade II · 16/11/2026</p>
+    <p class="ident"><b>${grupo}:</b> ${integrantes}</p>
+  </header>
+
+  <section class="bloco">
+    <h2 class="secao"><span class="num">1</span>Objetivo</h2>
+    <p>Comparar Paraíba (PB) e Rio Grande do Norte (RN) no IDEB dos anos iniciais, na proporção da população com renda per capita de até 1/2 salário mínimo e no salário médio formal, testando se as diferenças entre as amostras são significativas.</p>
+  </section>
+
+  <section class="bloco">
+    <h2 class="secao"><span class="num">2</span>Metodologia</h2>
+    <div class="fluxo">
+      <div class="passos"><span class="uf"><i class="cor pb"></i>PB</span>
+        <span class="passo"><b>${N_PB}</b> municípios</span><span class="seta">→</span>
+        <span class="passo"><b>${B_PB}</b> com as 3 variáveis*</span><span class="seta">→</span>
+        <span class="passo fim">sorteio de ${n}</span></div>
+      <div class="passos"><span class="uf"><i class="cor rn"></i>RN</span>
+        <span class="passo"><b>${N_RN}</b> municípios</span><span class="seta">→</span>
+        <span class="passo"><b>${B_RN}</b> com as 3 variáveis*</span><span class="seta">→</span>
+        <span class="passo fim">sorteio de ${n}</span></div>
+    </div>
+    <p class="nota">* 6 municípios de cada estado não têm IDEB divulgado e ficaram fora do sorteio.</p>
+    <dl class="ficha">
+      <dt>Amostragem</dt>
+      <dd>Aleatória simples (AAS), sem reposição, sorteada por computador (semente ${semente}): n = ${n} municípios por estado.</dd>
+      <dt>Variáveis</dt>
+      <dd>Quantitativas contínuas:
+        <ul>
+          <li><b>IDEB</b>: anos iniciais do ensino fundamental, rede pública (0 a 10);</li>
+          <li><b>Renda</b>: % da população com renda per capita de até 1/2 salário mínimo;</li>
+          <li><b>Salário</b>: salário médio mensal dos trabalhadores formais, em salários mínimos (SM).</li>
+        </ul></dd>
+      <dt>Métodos</dt>
+      <dd>Estatística descritiva, intervalo de confiança (IC) de 95% e testes z (proporções), F (variâncias) e t (médias), com α = 5%.</dd>
+      <dt>Fonte</dt>
+      <dd>IBGE Cidades e Estados, planilhas fornecidas pela docente.</dd>
+    </dl>
+    <div class="dados">
+      ${qr}
+      <div>
+        <p class="dados-titulo">Planilhas das amostras</p>
+        <p class="dados-link">${link_texto}</p>
+        <p class="nota">Amostra 1 (PB) e Amostra 2 (RN). Aponte a câmera do celular para o código.</p>
+      </div>
+    </div>
+  </section>
+</div></section>
+
+<!-- ===================== Quadrante 2 (superior direito) ===================== -->
+<section class="quadrante q2"><div class="cartao" data-nome="2 (superior direito)">
+  <section class="bloco">
+    <h2 class="secao"><span class="num">3</span>Estatísticas descritivas</h2>
+    <p class="lead">População = todos os municípios do estado com o dado. Amostra (linhas sombreadas) = os ${n} municípios sorteados.</p>
+    ${tabela_descritiva}
+    <p class="nota">Q1 e Q3 = 1º e 3º quartis. Variância com divisor N na população (σ²) e n − 1 na amostra (s²). <b>Moda: não se aplica</b>, pois as três variáveis são quantitativas contínuas (valores repetidos só aparecem porque o IBGE arredonda para uma casa decimal).</p>
+  </section>
+  <div class="leitura">
+    <h3>O que a tabela mostra</h3>
+    <ul>
+      <li><b>População × amostra:</b> as médias amostrais ficaram perto das populacionais (maior distância relativa: IDEB da PB, ${ideb_pb_am_media} × ${ideb_pb_pop_media}), e os extremos da amostra são menos extremos (renda no RN: ${renda_rn_am_minimo_1}% a ${renda_rn_am_maximo_1}%, contra ${renda_rn_pop_minimo_1}% a ${renda_rn_pop_maximo_1}%).</li>
+      <li><b>PB × RN:</b> a PB tem IDEB maior (${ideb_pb_pop_media} × ${ideb_rn_pop_media} na população); renda (perto de 50%) e salário (perto de 1,8 SM) têm centros parecidos.</li>
+      <li><b>Dispersão:</b> o RN varia mais no salário (desvio padrão ${salario_rn_pop_dp} × ${salario_pb_pop_dp} SM); a PB varia mais no IDEB (${ideb_pb_pop_dp} × ${ideb_rn_pop_dp}).</li>
+      <li><b>Assimetria:</b> IDEB e salário têm cauda à direita (o máximo fica bem mais longe de Q3 do que o mínimo de Q1); a renda tem cauda à esquerda nas populações (média abaixo da mediana).</li>
+    </ul>
+  </div>
+</div></section>
+
+<!-- ===================== Quadrante 3 (inferior esquerdo) ===================== -->
+<section class="quadrante q3"><div class="cartao" data-nome="3 (inferior esquerdo)">
+  <section class="bloco">
+    <h2 class="secao"><span class="num">4</span>Análise gráfica: salário médio mensal</h2>
+    <figure>${grafico_salario}</figure>
+    <div class="leitura">
+      <ul>
+        <li><b>Dispersão:</b> o RN é mais disperso (${salario_rn_am_minimo_1} a ${salario_rn_am_maximo_1} SM; desvio padrão ${salario_rn_am_dp}; AIQ ${salario_rn_am_aiq}) que a PB (${salario_pb_am_minimo_1} a ${salario_pb_am_maximo_1} SM; desvio padrão ${salario_pb_am_dp}; AIQ ${salario_pb_am_aiq}), que concentra ${pb_entre_16_20} dos 30 municípios de 1,6&nbsp;a&nbsp;1,9&nbsp;SM.</li>
+        <li><b>Assimetria:</b> o centro é quase simétrico (média ≈ mediana: PB ${salario_pb_am_media} e ${salario_pb_am_mediana}; RN ${salario_rn_am_media} e ${salario_rn_am_mediana}), e a cauda direita é mais longa no RN.</li>
+        <li><b>Valores atípicos:</b> ${atipicos_pb} e ${atipicos_rn}, acima de Q3&nbsp;+&nbsp;1,5·AIQ (PB ${lim_pb}; RN ${lim_rn}). AIQ&nbsp;=&nbsp;Q3&nbsp;−&nbsp;Q1.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="bloco">
+    <h2 class="secao"><span class="num">5</span>Inferência estatística</h2>
+    <h3>5.1 · IC de 95% para a proporção com renda per capita de até 1/2 SM</h3>
+    <p class="formula"><b>p&#770; ± z·√(p&#770;(1 − p&#770;)/n)</b>, com z = 1,96, n = ${n} e p&#770; = média das proporções dos ${n} municípios.</p>
+    <figure>${grafico_ic}</figure>
+    <p>Com 95% de confiança, a proporção fica entre <b>${li_pb}% e ${ls_pb}%</b> na PB e entre <b>${li_rn}% e ${ls_rn}%</b> no RN. Os dois ICs contêm o valor real e se sobrepõem quase por inteiro; a margem é larga (±${margem} p.p.) porque n = ${n}.</p>
+  </section>
+</div></section>
+
+<!-- ===================== Quadrante 4 (inferior direito) ===================== -->
+<section class="quadrante q4"><div class="cartao" data-nome="4 (inferior direito)">
+  <section class="bloco">
+    <p class="continua">5 · Inferência estatística (continuação)</p>
+    <h2 class="secao"><span class="num">5.2</span>Testes de hipóteses (α = 5%)</h2>
+    <p>O teste F decide a suposição sobre as variâncias; depois, o teste t compara as médias. H<sub>1</sub> é sempre bilateral (≠), e H<sub>0</sub> é rejeitada quando o p-valor &lt; 0,05.</p>
+    <figure>${grafico_medias}</figure>
+    ${tabela_testes}
+    <p class="nota">O teste de Shapiro-Wilk aponta desvios da normalidade, mas com n = ${n} por estado o Teorema Central do Limite sustenta os testes t. Com ou sem a suposição de variâncias iguais, as decisões sobre as médias não mudam.</p>
+  </section>
+
+  <section class="bloco">
+    <h2 class="secao"><span class="num">6</span>Conclusão</h2>
+    <ul class="conclusao">
+      <li><b>A educação separa os estados:</b> o IDEB dos anos iniciais é maior na PB, na amostra (${ideb_pb_am_media} × ${ideb_rn_am_media}; diferença de ${ideb_dif}, com IC de 95% de ${ideb_dif_li} a ${ideb_dif_ls}) e na população (${ideb_pb_pop_media} × ${ideb_rn_pop_media}).</li>
+      <li><b>Renda e salário aproximam os estados:</b> em um município típico, cerca de metade da população tem renda per capita de até 1/2 SM, e o salário formal médio fica perto de 1,8 SM, sem diferença significativa.</li>
+      <li><b>O RN é mais heterogêneo no salário formal:</b> variância maior e o maior valor atípico, ${atipicos_rn}.</li>
+      <li><b>As amostras representaram bem as populações:</b> todos os ICs contêm os valores reais, mas n = ${n} deixa a proporção imprecisa (±${margem} p.p.).</li>
+      <li><b>Na prática:</b> com renda e salário parecidos, a vantagem da PB no IDEB não parece vir dessas variáveis; gestão e políticas educacionais merecem investigação.</li>
+    </ul>
+  </section>
+  <p class="assinatura">Análise em Python (pandas, SciPy, Matplotlib), reproduzível com a semente ${semente}.</p>
+</div></section>
+
+<script>
+  // Verificação automática: marca no <body> os quadrantes cujo conteúdo invadiu a margem interna
+  // (o fim do último elemento passou do limite do conteúdo do cartão).
+  const transbordando = [...document.querySelectorAll('.cartao')].map(c => {
+    const estilo = getComputedStyle(c);
+    const limite = c.getBoundingClientRect().bottom - parseFloat(estilo.paddingBottom) - parseFloat(estilo.borderBottomWidth);
+    const fundo = Math.max(...[...c.children].map(f => f.getBoundingClientRect().bottom));
+    const excesso = (fundo - limite) * 25.4 / 96;
+    return excesso > 0.2 ? c.dataset.nome + ' +' + excesso.toFixed(1) + 'mm' : null;
+  }).filter(Boolean);
+  document.body.dataset.transbordando = transbordando.join('; ');
+</script>
+</body>
+</html>

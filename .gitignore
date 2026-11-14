@@ -1,0 +1,6 @@
+# Cache que o Python gera sozinho ao importar um módulo
+__pycache__/
+*.pyc
+
+# Arquivo temporário que o Excel cria enquanto a planilha está aberta
+~$*

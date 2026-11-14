@@ -1,0 +1,2001 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Cartaz · IDEB, renda e salário: PB × RN</title>
+<!--
+  MODELO do cartaz. Não edite o cartaz.html (ele é gerado). Edite este arquivo e rode:
+      python cartaz\montar_cartaz.py
+  Os campos marcados com cifrão e chaves são preenchidos com os números de saida/resultados.json.
+  Tamanho: A2 (420 x 594 mm) = 4 folhas A4 (quadrantes q1 a q4) = 2 folhas A3.
+-->
+<style>
+  @page { size: 420mm 594mm; margin: 0; }
+  :root {
+    --tinta: #171716; --tinta-2: #4e4d49; --mudo: #77756e;
+    --linha: #d9d7cf; --linha-forte: #bdbbb2; --suave: #f4f3ef;
+    --pb: #2a78d6; --rn: #eb6834;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    width: 420mm; height: 594mm; position: relative; overflow: hidden; background: #fff; color: var(--tinta);
+    font-family: "Segoe UI", system-ui, sans-serif; font-size: 12pt; line-height: 1.38;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  p, ul, dl, dd, figure, h1, h2, h3 { margin: 0; }
+  sub { font-size: 0.7em; line-height: 0; }
+
+  /* Quatro quadrantes A4. Nenhum conteúdo cruza as emendas: cada um pode ser impresso sozinho. */
+  .quadrante { position: absolute; width: 210mm; height: 297mm; padding: 8mm; overflow: hidden; }
+  .q1 { left: 0; top: 0; } .q2 { left: 210mm; top: 0; }
+  .q3 { left: 0; top: 297mm; } .q4 { left: 210mm; top: 297mm; }
+  .cartao {
+    width: 100%; height: 100%; border: 0.35mm solid var(--linha); border-radius: 3mm;
+    padding: 7.5mm 9mm; display: flex; flex-direction: column; gap: 4.5mm;
+  }
+  .bloco { display: flex; flex-direction: column; gap: 2.8mm; }
+
+  /* Cabeçalho */
+  .sobretitulo { font-size: 9.5pt; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--tinta-2); }
+  h1 { font-size: 34pt; line-height: 1.08; font-weight: 700; letter-spacing: -0.012em; margin-top: 2.5mm; text-wrap: balance; }
+  .subtitulo { font-size: 15pt; line-height: 1.3; color: var(--tinta-2); margin-top: 2.5mm; text-wrap: balance; }
+  .faixa { display: flex; height: 2.2mm; margin: 4mm 0 3.5mm; border-radius: 1.1mm; overflow: hidden; }
+  .faixa span { flex: 1; } .faixa span:first-child { background: var(--pb); } .faixa span:last-child { background: var(--rn); }
+  .ident { font-size: 11pt; line-height: 1.45; color: var(--tinta-2); }
+  .ident b { color: var(--tinta); font-weight: 600; }
+  .ident + .ident { margin-top: 1.2mm; }
+
+  /* Títulos de seção */
+  .secao {
+    display: flex; align-items: center; gap: 3mm; font-size: 18pt; line-height: 1.15; font-weight: 700;
+    padding-bottom: 2mm; border-bottom: 0.35mm solid var(--linha);
+  }
+  .num {
+    flex: none; min-width: 8.5mm; height: 8.5mm; padding: 0 2mm; border-radius: 4.25mm; background: var(--tinta);
+    color: #fff; font-size: 12.5pt; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;
+  }
+  .continua { font-size: 9.5pt; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mudo); margin-bottom: -1mm; }
+  h3 { font-size: 13pt; line-height: 1.25; font-weight: 700; }
+  .nota { font-size: 9.8pt; line-height: 1.38; color: var(--tinta-2); }
+  .lead { color: var(--tinta-2); font-size: 11pt; }
+
+  /* Metodologia */
+  .fluxo { display: flex; flex-direction: column; gap: 1.8mm; }
+  .passos { display: flex; align-items: center; gap: 2mm; font-size: 11pt; }
+  .uf { flex: none; width: 12mm; font-weight: 700; display: inline-flex; align-items: center; gap: 1.6mm; }
+  .cor { display: inline-block; width: 3.2mm; height: 3.2mm; border-radius: 0.6mm; }
+  .cor.pb { background: var(--pb); } .cor.rn { background: var(--rn); }
+  .passo { flex: 1; text-align: center; padding: 1.4mm 2mm; border: 0.3mm solid var(--linha-forte); border-radius: 2mm; white-space: nowrap; }
+  .passo.fim { background: var(--tinta); border-color: var(--tinta); color: #fff; font-weight: 600; }
+  .seta { flex: none; color: var(--mudo); }
+  .ficha { display: grid; grid-template-columns: 25mm 1fr; column-gap: 4mm; row-gap: 1.8mm; font-size: 11.5pt; }
+  .ficha dt { font-weight: 700; }
+  .ficha ul { padding-left: 5mm; margin-top: 0.6mm; }
+  .ficha li + li { margin-top: 0.4mm; }
+  .dados { display: flex; align-items: center; gap: 5mm; padding: 3.5mm 4mm; background: var(--suave); border-radius: 2.5mm; margin-top: 0.5mm; }
+  .qr { flex: none; width: 25mm; height: 25mm; background: #fff; padding: 1.5mm; border-radius: 1.5mm; }
+  .qr svg { width: 100%; height: 100%; display: block; }
+  .qr.vazio { border: 0.5mm dashed var(--rn); display: flex; align-items: center; justify-content: center; text-align: center; font-size: 9pt; color: var(--tinta-2); }
+  .dados-titulo { font-weight: 700; font-size: 11.5pt; }
+  .dados-link { font-size: 10.5pt; word-break: break-all; }
+
+  /* Tabelas */
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  .descritiva { font-size: 11.5pt; line-height: 1.2; }
+  .descritiva th, .descritiva td { padding: 1.45mm 1.5mm; }
+  .descritiva thead th { font-weight: 600; color: var(--tinta-2); text-align: right; vertical-align: bottom; border-bottom: 0.35mm solid var(--tinta); }
+  .descritiva tbody th { text-align: left; font-weight: 600; white-space: nowrap; }
+  .descritiva tbody th .cor { margin-right: 1.8mm; vertical-align: -0.2mm; }
+  .descritiva td { text-align: right; }
+  .descritiva td.media { font-weight: 700; }
+  .descritiva tbody tr { border-bottom: 0.2mm solid #ebe9e3; }
+  .descritiva tr.amostra th, .descritiva tr.amostra td { background: var(--suave); }
+  .descritiva tr.grupo th { padding-top: 3.2mm; font-weight: 700; border-bottom: 0.35mm solid var(--linha-forte); }
+
+  .testes { font-size: 10.3pt; line-height: 1.28; }
+  .testes th, .testes td { padding: 1.3mm 1.8mm; text-align: left; vertical-align: top; }
+  .testes thead th { font-weight: 600; color: var(--tinta-2); border-bottom: 0.35mm solid var(--tinta); }
+  .testes tbody tr { border-bottom: 0.2mm solid #ebe9e3; }
+  .testes tr.var-f td { color: var(--tinta-2); }
+  .testes tr.var-f td b { color: var(--tinta-2); }
+  .testes .h0 { display: block; font-size: 9.6pt; color: var(--tinta-2); }
+  .testes tr.rejeita td.decisao { font-weight: 700; }
+
+  /* Leituras e listas */
+  .leitura { background: var(--suave); border-radius: 2.5mm; padding: 3.5mm 4.5mm; display: flex; flex-direction: column; gap: 1.8mm; font-size: 11.5pt; }
+  .leitura h3 { font-size: 12pt; }
+  .leitura ul, .conclusao { padding-left: 5mm; display: flex; flex-direction: column; gap: 1.4mm; }
+  .formula { font-size: 11pt; color: var(--tinta-2); }
+  .formula b { color: var(--tinta); }
+  figure svg.grafico { width: 100%; height: auto; display: block; }
+  .conclusao { gap: 1.8mm; }
+  .q2 .leitura { font-size: 12pt; }
+  .assinatura { margin-top: auto; font-size: 9pt; color: var(--mudo); }
+</style>
+</head>
+<body>
+
+<!-- ===================== Quadrante 1 (superior esquerdo) ===================== -->
+<section class="quadrante q1"><div class="cartao" data-nome="1 (superior esquerdo)">
+  <header>
+    <p class="sobretitulo">Universidade Federal da Paraíba · Departamento de Estatística</p>
+    <h1>IDEB, renda e salário: Paraíba × Rio Grande do Norte</h1>
+    <p class="subtitulo">Comparação estatística entre amostras aleatórias de 30 municípios de cada estado</p>
+    <div class="faixa"><span></span><span></span></div>
+    <p class="ident"><b>Disciplina:</b> Métodos Estatísticos Aplicados às Ciências Tecnológicas<br>
+      <b>Docente:</b> Renilma Pereira · Atividade Avaliativa da Unidade II · 16/11/2026</p>
+    <p class="ident"><b>Integrantes:</b> Augusto Blois · Pedro Luna · Luy Koji · Luiz Ramalho</p>
+  </header>
+
+  <section class="bloco">
+    <h2 class="secao"><span class="num">1</span>Objetivo</h2>
+    <p>Comparar Paraíba (PB) e Rio Grande do Norte (RN) no IDEB dos anos iniciais, na proporção da população com renda per capita de até 1/2 salário mínimo e no salário médio formal, testando se as diferenças entre as amostras são significativas.</p>
+  </section>
+
+  <section class="bloco">
+    <h2 class="secao"><span class="num">2</span>Metodologia</h2>
+    <div class="fluxo">
+      <div class="passos"><span class="uf"><i class="cor pb"></i>PB</span>
+        <span class="passo"><b>223</b> municípios</span><span class="seta">→</span>
+        <span class="passo"><b>217</b> com as 3 variáveis*</span><span class="seta">→</span>
+        <span class="passo fim">sorteio de 30</span></div>
+      <div class="passos"><span class="uf"><i class="cor rn"></i>RN</span>
+        <span class="passo"><b>167</b> municípios</span><span class="seta">→</span>
+        <span class="passo"><b>161</b> com as 3 variáveis*</span><span class="seta">→</span>
+        <span class="passo fim">sorteio de 30</span></div>
+    </div>
+    <p class="nota">* 6 municípios de cada estado não têm IDEB divulgado e ficaram fora do sorteio.</p>
+    <dl class="ficha">
+      <dt>Amostragem</dt>
+      <dd>Aleatória simples (AAS), sem reposição, sorteada por computador (semente 20261116): n = 30 municípios por estado.</dd>
+      <dt>Variáveis</dt>
+      <dd>Quantitativas contínuas:
+        <ul>
+          <li><b>IDEB</b>: anos iniciais do ensino fundamental, rede pública (0 a 10);</li>
+          <li><b>Renda</b>: % da população com renda per capita de até 1/2 salário mínimo;</li>
+          <li><b>Salário</b>: salário médio mensal dos trabalhadores formais, em salários mínimos (SM).</li>
+        </ul></dd>
+      <dt>Métodos</dt>
+      <dd>Estatística descritiva, intervalo de confiança (IC) de 95% e testes z (proporções), F (variâncias) e t (médias), com α = 5%.</dd>
+      <dt>Fonte</dt>
+      <dd>IBGE Cidades e Estados, planilhas fornecidas pela docente.</dd>
+    </dl>
+    <div class="dados">
+      <div class="qr"><svg version="1.1" viewBox="0 0 37 37" xmlns="http://www.w3.org/2000/svg"><path d="M0,0H1V1H0zM1,0H2V1H1zM2,0H3V1H2zM3,0H4V1H3zM4,0H5V1H4zM5,0H6V1H5zM6,0H7V1H6zM10,0H11V1H10zM11,0H12V1H11zM12,0H13V1H12zM14,0H15V1H14zM15,0H16V1H15zM17,0H18V1H17zM22,0H23V1H22zM25,0H26V1H25zM26,0H27V1H26zM27,0H28V1H27zM28,0H29V1H28zM30,0H31V1H30zM31,0H32V1H31zM32,0H33V1H32zM33,0H34V1H33zM34,0H35V1H34zM35,0H36V1H35zM36,0H37V1H36zM0,1H1V2H0zM6,1H7V2H6zM11,1H12V2H11zM13,1H14V2H13zM16,1H17V2H16zM20,1H21V2H20zM22,1H23V2H22zM25,1H26V2H25zM26,1H27V2H26zM27,1H28V2H27zM28,1H29V2H28zM30,1H31V2H30zM36,1H37V2H36zM0,2H1V3H0zM2,2H3V3H2zM3,2H4V3H3zM4,2H5V3H4zM6,2H7V3H6zM8,2H9V3H8zM9,2H10V3H9zM10,2H11V3H10zM11,2H12V3H11zM18,2H19V3H18zM21,2H22V3H21zM22,2H23V3H22zM26,2H27V3H26zM27,2H28V3H27zM28,2H29V3H28zM30,2H31V3H30zM32,2H33V3H32zM33,2H34V3H33zM34,2H35V3H34zM36,2H37V3H36zM0,3H1V4H0zM2,3H3V4H2zM3,3H4V4H3zM4,3H5V4H4zM6,3H7V4H6zM8,3H9V4H8zM9,3H10V4H9zM10,3H11V4H10zM13,3H14V4H13zM14,3H15V4H14zM17,3H18V4H17zM22,3H23V4H22zM24,3H25V4H24zM25,3H26V4H25zM26,3H27V4H26zM27,3H28V4H27zM30,3H31V4H30zM32,3H33V4H32zM33,3H34V4H33zM34,3H35V4H34zM36,3H37V4H36zM0,4H1V5H0zM2,4H3V5H2zM3,4H4V5H3zM4,4H5V5H4zM6,4H7V5H6zM8,4H9V5H8zM10,4H11V5H10zM11,4H12V5H11zM12,4H13V5H12zM13,4H14V5H13zM15,4H16V5H15zM16,4H17V5H16zM17,4H18V5H17zM18,4H19V5H18zM19,4H20V5H19zM20,4H21V5H20zM23,4H24V5H23zM24,4H25V5H24zM25,4H26V5H25zM28,4H29V5H28zM30,4H31V5H30zM32,4H33V5H32zM33,4H34V5H33zM34,4H35V5H34zM36,4H37V5H36zM0,5H1V6H0zM6,5H7V6H6zM8,5H9V6H8zM14,5H15V6H14zM17,5H18V6H17zM20,5H21V6H20zM21,5H22V6H21zM27,5H28V6H27zM28,5H29V6H28zM30,5H31V6H30zM36,5H37V6H36zM0,6H1V7H0zM1,6H2V7H1zM2,6H3V7H2zM3,6H4V7H3zM4,6H5V7H4zM5,6H6V7H5zM6,6H7V7H6zM8,6H9V7H8zM10,6H11V7H10zM12,6H13V7H12zM14,6H15V7H14zM16,6H17V7H16zM18,6H19V7H18zM20,6H21V7H20zM22,6H23V7H22zM24,6H25V7H24zM26,6H27V7H26zM28,6H29V7H28zM30,6H31V7H30zM31,6H32V7H31zM32,6H33V7H32zM33,6H34V7H33zM34,6H35V7H34zM35,6H36V7H35zM36,6H37V7H36zM8,7H9V8H8zM9,7H10V8H9zM10,7H11V8H10zM11,7H12V8H11zM14,7H15V8H14zM16,7H17V8H16zM17,7H18V8H17zM18,7H19V8H18zM19,7H20V8H19zM20,7H21V8H20zM21,7H22V8H21zM22,7H23V8H22zM28,7H29V8H28zM0,8H1V9H0zM2,8H3V9H2zM3,8H4V9H3zM4,8H5V9H4zM5,8H6V9H5zM6,8H7V9H6zM12,8H13V9H12zM13,8H14V9H13zM16,8H17V9H16zM19,8H20V9H19zM23,8H24V9H23zM26,8H27V9H26zM27,8H28V9H27zM28,8H29V9H28zM30,8H31V9H30zM31,8H32V9H31zM32,8H33V9H32zM33,8H34V9H33zM34,8H35V9H34zM0,9H1V10H0zM1,9H2V10H1zM4,9H5V10H4zM5,9H6V10H5zM8,9H9V10H8zM9,9H10V10H9zM11,9H12V10H11zM15,9H16V10H15zM18,9H19V10H18zM20,9H21V10H20zM21,9H22V10H21zM22,9H23V10H22zM23,9H24V10H23zM24,9H25V10H24zM25,9H26V10H25zM26,9H27V10H26zM28,9H29V10H28zM29,9H30V10H29zM31,9H32V10H31zM33,9H34V10H33zM35,9H36V10H35zM3,10H4V11H3zM5,10H6V11H5zM6,10H7V11H6zM7,10H8V11H7zM9,10H10V11H9zM10,10H11V11H10zM11,10H12V11H11zM12,10H13V11H12zM13,10H14V11H13zM14,10H15V11H14zM15,10H16V11H15zM16,10H17V11H16zM19,10H20V11H19zM21,10H22V11H21zM22,10H23V11H22zM24,10H25V11H24zM25,10H26V11H25zM26,10H27V11H26zM27,10H28V11H27zM29,10H30V11H29zM30,10H31V11H30zM32,10H33V11H32zM35,10H36V11H35zM36,10H37V11H36zM1,11H2V12H1zM2,11H3V12H2zM3,11H4V12H3zM7,11H8V12H7zM10,11H11V12H10zM11,11H12V12H11zM12,11H13V12H12zM15,11H16V12H15zM18,11H19V12H18zM19,11H20V12H19zM20,11H21V12H20zM21,11H22V12H21zM24,11H25V12H24zM26,11H27V12H26zM28,11H29V12H28zM30,11H31V12H30zM36,11H37V12H36zM3,12H4V13H3zM4,12H5V13H4zM5,12H6V13H5zM6,12H7V13H6zM7,12H8V13H7zM11,12H12V13H11zM12,12H13V13H12zM13,12H14V13H13zM15,12H16V13H15zM17,12H18V13H17zM19,12H20V13H19zM22,12H23V13H22zM24,12H25V13H24zM25,12H26V13H25zM26,12H27V13H26zM29,12H30V13H29zM30,12H31V13H30zM32,12H33V13H32zM33,12H34V13H33zM35,12H36V13H35zM36,12H37V13H36zM0,13H1V14H0zM5,13H6V14H5zM8,13H9V14H8zM9,13H10V14H9zM11,13H12V14H11zM14,13H15V14H14zM16,13H17V14H16zM18,13H19V14H18zM19,13H20V14H19zM20,13H21V14H20zM21,13H22V14H21zM22,13H23V14H22zM23,13H24V14H23zM25,13H26V14H25zM28,13H29V14H28zM29,13H30V14H29zM31,13H32V14H31zM35,13H36V14H35zM4,14H5V15H4zM5,14H6V15H5zM6,14H7V15H6zM7,14H8V15H7zM8,14H9V15H8zM10,14H11V15H10zM11,14H12V15H11zM12,14H13V15H12zM15,14H16V15H15zM18,14H19V15H18zM25,14H26V15H25zM26,14H27V15H26zM27,14H28V15H27zM30,14H31V15H30zM31,14H32V15H31zM32,14H33V15H32zM33,14H34V15H33zM36,14H37V15H36zM1,15H2V16H1zM3,15H4V16H3zM4,15H5V16H4zM5,15H6V16H5zM7,15H8V16H7zM9,15H10V16H9zM12,15H13V16H12zM14,15H15V16H14zM15,15H16V16H15zM16,15H17V16H16zM19,15H20V16H19zM20,15H21V16H20zM21,15H22V16H21zM23,15H24V16H23zM26,15H27V16H26zM28,15H29V16H28zM29,15H30V16H29zM31,15H32V16H31zM32,15H33V16H32zM36,15H37V16H36zM0,16H1V17H0zM1,16H2V17H1zM3,16H4V17H3zM4,16H5V17H4zM6,16H7V17H6zM9,16H10V17H9zM11,16H12V17H11zM12,16H13V17H12zM18,16H19V17H18zM20,16H21V17H20zM22,16H23V17H22zM23,16H24V17H23zM26,16H27V17H26zM29,16H30V17H29zM30,16H31V17H30zM32,16H33V17H32zM34,16H35V17H34zM35,16H36V17H35zM1,17H2V18H1zM2,17H3V18H2zM8,17H9V18H8zM9,17H10V18H9zM10,17H11V18H10zM11,17H12V18H11zM12,17H13V18H12zM15,17H16V18H15zM16,17H17V18H16zM21,17H22V18H21zM22,17H23V18H22zM23,17H24V18H23zM24,17H25V18H24zM27,17H28V18H27zM28,17H29V18H28zM29,17H30V18H29zM31,17H32V18H31zM33,17H34V18H33zM34,17H35V18H34zM35,17H36V18H35zM1,18H2V19H1zM2,18H3V19H2zM3,18H4V19H3zM6,18H7V19H6zM8,18H9V19H8zM9,18H10V19H9zM11,18H12V19H11zM12,18H13V19H12zM13,18H14V19H13zM14,18H15V19H14zM20,18H21V19H20zM25,18H26V19H25zM26,18H27V19H26zM27,18H28V19H27zM30,18H31V19H30zM31,18H32V19H31zM33,18H34V19H33zM34,18H35V19H34zM35,18H36V19H35zM36,18H37V19H36zM4,19H5V20H4zM5,19H6V20H5zM7,19H8V20H7zM8,19H9V20H8zM10,19H11V20H10zM12,19H13V20H12zM14,19H15V20H14zM16,19H17V20H16zM21,19H22V20H21zM23,19H24V20H23zM24,19H25V20H24zM26,19H27V20H26zM27,19H28V20H27zM31,19H32V20H31zM32,19H33V20H32zM36,19H37V20H36zM0,20H1V21H0zM2,20H3V21H2zM4,20H5V21H4zM5,20H6V21H5zM6,20H7V21H6zM7,20H8V21H7zM8,20H9V21H8zM11,20H12V21H11zM13,20H14V21H13zM14,20H15V21H14zM17,20H18V21H17zM22,20H23V21H22zM23,20H24V21H23zM24,20H25V21H24zM25,20H26V21H25zM26,20H27V21H26zM27,20H28V21H27zM29,20H30V21H29zM30,20H31V21H30zM32,20H33V21H32zM33,20H34V21H33zM34,20H35V21H34zM1,21H2V22H1zM2,21H3V22H2zM3,21H4V22H3zM4,21H5V22H4zM5,21H6V22H5zM11,21H12V22H11zM13,21H14V22H13zM14,21H15V22H14zM15,21H16V22H15zM16,21H17V22H16zM17,21H18V22H17zM19,21H20V22H19zM20,21H21V22H20zM21,21H22V22H21zM23,21H24V22H23zM25,21H26V22H25zM33,21H34V22H33zM36,21H37V22H36zM3,22H4V23H3zM5,22H6V23H5zM6,22H7V23H6zM7,22H8V23H7zM8,22H9V23H8zM9,22H10V23H9zM10,22H11V23H10zM11,22H12V23H11zM12,22H13V23H12zM15,22H16V23H15zM16,22H17V23H16zM17,22H18V23H17zM20,22H21V23H20zM22,22H23V23H22zM26,22H27V23H26zM27,22H28V23H27zM28,22H29V23H28zM31,22H32V23H31zM32,22H33V23H32zM33,22H34V23H33zM35,22H36V23H35zM36,22H37V23H36zM2,23H3V24H2zM3,23H4V24H3zM5,23H6V24H5zM8,23H9V24H8zM10,23H11V24H10zM13,23H14V24H13zM15,23H16V24H15zM17,23H18V24H17zM18,23H19V24H18zM19,23H20V24H19zM20,23H21V24H20zM21,23H22V24H21zM22,23H23V24H22zM23,23H24V24H23zM24,23H25V24H24zM27,23H28V24H27zM28,23H29V24H28zM31,23H32V24H31zM32,23H33V24H32zM36,23H37V24H36zM0,24H1V25H0zM5,24H6V25H5zM6,24H7V25H6zM8,24H9V25H8zM10,24H11V25H10zM11,24H12V25H11zM12,24H13V25H12zM15,24H16V25H15zM16,24H17V25H16zM19,24H20V25H19zM21,24H22V25H21zM22,24H23V25H22zM24,24H25V25H24zM26,24H27V25H26zM27,24H28V25H27zM28,24H29V25H28zM29,24H30V25H29zM30,24H31V25H30zM32,24H33V25H32zM34,24H35V25H34zM0,25H1V26H0zM1,25H2V26H1zM5,25H6V26H5zM9,25H10V26H9zM12,25H13V26H12zM13,25H14V26H13zM15,25H16V26H15zM18,25H19V26H18zM20,25H21V26H20zM22,25H23V26H22zM23,25H24V26H23zM25,25H26V26H25zM26,25H27V26H26zM27,25H28V26H27zM28,25H29V26H28zM29,25H30V26H29zM31,25H32V26H31zM34,25H35V26H34zM0,26H1V27H0zM3,26H4V27H3zM5,26H6V27H5zM6,26H7V27H6zM11,26H12V27H11zM12,26H13V27H12zM15,26H16V27H15zM16,26H17V27H16zM17,26H18V27H17zM18,26H19V27H18zM19,26H20V27H19zM21,26H22V27H21zM26,26H27V27H26zM27,26H28V27H27zM31,26H32V27H31zM34,26H35V27H34zM35,26H36V27H35zM36,26H37V27H36zM0,27H1V28H0zM4,27H5V28H4zM5,27H6V28H5zM7,27H8V28H7zM8,27H9V28H8zM12,27H13V28H12zM15,27H16V28H15zM18,27H19V28H18zM19,27H20V28H19zM20,27H21V28H20zM21,27H22V28H21zM22,27H23V28H22zM24,27H25V28H24zM28,27H29V28H28zM29,27H30V28H29zM30,27H31V28H30zM32,27H33V28H32zM36,27H37V28H36zM0,28H1V29H0zM4,28H5V29H4zM5,28H6V29H5zM6,28H7V29H6zM7,28H8V29H7zM9,28H10V29H9zM13,28H14V29H13zM15,28H16V29H15zM16,28H17V29H16zM17,28H18V29H17zM19,28H20V29H19zM22,28H23V29H22zM23,28H24V29H23zM24,28H25V29H24zM25,28H26V29H25zM26,28H27V29H26zM27,28H28V29H27zM28,28H29V29H28zM29,28H30V29H29zM30,28H31V29H30zM31,28H32V29H31zM32,28H33V29H32zM33,28H34V29H33zM34,28H35V29H34zM8,29H9V30H8zM12,29H13V30H12zM13,29H14V30H13zM19,29H20V30H19zM21,29H22V30H21zM22,29H23V30H22zM23,29H24V30H23zM27,29H28V30H27zM28,29H29V30H28zM32,29H33V30H32zM33,29H34V30H33zM35,29H36V30H35zM36,29H37V30H36zM0,30H1V31H0zM1,30H2V31H1zM2,30H3V31H2zM3,30H4V31H3zM4,30H5V31H4zM5,30H6V31H5zM6,30H7V31H6zM9,30H10V31H9zM11,30H12V31H11zM15,30H16V31H15zM16,30H17V31H16zM18,30H19V31H18zM20,30H21V31H20zM24,30H25V31H24zM25,30H26V31H25zM26,30H27V31H26zM28,30H29V31H28zM30,30H31V31H30zM32,30H33V31H32zM34,30H35V31H34zM35,30H36V31H35zM36,30H37V31H36zM0,31H1V32H0zM6,31H7V32H6zM8,31H9V32H8zM10,31H11V32H10zM14,31H15V32H14zM16,31H17V32H16zM20,31H21V32H20zM21,31H22V32H21zM22,31H23V32H22zM23,31H24V32H23zM26,31H27V32H26zM28,31H29V32H28zM32,31H33V32H32zM33,31H34V32H33zM0,32H1V33H0zM2,32H3V33H2zM3,32H4V33H3zM4,32H5V33H4zM6,32H7V33H6zM8,32H9V33H8zM9,32H10V33H9zM18,32H19V33H18zM22,32H23V33H22zM23,32H24V33H23zM24,32H25V33H24zM26,32H27V33H26zM27,32H28V33H27zM28,32H29V33H28zM29,32H30V33H29zM30,32H31V33H30zM31,32H32V33H31zM32,32H33V33H32zM34,32H35V33H34zM35,32H36V33H35zM36,32H37V33H36zM0,33H1V34H0zM2,33H3V34H2zM3,33H4V34H3zM4,33H5V34H4zM6,33H7V34H6zM8,33H9V34H8zM12,33H13V34H12zM15,33H16V34H15zM16,33H17V34H16zM21,33H22V34H21zM23,33H24V34H23zM26,33H27V34H26zM27,33H28V34H27zM28,33H29V34H28zM29,33H30V34H29zM30,33H31V34H30zM32,33H33V34H32zM33,33H34V34H33zM34,33H35V34H34zM36,33H37V34H36zM0,34H1V35H0zM2,34H3V35H2zM3,34H4V35H3zM4,34H5V35H4zM6,34H7V35H6zM8,34H9V35H8zM9,34H10V35H9zM10,34H11V35H10zM11,34H12V35H11zM17,34H18V35H17zM18,34H19V35H18zM22,34H23V35H22zM26,34H27V35H26zM29,34H30V35H29zM34,34H35V35H34zM35,34H36V35H35zM36,34H37V35H36zM0,35H1V36H0zM6,35H7V36H6zM9,35H10V36H9zM13,35H14V36H13zM16,35H17V36H16zM20,35H21V36H20zM21,35H22V36H21zM24,35H25V36H24zM26,35H27V36H26zM28,35H29V36H28zM30,35H31V36H30zM32,35H33V36H32zM36,35H37V36H36zM0,36H1V37H0zM1,36H2V37H1zM2,36H3V37H2zM3,36H4V37H3zM4,36H5V37H4zM5,36H6V37H5zM6,36H7V37H6zM8,36H9V37H8zM9,36H10V37H9zM11,36H12V37H11zM12,36H13V37H12zM13,36H14V37H13zM14,36H15V37H14zM17,36H18V37H17zM18,36H19V37H18zM19,36H20V37H19zM22,36H23V37H22zM24,36H25V37H24zM25,36H26V37H25zM27,36H28V37H27zM29,36H30V37H29zM32,36H33V37H32zM34,36H35V37H34zM35,36H36V37H35zM36,36H37V37H36z" id="qr-path" fill="#000000" fill-opacity="1" fill-rule="nonzero" stroke="none"/></svg></div>
+      <div>
+        <p class="dados-titulo">Planilhas das amostras</p>
+        <p class="dados-link">https://drive.google.com/drive/folders/1LfXL1Jokymbszs6PNuX_LWQik05Y2wSl</p>
+        <p class="nota">Amostra 1 (PB) e Amostra 2 (RN). Aponte a câmera do celular para o código.</p>
+      </div>
+    </div>
+  </section>
+</div></section>
+
+<!-- ===================== Quadrante 2 (superior direito) ===================== -->
+<section class="quadrante q2"><div class="cartao" data-nome="2 (superior direito)">
+  <section class="bloco">
+    <h2 class="secao"><span class="num">3</span>Estatísticas descritivas</h2>
+    <p class="lead">População = todos os municípios do estado com o dado. Amostra (linhas sombreadas) = os 30 municípios sorteados.</p>
+    <table class="descritiva">
+  <colgroup><col style="width:21%"><col style="width:6%"><col><col><col><col><col><col><col><col></colgroup>
+  <thead><tr><th></th><th>n</th><th>Média</th><th>Mediana</th><th>Variância</th><th>Desvio padrão</th><th>Mínimo</th><th>Q1</th><th>Q3</th><th>Máximo</th></tr></thead>
+  <tbody><tr class="grupo"><th colspan="10">IDEB: anos iniciais, rede pública (0 a 10)</th></tr><tr><th><i class="cor pb"></i>PB · população</th><td>217</td><td class="media">5,34</td><td>5,20</td><td>0,670</td><td>0,82</td><td>3,60</td><td>4,80</td><td>5,80</td><td>8,20</td></tr><tr class="amostra"><th><i class="cor pb"></i>PB · amostra</th><td>30</td><td class="media">5,57</td><td>5,45</td><td>1,015</td><td>1,01</td><td>3,90</td><td>4,92</td><td>6,10</td><td>8,20</td></tr><tr><th><i class="cor rn"></i>RN · população</th><td>161</td><td class="media">4,84</td><td>4,80</td><td>0,440</td><td>0,66</td><td>3,60</td><td>4,40</td><td>5,20</td><td>7,60</td></tr><tr class="amostra"><th><i class="cor rn"></i>RN · amostra</th><td>30</td><td class="media">4,85</td><td>4,70</td><td>0,689</td><td>0,83</td><td>3,60</td><td>4,30</td><td>5,20</td><td>7,60</td></tr><tr class="grupo"><th colspan="10">Renda: % da população com renda per capita de até 1/2 SM</th></tr><tr><th><i class="cor pb"></i>PB · população</th><td>223</td><td class="media">50,53</td><td>50,80</td><td>13,58</td><td>3,68</td><td>35,70</td><td>48,60</td><td>53,00</td><td>60,40</td></tr><tr class="amostra"><th><i class="cor pb"></i>PB · amostra</th><td>30</td><td class="media">51,01</td><td>51,30</td><td>12,85</td><td>3,59</td><td>44,00</td><td>48,62</td><td>52,50</td><td>60,40</td></tr><tr><th><i class="cor rn"></i>RN · população</th><td>167</td><td class="media">49,10</td><td>50,00</td><td>19,36</td><td>4,40</td><td>35,50</td><td>47,25</td><td>51,95</td><td>61,40</td></tr><tr class="amostra"><th><i class="cor rn"></i>RN · amostra</th><td>30</td><td class="media">48,87</td><td>50,00</td><td>12,35</td><td>3,51</td><td>37,50</td><td>47,40</td><td>51,50</td><td>52,90</td></tr><tr class="grupo"><th colspan="10">Salário médio mensal dos trabalhadores formais (em SM)</th></tr><tr><th><i class="cor pb"></i>PB · população</th><td>223</td><td class="media">1,80</td><td>1,80</td><td>0,051</td><td>0,23</td><td>1,20</td><td>1,60</td><td>1,90</td><td>2,70</td></tr><tr class="amostra"><th><i class="cor pb"></i>PB · amostra</th><td>30</td><td class="media">1,78</td><td>1,80</td><td>0,040</td><td>0,20</td><td>1,30</td><td>1,62</td><td>1,90</td><td>2,40</td></tr><tr><th><i class="cor rn"></i>RN · população</th><td>167</td><td class="media">1,83</td><td>1,80</td><td>0,094</td><td>0,31</td><td>1,20</td><td>1,60</td><td>2,00</td><td>3,30</td></tr><tr class="amostra"><th><i class="cor rn"></i>RN · amostra</th><td>30</td><td class="media">1,88</td><td>1,90</td><td>0,093</td><td>0,30</td><td>1,40</td><td>1,62</td><td>2,00</td><td>2,90</td></tr></tbody>
+</table>
+    <p class="nota">Q1 e Q3 = 1º e 3º quartis. Variância com divisor N na população (σ²) e n − 1 na amostra (s²). <b>Moda: não se aplica</b>, pois as três variáveis são quantitativas contínuas (valores repetidos só aparecem porque o IBGE arredonda para uma casa decimal).</p>
+  </section>
+  <div class="leitura">
+    <h3>O que a tabela mostra</h3>
+    <ul>
+      <li><b>População × amostra:</b> as médias amostrais ficaram perto das populacionais (maior distância relativa: IDEB da PB, 5,57 × 5,34), e os extremos da amostra são menos extremos (renda no RN: 37,5% a 52,9%, contra 35,5% a 61,4%).</li>
+      <li><b>PB × RN:</b> a PB tem IDEB maior (5,34 × 4,84 na população); renda (perto de 50%) e salário (perto de 1,8 SM) têm centros parecidos.</li>
+      <li><b>Dispersão:</b> o RN varia mais no salário (desvio padrão 0,31 × 0,23 SM); a PB varia mais no IDEB (0,82 × 0,66).</li>
+      <li><b>Assimetria:</b> IDEB e salário têm cauda à direita (o máximo fica bem mais longe de Q3 do que o mínimo de Q1); a renda tem cauda à esquerda nas populações (média abaixo da mediana).</li>
+    </ul>
+  </div>
+</div></section>
+
+<!-- ===================== Quadrante 3 (inferior esquerdo) ===================== -->
+<section class="quadrante q3"><div class="cartao" data-nome="3 (inferior esquerdo)">
+  <section class="bloco">
+    <h2 class="secao"><span class="num">4</span>Análise gráfica: salário médio mensal</h2>
+    <figure><svg xmlns:xlink="http://www.w3.org/1999/xlink" class="grafico" viewBox="0 0 498.897638 289.133858" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-14T19:50:10.757706</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.9, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="g1-figure_1">
+  <g id="g1-patch_1">
+   <path d="M 0 289.133858 
+L 498.897638 289.133858 
+L 498.897638 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="g1-axes_1">
+   <g id="g1-patch_2">
+    <path d="M 37.417323 87.44207 
+L 491.414173 87.44207 
+L 491.414173 25.511811 
+L 37.417323 25.511811 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="g1-matplotlib.axis_1">
+    <g id="g1-xtick_1">
+     <g id="g1-line2d_1"/>
+    </g>
+    <g id="g1-xtick_2">
+     <g id="g1-line2d_2"/>
+    </g>
+    <g id="g1-xtick_3">
+     <g id="g1-line2d_3"/>
+    </g>
+    <g id="g1-xtick_4">
+     <g id="g1-line2d_4"/>
+    </g>
+    <g id="g1-xtick_5">
+     <g id="g1-line2d_5"/>
+    </g>
+    <g id="g1-xtick_6">
+     <g id="g1-line2d_6"/>
+    </g>
+    <g id="g1-xtick_7">
+     <g id="g1-line2d_7"/>
+    </g>
+    <g id="g1-xtick_8">
+     <g id="g1-line2d_8"/>
+    </g>
+    <g id="g1-xtick_9">
+     <g id="g1-line2d_9"/>
+    </g>
+    <g id="g1-xtick_10">
+     <g id="g1-line2d_10"/>
+    </g>
+    <g id="g1-xtick_11">
+     <g id="g1-line2d_11"/>
+    </g>
+   </g>
+   <g id="g1-matplotlib.axis_2">
+    <g id="g1-ytick_1">
+     <g id="g1-line2d_12">
+      <path d="M 37.417323 87.44207 
+L 491.414173 87.44207 
+" clip-path="url(#g1-p6080a621d1)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_13"/>
+     <g id="g1-text_1">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: end; fill: #52514e" x="31.417323" y="91.32871" transform="rotate(-0 31.417323 91.32871)">0</text>
+     </g>
+    </g>
+    <g id="g1-ytick_2">
+     <g id="g1-line2d_14">
+      <path d="M 37.417323 71.144633 
+L 491.414173 71.144633 
+" clip-path="url(#g1-p6080a621d1)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_15"/>
+     <g id="g1-text_2">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: end; fill: #52514e" x="31.417323" y="75.031274" transform="rotate(-0 31.417323 75.031274)">4</text>
+     </g>
+    </g>
+    <g id="g1-ytick_3">
+     <g id="g1-line2d_16">
+      <path d="M 37.417323 54.847197 
+L 491.414173 54.847197 
+" clip-path="url(#g1-p6080a621d1)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_17"/>
+     <g id="g1-text_3">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: end; fill: #52514e" x="31.417323" y="58.733837" transform="rotate(-0 31.417323 58.733837)">8</text>
+     </g>
+    </g>
+    <g id="g1-ytick_4">
+     <g id="g1-line2d_18">
+      <path d="M 37.417323 38.54976 
+L 491.414173 38.54976 
+" clip-path="url(#g1-p6080a621d1)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_19"/>
+     <g id="g1-text_4">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: end; fill: #52514e" x="31.417323" y="42.436401" transform="rotate(-0 31.417323 42.436401)">12</text>
+     </g>
+    </g>
+    <g id="g1-text_5">
+     <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="13.68201" y="56.47694" transform="rotate(-90 13.68201 56.47694)">municípios</text>
+    </g>
+   </g>
+   <g id="g1-patch_3">
+    <path d="M 37.417323 87.44207 
+L 491.414173 87.44207 
+" style="fill: none; stroke: #c3c2b7; stroke-width: 0.9; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g1-patch_4">
+    <path d="M 49.199622 87.44207 
+L 90.491717 87.44207 
+L 90.491717 83.367711 
+L 49.199622 83.367711 
+z
+" clip-path="url(#g1-p6080a621d1)" style="fill: #2a78d6"/>
+   </g>
+   <g id="g1-patch_5">
+    <path d="M 92.437417 87.44207 
+L 133.729512 87.44207 
+L 133.729512 83.367711 
+L 92.437417 83.367711 
+z
+" clip-path="url(#g1-p6080a621d1)" style="fill: #2a78d6"/>
+   </g>
+   <g id="g1-patch_6">
+    <path d="M 135.675213 87.44207 
+L 176.967307 87.44207 
+L 176.967307 42.624119 
+L 135.675213 42.624119 
+z
+" clip-path="url(#g1-p6080a621d1)" style="fill: #2a78d6"/>
+   </g>
+   <g id="g1-patch_7">
+    <path d="M 178.913008 87.44207 
+L 220.205102 87.44207 
+L 220.205102 34.475401 
+L 178.913008 34.475401 
+z
+" clip-path="url(#g1-p6080a621d1)" style="fill: #2a78d6"/>
+   </g>
+   <g id="g1-patch_8">
+    <path d="M 222.150803 87.44207 
+L 263.442898 87.44207 
+L 263.442898 75.218992 
+L 222.150803 75.218992 
+z
+" clip-path="url(#g1-p6080a621d1)" style="fill: #2a78d6"/>
+   </g>
+   <g id="g1-patch_9">
+    <path d="M 265.388598 87.44207 
+L 306.680693 87.44207 
+L 306.680693 87.44207 
+L 265.388598 87.44207 
+z
+" clip-path="url(#g1-p6080a621d1)" style="fill: #2a78d6"/>
+   </g>
+   <g id="g1-patch_10">
+    <path d="M 308.626394 87.44207 
+L 349.918488 87.44207 
+L 349.918488 83.367711 
+L 308.626394 83.367711 
+z
+" clip-path="url(#g1-p6080a621d1)" style="fill: #2a78d6"/>
+   </g>
+   <g id="g1-patch_11">
+    <path d="M 351.864189 87.44207 
+L 393.156283 87.44207 
+L 393.156283 87.44207 
+L 351.864189 87.44207 
+z
+" clip-path="url(#g1-p6080a621d1)" style="fill: #2a78d6"/>
+   </g>
+   <g id="g1-patch_12">
+    <path d="M 395.101984 87.44207 
+L 436.394079 87.44207 
+L 436.394079 87.44207 
+L 395.101984 87.44207 
+z
+" clip-path="url(#g1-p6080a621d1)" style="fill: #2a78d6"/>
+   </g>
+   <g id="g1-patch_13">
+    <path d="M 438.33978 87.44207 
+L 479.631874 87.44207 
+L 479.631874 87.44207 
+L 438.33978 87.44207 
+z
+" clip-path="url(#g1-p6080a621d1)" style="fill: #2a78d6"/>
+   </g>
+   <g id="g1-text_6">
+    <text style="font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="69.845669" y="79.756685" transform="rotate(-0 69.845669 79.756685)">1</text>
+   </g>
+   <g id="g1-text_7">
+    <text style="font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="113.083465" y="79.756685" transform="rotate(-0 113.083465 79.756685)">1</text>
+   </g>
+   <g id="g1-text_8">
+    <text style="font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="156.32126" y="39.013094" transform="rotate(-0 156.32126 39.013094)">11</text>
+   </g>
+   <g id="g1-text_9">
+    <text style="font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="199.559055" y="30.864375" transform="rotate(-0 199.559055 30.864375)">13</text>
+   </g>
+   <g id="g1-text_10">
+    <text style="font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="242.79685" y="71.607967" transform="rotate(-0 242.79685 71.607967)">3</text>
+   </g>
+   <g id="g1-text_11">
+    <text style="font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="329.272441" y="79.756685" transform="rotate(-0 329.272441 79.756685)">1</text>
+   </g>
+  </g>
+  <g id="g1-axes_2">
+   <g id="g1-patch_14">
+    <path d="M 37.417323 112.413948 
+L 491.414173 112.413948 
+L 491.414173 87.44207 
+L 37.417323 87.44207 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="g1-matplotlib.axis_3">
+    <g id="g1-xtick_12">
+     <g id="g1-line2d_20">
+      <path d="M 48.226772 112.413948 
+L 48.226772 87.44207 
+" clip-path="url(#g1-p56130adddc)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_21"/>
+     <g id="g1-text_12">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="48.226772" y="125.18723" transform="rotate(-0 48.226772 125.18723)">1,2</text>
+     </g>
+    </g>
+    <g id="g1-xtick_13">
+     <g id="g1-line2d_22">
+      <path d="M 91.464567 112.413948 
+L 91.464567 87.44207 
+" clip-path="url(#g1-p56130adddc)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_23"/>
+     <g id="g1-text_13">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="91.464567" y="125.18723" transform="rotate(-0 91.464567 125.18723)">1,4</text>
+     </g>
+    </g>
+    <g id="g1-xtick_14">
+     <g id="g1-line2d_24">
+      <path d="M 134.702362 112.413948 
+L 134.702362 87.44207 
+" clip-path="url(#g1-p56130adddc)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_25"/>
+     <g id="g1-text_14">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="134.702362" y="125.18723" transform="rotate(-0 134.702362 125.18723)">1,6</text>
+     </g>
+    </g>
+    <g id="g1-xtick_15">
+     <g id="g1-line2d_26">
+      <path d="M 177.940157 112.413948 
+L 177.940157 87.44207 
+" clip-path="url(#g1-p56130adddc)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_27"/>
+     <g id="g1-text_15">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="177.940157" y="125.18723" transform="rotate(-0 177.940157 125.18723)">1,8</text>
+     </g>
+    </g>
+    <g id="g1-xtick_16">
+     <g id="g1-line2d_28">
+      <path d="M 221.177953 112.413948 
+L 221.177953 87.44207 
+" clip-path="url(#g1-p56130adddc)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_29"/>
+     <g id="g1-text_16">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="221.177953" y="125.18723" transform="rotate(-0 221.177953 125.18723)">2,0</text>
+     </g>
+    </g>
+    <g id="g1-xtick_17">
+     <g id="g1-line2d_30">
+      <path d="M 264.415748 112.413948 
+L 264.415748 87.44207 
+" clip-path="url(#g1-p56130adddc)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_31"/>
+     <g id="g1-text_17">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="264.415748" y="125.18723" transform="rotate(-0 264.415748 125.18723)">2,2</text>
+     </g>
+    </g>
+    <g id="g1-xtick_18">
+     <g id="g1-line2d_32">
+      <path d="M 307.653543 112.413948 
+L 307.653543 87.44207 
+" clip-path="url(#g1-p56130adddc)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_33"/>
+     <g id="g1-text_18">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="307.653543" y="125.18723" transform="rotate(-0 307.653543 125.18723)">2,4</text>
+     </g>
+    </g>
+    <g id="g1-xtick_19">
+     <g id="g1-line2d_34">
+      <path d="M 350.891339 112.413948 
+L 350.891339 87.44207 
+" clip-path="url(#g1-p56130adddc)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_35"/>
+     <g id="g1-text_19">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="350.891339" y="125.18723" transform="rotate(-0 350.891339 125.18723)">2,6</text>
+     </g>
+    </g>
+    <g id="g1-xtick_20">
+     <g id="g1-line2d_36">
+      <path d="M 394.129134 112.413948 
+L 394.129134 87.44207 
+" clip-path="url(#g1-p56130adddc)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_37"/>
+     <g id="g1-text_20">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="394.129134" y="125.18723" transform="rotate(-0 394.129134 125.18723)">2,8</text>
+     </g>
+    </g>
+    <g id="g1-xtick_21">
+     <g id="g1-line2d_38">
+      <path d="M 437.366929 112.413948 
+L 437.366929 87.44207 
+" clip-path="url(#g1-p56130adddc)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_39"/>
+     <g id="g1-text_21">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="437.366929" y="125.18723" transform="rotate(-0 437.366929 125.18723)">3,0</text>
+     </g>
+    </g>
+    <g id="g1-xtick_22">
+     <g id="g1-line2d_40">
+      <path d="M 480.604724 112.413948 
+L 480.604724 87.44207 
+" clip-path="url(#g1-p56130adddc)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_41"/>
+     <g id="g1-text_22">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="480.604724" y="125.18723" transform="rotate(-0 480.604724 125.18723)">3,2</text>
+     </g>
+    </g>
+   </g>
+   <g id="g1-matplotlib.axis_4"/>
+   <g id="g1-patch_15">
+    <path d="M 140.107087 105.088864 
+L 140.107087 94.767154 
+L 199.559055 94.767154 
+L 199.559055 105.088864 
+L 140.107087 105.088864 
+z
+" clip-path="url(#g1-p56130adddc)" style="fill: #2a78d6; fill-opacity: 0.180392; stroke: #2a78d6; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="g1-line2d_42">
+    <path d="M 140.107087 99.928009 
+L 69.845669 99.928009 
+" clip-path="url(#g1-p56130adddc)" style="fill: none; stroke: #52514e; stroke-width: 1.2; stroke-linecap: square"/>
+   </g>
+   <g id="g1-line2d_43">
+    <path d="M 199.559055 99.928009 
+L 221.177953 99.928009 
+" clip-path="url(#g1-p56130adddc)" style="fill: none; stroke: #52514e; stroke-width: 1.2; stroke-linecap: square"/>
+   </g>
+   <g id="g1-line2d_44">
+    <path d="M 69.845669 102.508436 
+L 69.845669 97.347582 
+" clip-path="url(#g1-p56130adddc)" style="fill: none; stroke: #52514e; stroke-width: 1.2; stroke-linecap: square"/>
+   </g>
+   <g id="g1-line2d_45">
+    <path d="M 221.177953 102.508436 
+L 221.177953 97.347582 
+" clip-path="url(#g1-p56130adddc)" style="fill: none; stroke: #52514e; stroke-width: 1.2; stroke-linecap: square"/>
+   </g>
+   <g id="g1-line2d_46">
+    <defs>
+     <path id="g1-m22a1f10907" d="M 0 3.75 
+C 0.994512 3.75 1.948425 3.354876 2.65165 2.65165 
+C 3.354876 1.948425 3.75 0.994512 3.75 0 
+C 3.75 -0.994512 3.354876 -1.948425 2.65165 -2.65165 
+C 1.948425 -3.354876 0.994512 -3.75 0 -3.75 
+C -0.994512 -3.75 -1.948425 -3.354876 -2.65165 -2.65165 
+C -3.354876 -1.948425 -3.75 -0.994512 -3.75 0 
+C -3.75 0.994512 -3.354876 1.948425 -2.65165 2.65165 
+C -1.948425 3.354876 -0.994512 3.75 0 3.75 
+z
+" style="stroke: #ffffff; stroke-width: 1.4"/>
+    </defs>
+    <g clip-path="url(#g1-p56130adddc)">
+     <use xlink:href="#g1-m22a1f10907" x="307.653543" y="99.928009" style="fill: #2a78d6; stroke: #ffffff; stroke-width: 1.4"/>
+    </g>
+   </g>
+   <g id="g1-line2d_47">
+    <path d="M 177.940157 105.088864 
+L 177.940157 94.767154 
+" clip-path="url(#g1-p56130adddc)" style="fill: none; stroke: #2a78d6; stroke-width: 3"/>
+   </g>
+   <g id="g1-patch_16">
+    <path d="M 37.417323 112.413948 
+L 491.414173 112.413948 
+" style="fill: none; stroke: #c3c2b7; stroke-width: 0.9; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g1-text_23">
+    <text style="font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: start; fill: #0b0b0b" x="317.382047" y="102.351993" transform="rotate(-0 317.382047 102.351993)">Carrapateira (2,4)</text>
+   </g>
+   <g id="g1-line2d_48">
+    <path d="M 172.895748 99.928009 
+" clip-path="url(#g1-p56130adddc)" style="fill: none; stroke: #0b0b0b; stroke-width: 1.5; stroke-linecap: square"/>
+    <defs>
+     <path id="g1-me5c5a5d526" d="M 0 4.596194 
+L 4.596194 0 
+L 0 -4.596194 
+L -4.596194 0 
+z
+" style="stroke: #ffffff; stroke-width: 1.2; stroke-linejoin: miter"/>
+    </defs>
+    <g clip-path="url(#g1-p56130adddc)">
+     <use xlink:href="#g1-me5c5a5d526" x="172.895748" y="99.928009" style="fill: #0b0b0b; stroke: #ffffff; stroke-width: 1.2; stroke-linejoin: miter"/>
+    </g>
+   </g>
+  </g>
+  <g id="g1-axes_3">
+   <g id="g1-patch_17">
+    <path d="M 37.417323 210.303712 
+L 491.414173 210.303712 
+L 491.414173 148.373453 
+L 37.417323 148.373453 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="g1-matplotlib.axis_5">
+    <g id="g1-xtick_23">
+     <g id="g1-line2d_49"/>
+    </g>
+    <g id="g1-xtick_24">
+     <g id="g1-line2d_50"/>
+    </g>
+    <g id="g1-xtick_25">
+     <g id="g1-line2d_51"/>
+    </g>
+    <g id="g1-xtick_26">
+     <g id="g1-line2d_52"/>
+    </g>
+    <g id="g1-xtick_27">
+     <g id="g1-line2d_53"/>
+    </g>
+    <g id="g1-xtick_28">
+     <g id="g1-line2d_54"/>
+    </g>
+    <g id="g1-xtick_29">
+     <g id="g1-line2d_55"/>
+    </g>
+    <g id="g1-xtick_30">
+     <g id="g1-line2d_56"/>
+    </g>
+    <g id="g1-xtick_31">
+     <g id="g1-line2d_57"/>
+    </g>
+    <g id="g1-xtick_32">
+     <g id="g1-line2d_58"/>
+    </g>
+    <g id="g1-xtick_33">
+     <g id="g1-line2d_59"/>
+    </g>
+   </g>
+   <g id="g1-matplotlib.axis_6">
+    <g id="g1-ytick_5">
+     <g id="g1-line2d_60">
+      <path d="M 37.417323 210.303712 
+L 491.414173 210.303712 
+" clip-path="url(#g1-p6533519bfa)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_61"/>
+     <g id="g1-text_24">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: end; fill: #52514e" x="31.417323" y="214.190353" transform="rotate(-0 31.417323 214.190353)">0</text>
+     </g>
+    </g>
+    <g id="g1-ytick_6">
+     <g id="g1-line2d_62">
+      <path d="M 37.417323 194.006276 
+L 491.414173 194.006276 
+" clip-path="url(#g1-p6533519bfa)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_63"/>
+     <g id="g1-text_25">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: end; fill: #52514e" x="31.417323" y="197.892916" transform="rotate(-0 31.417323 197.892916)">4</text>
+     </g>
+    </g>
+    <g id="g1-ytick_7">
+     <g id="g1-line2d_64">
+      <path d="M 37.417323 177.708839 
+L 491.414173 177.708839 
+" clip-path="url(#g1-p6533519bfa)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_65"/>
+     <g id="g1-text_26">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: end; fill: #52514e" x="31.417323" y="181.59548" transform="rotate(-0 31.417323 181.59548)">8</text>
+     </g>
+    </g>
+    <g id="g1-ytick_8">
+     <g id="g1-line2d_66">
+      <path d="M 37.417323 161.411403 
+L 491.414173 161.411403 
+" clip-path="url(#g1-p6533519bfa)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_67"/>
+     <g id="g1-text_27">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: end; fill: #52514e" x="31.417323" y="165.298043" transform="rotate(-0 31.417323 165.298043)">12</text>
+     </g>
+    </g>
+    <g id="g1-text_28">
+     <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="13.68201" y="179.338583" transform="rotate(-90 13.68201 179.338583)">municípios</text>
+    </g>
+   </g>
+   <g id="g1-patch_18">
+    <path d="M 37.417323 210.303712 
+L 491.414173 210.303712 
+" style="fill: none; stroke: #c3c2b7; stroke-width: 0.9; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g1-patch_19">
+    <path d="M 49.199622 210.303712 
+L 90.491717 210.303712 
+L 90.491717 210.303712 
+L 49.199622 210.303712 
+z
+" clip-path="url(#g1-p6533519bfa)" style="fill: #eb6834"/>
+   </g>
+   <g id="g1-patch_20">
+    <path d="M 92.437417 210.303712 
+L 133.729512 210.303712 
+L 133.729512 198.080635 
+L 92.437417 198.080635 
+z
+" clip-path="url(#g1-p6533519bfa)" style="fill: #eb6834"/>
+   </g>
+   <g id="g1-patch_21">
+    <path d="M 135.675213 210.303712 
+L 176.967307 210.303712 
+L 176.967307 185.857557 
+L 135.675213 185.857557 
+z
+" clip-path="url(#g1-p6533519bfa)" style="fill: #eb6834"/>
+   </g>
+   <g id="g1-patch_22">
+    <path d="M 178.913008 210.303712 
+L 220.205102 210.303712 
+L 220.205102 173.63448 
+L 178.913008 173.63448 
+z
+" clip-path="url(#g1-p6533519bfa)" style="fill: #eb6834"/>
+   </g>
+   <g id="g1-patch_23">
+    <path d="M 222.150803 210.303712 
+L 263.442898 210.303712 
+L 263.442898 173.63448 
+L 222.150803 173.63448 
+z
+" clip-path="url(#g1-p6533519bfa)" style="fill: #eb6834"/>
+   </g>
+   <g id="g1-patch_24">
+    <path d="M 265.388598 210.303712 
+L 306.680693 210.303712 
+L 306.680693 202.154994 
+L 265.388598 202.154994 
+z
+" clip-path="url(#g1-p6533519bfa)" style="fill: #eb6834"/>
+   </g>
+   <g id="g1-patch_25">
+    <path d="M 308.626394 210.303712 
+L 349.918488 210.303712 
+L 349.918488 210.303712 
+L 308.626394 210.303712 
+z
+" clip-path="url(#g1-p6533519bfa)" style="fill: #eb6834"/>
+   </g>
+   <g id="g1-patch_26">
+    <path d="M 351.864189 210.303712 
+L 393.156283 210.303712 
+L 393.156283 210.303712 
+L 351.864189 210.303712 
+z
+" clip-path="url(#g1-p6533519bfa)" style="fill: #eb6834"/>
+   </g>
+   <g id="g1-patch_27">
+    <path d="M 395.101984 210.303712 
+L 436.394079 210.303712 
+L 436.394079 206.229353 
+L 395.101984 206.229353 
+z
+" clip-path="url(#g1-p6533519bfa)" style="fill: #eb6834"/>
+   </g>
+   <g id="g1-patch_28">
+    <path d="M 438.33978 210.303712 
+L 479.631874 210.303712 
+L 479.631874 210.303712 
+L 438.33978 210.303712 
+z
+" clip-path="url(#g1-p6533519bfa)" style="fill: #eb6834"/>
+   </g>
+   <g id="g1-text_29">
+    <text style="font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="113.083465" y="194.469609" transform="rotate(-0 113.083465 194.469609)">3</text>
+   </g>
+   <g id="g1-text_30">
+    <text style="font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="156.32126" y="182.246532" transform="rotate(-0 156.32126 182.246532)">6</text>
+   </g>
+   <g id="g1-text_31">
+    <text style="font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="199.559055" y="170.023454" transform="rotate(-0 199.559055 170.023454)">9</text>
+   </g>
+   <g id="g1-text_32">
+    <text style="font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="242.79685" y="170.023454" transform="rotate(-0 242.79685 170.023454)">9</text>
+   </g>
+   <g id="g1-text_33">
+    <text style="font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="286.034646" y="198.543968" transform="rotate(-0 286.034646 198.543968)">2</text>
+   </g>
+   <g id="g1-text_34">
+    <text style="font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="415.748031" y="202.618327" transform="rotate(-0 415.748031 202.618327)">1</text>
+   </g>
+  </g>
+  <g id="g1-axes_4">
+   <g id="g1-patch_29">
+    <path d="M 37.417323 235.275591 
+L 491.414173 235.275591 
+L 491.414173 210.303712 
+L 37.417323 210.303712 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="g1-matplotlib.axis_7">
+    <g id="g1-xtick_34">
+     <g id="g1-line2d_68">
+      <path d="M 48.226772 235.275591 
+L 48.226772 210.303712 
+" clip-path="url(#g1-pd1c3bd89ae)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_69"/>
+     <g id="g1-text_35">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="48.226772" y="248.048872" transform="rotate(-0 48.226772 248.048872)">1,2</text>
+     </g>
+    </g>
+    <g id="g1-xtick_35">
+     <g id="g1-line2d_70">
+      <path d="M 91.464567 235.275591 
+L 91.464567 210.303712 
+" clip-path="url(#g1-pd1c3bd89ae)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_71"/>
+     <g id="g1-text_36">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="91.464567" y="248.048872" transform="rotate(-0 91.464567 248.048872)">1,4</text>
+     </g>
+    </g>
+    <g id="g1-xtick_36">
+     <g id="g1-line2d_72">
+      <path d="M 134.702362 235.275591 
+L 134.702362 210.303712 
+" clip-path="url(#g1-pd1c3bd89ae)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_73"/>
+     <g id="g1-text_37">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="134.702362" y="248.048872" transform="rotate(-0 134.702362 248.048872)">1,6</text>
+     </g>
+    </g>
+    <g id="g1-xtick_37">
+     <g id="g1-line2d_74">
+      <path d="M 177.940157 235.275591 
+L 177.940157 210.303712 
+" clip-path="url(#g1-pd1c3bd89ae)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_75"/>
+     <g id="g1-text_38">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="177.940157" y="248.048872" transform="rotate(-0 177.940157 248.048872)">1,8</text>
+     </g>
+    </g>
+    <g id="g1-xtick_38">
+     <g id="g1-line2d_76">
+      <path d="M 221.177953 235.275591 
+L 221.177953 210.303712 
+" clip-path="url(#g1-pd1c3bd89ae)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_77"/>
+     <g id="g1-text_39">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="221.177953" y="248.048872" transform="rotate(-0 221.177953 248.048872)">2,0</text>
+     </g>
+    </g>
+    <g id="g1-xtick_39">
+     <g id="g1-line2d_78">
+      <path d="M 264.415748 235.275591 
+L 264.415748 210.303712 
+" clip-path="url(#g1-pd1c3bd89ae)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_79"/>
+     <g id="g1-text_40">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="264.415748" y="248.048872" transform="rotate(-0 264.415748 248.048872)">2,2</text>
+     </g>
+    </g>
+    <g id="g1-xtick_40">
+     <g id="g1-line2d_80">
+      <path d="M 307.653543 235.275591 
+L 307.653543 210.303712 
+" clip-path="url(#g1-pd1c3bd89ae)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_81"/>
+     <g id="g1-text_41">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="307.653543" y="248.048872" transform="rotate(-0 307.653543 248.048872)">2,4</text>
+     </g>
+    </g>
+    <g id="g1-xtick_41">
+     <g id="g1-line2d_82">
+      <path d="M 350.891339 235.275591 
+L 350.891339 210.303712 
+" clip-path="url(#g1-pd1c3bd89ae)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_83"/>
+     <g id="g1-text_42">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="350.891339" y="248.048872" transform="rotate(-0 350.891339 248.048872)">2,6</text>
+     </g>
+    </g>
+    <g id="g1-xtick_42">
+     <g id="g1-line2d_84">
+      <path d="M 394.129134 235.275591 
+L 394.129134 210.303712 
+" clip-path="url(#g1-pd1c3bd89ae)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_85"/>
+     <g id="g1-text_43">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="394.129134" y="248.048872" transform="rotate(-0 394.129134 248.048872)">2,8</text>
+     </g>
+    </g>
+    <g id="g1-xtick_43">
+     <g id="g1-line2d_86">
+      <path d="M 437.366929 235.275591 
+L 437.366929 210.303712 
+" clip-path="url(#g1-pd1c3bd89ae)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_87"/>
+     <g id="g1-text_44">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="437.366929" y="248.048872" transform="rotate(-0 437.366929 248.048872)">3,0</text>
+     </g>
+    </g>
+    <g id="g1-xtick_44">
+     <g id="g1-line2d_88">
+      <path d="M 480.604724 235.275591 
+L 480.604724 210.303712 
+" clip-path="url(#g1-pd1c3bd89ae)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g1-line2d_89"/>
+     <g id="g1-text_45">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="480.604724" y="248.048872" transform="rotate(-0 480.604724 248.048872)">3,2</text>
+     </g>
+    </g>
+    <g id="g1-text_46">
+     <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="264.415748" y="262.237153" transform="rotate(-0 264.415748 262.237153)">Salário médio mensal dos trabalhadores formais (em salários mínimos)</text>
+    </g>
+   </g>
+   <g id="g1-matplotlib.axis_8"/>
+   <g id="g1-patch_30">
+    <path d="M 140.107087 227.950506 
+L 140.107087 217.628796 
+L 221.177953 217.628796 
+L 221.177953 227.950506 
+L 140.107087 227.950506 
+z
+" clip-path="url(#g1-pd1c3bd89ae)" style="fill: #eb6834; fill-opacity: 0.180392; stroke: #eb6834; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="g1-line2d_90">
+    <path d="M 140.107087 222.789651 
+L 91.464567 222.789651 
+" clip-path="url(#g1-pd1c3bd89ae)" style="fill: none; stroke: #52514e; stroke-width: 1.2; stroke-linecap: square"/>
+   </g>
+   <g id="g1-line2d_91">
+    <path d="M 221.177953 222.789651 
+L 286.034646 222.789651 
+" clip-path="url(#g1-pd1c3bd89ae)" style="fill: none; stroke: #52514e; stroke-width: 1.2; stroke-linecap: square"/>
+   </g>
+   <g id="g1-line2d_92">
+    <path d="M 91.464567 225.370079 
+L 91.464567 220.209224 
+" clip-path="url(#g1-pd1c3bd89ae)" style="fill: none; stroke: #52514e; stroke-width: 1.2; stroke-linecap: square"/>
+   </g>
+   <g id="g1-line2d_93">
+    <path d="M 286.034646 225.370079 
+L 286.034646 220.209224 
+" clip-path="url(#g1-pd1c3bd89ae)" style="fill: none; stroke: #52514e; stroke-width: 1.2; stroke-linecap: square"/>
+   </g>
+   <g id="g1-line2d_94">
+    <defs>
+     <path id="g1-m46b34c81fb" d="M 0 3.75 
+C 0.994512 3.75 1.948425 3.354876 2.65165 2.65165 
+C 3.354876 1.948425 3.75 0.994512 3.75 0 
+C 3.75 -0.994512 3.354876 -1.948425 2.65165 -2.65165 
+C 1.948425 -3.354876 0.994512 -3.75 0 -3.75 
+C -0.994512 -3.75 -1.948425 -3.354876 -2.65165 -2.65165 
+C -3.354876 -1.948425 -3.75 -0.994512 -3.75 0 
+C -3.75 0.994512 -3.354876 1.948425 -2.65165 2.65165 
+C -1.948425 3.354876 -0.994512 3.75 0 3.75 
+z
+" style="stroke: #ffffff; stroke-width: 1.4"/>
+    </defs>
+    <g clip-path="url(#g1-pd1c3bd89ae)">
+     <use xlink:href="#g1-m46b34c81fb" x="415.748031" y="222.789651" style="fill: #eb6834; stroke: #ffffff; stroke-width: 1.4"/>
+    </g>
+   </g>
+   <g id="g1-line2d_95">
+    <path d="M 199.559055 227.950506 
+L 199.559055 217.628796 
+" clip-path="url(#g1-pd1c3bd89ae)" style="fill: none; stroke: #eb6834; stroke-width: 3"/>
+   </g>
+   <g id="g1-patch_31">
+    <path d="M 37.417323 235.275591 
+L 491.414173 235.275591 
+" style="fill: none; stroke: #c3c2b7; stroke-width: 0.9; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g1-text_47">
+    <text style="font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: start; fill: #0b0b0b" x="425.476535" y="225.213636" transform="rotate(-0 425.476535 225.213636)">Riachuelo (2,9)</text>
+   </g>
+   <g id="g1-line2d_96">
+    <path d="M 195.235276 222.789651 
+" clip-path="url(#g1-pd1c3bd89ae)" style="fill: none; stroke: #0b0b0b; stroke-width: 1.5; stroke-linecap: square"/>
+    <g clip-path="url(#g1-pd1c3bd89ae)">
+     <use xlink:href="#g1-me5c5a5d526" x="195.235276" y="222.789651" style="fill: #0b0b0b; stroke: #ffffff; stroke-width: 1.2; stroke-linejoin: miter"/>
+    </g>
+   </g>
+  </g>
+  <g id="g1-text_48">
+   <text style="font-weight: 700; font-size: 11.5px; font-family: 'Segoe UI'; text-anchor: start; fill: #0b0b0b" x="49.390866" y="15.590551" transform="rotate(-0 49.390866 15.590551)">Paraíba · Amostra 1  (n = 30)</text>
+  </g>
+  <g id="g1-text_49">
+   <text style="font-weight: 700; font-size: 11.5px; font-family: 'Segoe UI'; text-anchor: start; fill: #0b0b0b" x="49.390866" y="138.452193" transform="rotate(-0 49.390866 138.452193)">Rio Grande do Norte · Amostra 2  (n = 30)</text>
+  </g>
+  <g id="g1-patch_32">
+   <path d="M 37.417323 15.590551 
+L 45.617323 15.590551 
+L 45.617323 7.390551 
+L 37.417323 7.390551 
+z
+" style="fill: #2a78d6; stroke: #2a78d6; stroke-linejoin: miter"/>
+  </g>
+  <g id="g1-patch_33">
+   <path d="M 37.417323 138.452193 
+L 45.617323 138.452193 
+L 45.617323 130.252193 
+L 37.417323 130.252193 
+z
+" style="fill: #eb6834; stroke: #eb6834; stroke-linejoin: miter"/>
+  </g>
+  <g id="g1-legend_1">
+   <g id="g1-patch_34">
+    <path d="M 70.600748 278.963858 
+L 82.300748 278.963858 
+L 82.300748 272.663858 
+L 70.600748 272.663858 
+z
+" style="fill: #e9e8e3; stroke: #52514e; stroke-linejoin: miter"/>
+   </g>
+   <g id="g1-text_50">
+    <text style="font-size: 9px; font-family: 'Segoe UI'; text-anchor: start; fill: #52514e" x="86.800748" y="278.963858" transform="rotate(-0 86.800748 278.963858)">caixa: de Q1 a Q3</text>
+   </g>
+   <g id="g1-line2d_97">
+    <path d="M 167.797936 275.813858 
+L 173.647936 275.813858 
+L 179.497936 275.813858 
+" style="fill: none; stroke: #52514e; stroke-width: 3; stroke-linecap: square"/>
+   </g>
+   <g id="g1-text_51">
+    <text style="font-size: 9px; font-family: 'Segoe UI'; text-anchor: start; fill: #52514e" x="183.997936" y="278.963858" transform="rotate(-0 183.997936 278.963858)">mediana</text>
+   </g>
+   <g id="g1-line2d_98">
+    <defs>
+     <path id="g1-m4763aa86ad" d="M 0 4.596194 
+L 4.596194 0 
+L 0 -4.596194 
+L -4.596194 0 
+z
+" style="stroke: #ffffff; stroke-linejoin: miter"/>
+    </defs>
+    <g>
+     <use xlink:href="#g1-m4763aa86ad" x="235.738092" y="275.813858" style="fill: #0b0b0b; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+   </g>
+   <g id="g1-text_52">
+    <text style="font-size: 9px; font-family: 'Segoe UI'; text-anchor: start; fill: #52514e" x="246.088092" y="278.963858" transform="rotate(-0 246.088092 278.963858)">média</text>
+   </g>
+   <g id="g1-line2d_99">
+    <defs>
+     <path id="g1-mde61056e4b" d="M 0 3.5 
+C 0.928211 3.5 1.81853 3.131218 2.474874 2.474874 
+C 3.131218 1.81853 3.5 0.928211 3.5 0 
+C 3.5 -0.928211 3.131218 -1.81853 2.474874 -2.474874 
+C 1.81853 -3.131218 0.928211 -3.5 0 -3.5 
+C -0.928211 -3.5 -1.81853 -3.131218 -2.474874 -2.474874 
+C -3.131218 -1.81853 -3.5 -0.928211 -3.5 0 
+C -3.5 0.928211 -3.131218 1.81853 -2.474874 2.474874 
+C -1.81853 3.131218 -0.928211 3.5 0 3.5 
+z
+" style="stroke: #ffffff"/>
+    </defs>
+    <g>
+     <use xlink:href="#g1-mde61056e4b" x="288.156061" y="275.813858" style="fill: #52514e; stroke: #ffffff"/>
+    </g>
+   </g>
+   <g id="g1-text_53">
+    <text style="font-size: 9px; font-family: 'Segoe UI'; text-anchor: start; fill: #52514e" x="298.506061" y="278.963858" transform="rotate(-0 298.506061 278.963858)">valor atípico (a mais de 1,5·AIQ da caixa)</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="g1-p6080a621d1">
+   <rect x="37.417323" y="25.511811" width="453.99685" height="61.930259"/>
+  </clipPath>
+  <clipPath id="g1-p56130adddc">
+   <rect x="37.417323" y="87.44207" width="453.99685" height="24.971879"/>
+  </clipPath>
+  <clipPath id="g1-p6533519bfa">
+   <rect x="37.417323" y="148.373453" width="453.99685" height="61.930259"/>
+  </clipPath>
+  <clipPath id="g1-pd1c3bd89ae">
+   <rect x="37.417323" y="210.303712" width="453.99685" height="24.971879"/>
+  </clipPath>
+ </defs>
+</svg>
+</figure>
+    <div class="leitura">
+      <ul>
+        <li><b>Dispersão:</b> o RN é mais disperso (1,4 a 2,9 SM; desvio padrão 0,30; AIQ 0,375) que a PB (1,3 a 2,4 SM; desvio padrão 0,20; AIQ 0,275), que concentra 24 dos 30 municípios de 1,6&nbsp;a&nbsp;1,9&nbsp;SM.</li>
+        <li><b>Assimetria:</b> o centro é quase simétrico (média ≈ mediana: PB 1,78 e 1,80; RN 1,88 e 1,90), e a cauda direita é mais longa no RN.</li>
+        <li><b>Valores atípicos:</b> Carrapateira (PB, 2,4 SM) e Riachuelo (RN, 2,9 SM), acima de Q3&nbsp;+&nbsp;1,5·AIQ (PB 2,31; RN 2,56). AIQ&nbsp;=&nbsp;Q3&nbsp;−&nbsp;Q1.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="bloco">
+    <h2 class="secao"><span class="num">5</span>Inferência estatística</h2>
+    <h3>5.1 · IC de 95% para a proporção com renda per capita de até 1/2 SM</h3>
+    <p class="formula"><b>p&#770; ± z·√(p&#770;(1 − p&#770;)/n)</b>, com z = 1,96, n = 30 e p&#770; = média das proporções dos 30 municípios.</p>
+    <figure><svg xmlns:xlink="http://www.w3.org/1999/xlink" class="grafico" viewBox="0 0 498.897638 119.055118" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-14T19:50:10.909808</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.9, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="g2-figure_1">
+  <g id="g2-patch_1">
+   <path d="M 0 119.055118 
+L 498.897638 119.055118 
+L 498.897638 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="g2-axes_1">
+   <g id="g2-patch_2">
+    <path d="M 37.417323 80.787402 
+L 491.414173 80.787402 
+L 491.414173 24.094488 
+L 37.417323 24.094488 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="g2-matplotlib.axis_1">
+    <g id="g2-xtick_1">
+     <g id="g2-line2d_1">
+      <path d="M 58.053543 80.787402 
+L 58.053543 24.094488 
+" clip-path="url(#g2-p2e91f3d3e7)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g2-line2d_2"/>
+     <g id="g2-text_1">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="58.053543" y="93.560683" transform="rotate(-0 58.053543 93.560683)">30%</text>
+     </g>
+    </g>
+    <g id="g2-xtick_2">
+     <g id="g2-line2d_3">
+      <path d="M 109.644094 80.787402 
+L 109.644094 24.094488 
+" clip-path="url(#g2-p2e91f3d3e7)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g2-line2d_4"/>
+     <g id="g2-text_2">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="109.644094" y="93.560683" transform="rotate(-0 109.644094 93.560683)">35%</text>
+     </g>
+    </g>
+    <g id="g2-xtick_3">
+     <g id="g2-line2d_5">
+      <path d="M 161.234646 80.787402 
+L 161.234646 24.094488 
+" clip-path="url(#g2-p2e91f3d3e7)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g2-line2d_6"/>
+     <g id="g2-text_3">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="161.234646" y="93.560683" transform="rotate(-0 161.234646 93.560683)">40%</text>
+     </g>
+    </g>
+    <g id="g2-xtick_4">
+     <g id="g2-line2d_7">
+      <path d="M 212.825197 80.787402 
+L 212.825197 24.094488 
+" clip-path="url(#g2-p2e91f3d3e7)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g2-line2d_8"/>
+     <g id="g2-text_4">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="212.825197" y="93.560683" transform="rotate(-0 212.825197 93.560683)">45%</text>
+     </g>
+    </g>
+    <g id="g2-xtick_5">
+     <g id="g2-line2d_9">
+      <path d="M 264.415748 80.787402 
+L 264.415748 24.094488 
+" clip-path="url(#g2-p2e91f3d3e7)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g2-line2d_10"/>
+     <g id="g2-text_5">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="264.415748" y="93.560683" transform="rotate(-0 264.415748 93.560683)">50%</text>
+     </g>
+    </g>
+    <g id="g2-xtick_6">
+     <g id="g2-line2d_11">
+      <path d="M 316.006299 80.787402 
+L 316.006299 24.094488 
+" clip-path="url(#g2-p2e91f3d3e7)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g2-line2d_12"/>
+     <g id="g2-text_6">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="316.006299" y="93.560683" transform="rotate(-0 316.006299 93.560683)">55%</text>
+     </g>
+    </g>
+    <g id="g2-xtick_7">
+     <g id="g2-line2d_13">
+      <path d="M 367.59685 80.787402 
+L 367.59685 24.094488 
+" clip-path="url(#g2-p2e91f3d3e7)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g2-line2d_14"/>
+     <g id="g2-text_7">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="367.59685" y="93.560683" transform="rotate(-0 367.59685 93.560683)">60%</text>
+     </g>
+    </g>
+    <g id="g2-xtick_8">
+     <g id="g2-line2d_15">
+      <path d="M 419.187402 80.787402 
+L 419.187402 24.094488 
+" clip-path="url(#g2-p2e91f3d3e7)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g2-line2d_16"/>
+     <g id="g2-text_8">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="419.187402" y="93.560683" transform="rotate(-0 419.187402 93.560683)">65%</text>
+     </g>
+    </g>
+    <g id="g2-xtick_9">
+     <g id="g2-line2d_17">
+      <path d="M 470.777953 80.787402 
+L 470.777953 24.094488 
+" clip-path="url(#g2-p2e91f3d3e7)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g2-line2d_18"/>
+     <g id="g2-text_9">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="470.777953" y="93.560683" transform="rotate(-0 470.777953 93.560683)">70%</text>
+     </g>
+    </g>
+    <g id="g2-text_10">
+     <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="264.415748" y="107.901542" transform="rotate(-0 264.415748 107.901542)">Proporção da população com renda per capita de até 1/2 salário mínimo</text>
+    </g>
+   </g>
+   <g id="g2-matplotlib.axis_2">
+    <g id="g2-ytick_1">
+     <g id="g2-line2d_19"/>
+     <g id="g2-text_11">
+      <text style="font-weight: 700; font-size: 11px; font-family: 'Segoe UI'; text-anchor: end; fill: #0b0b0b" x="31.417323" y="39.838277" transform="rotate(-0 31.417323 39.838277)">PB</text>
+     </g>
+    </g>
+    <g id="g2-ytick_2">
+     <g id="g2-line2d_20"/>
+     <g id="g2-text_12">
+      <text style="font-weight: 700; font-size: 11px; font-family: 'Segoe UI'; text-anchor: end; fill: #0b0b0b" x="31.417323" y="67.628921" transform="rotate(-0 31.417323 67.628921)">RN</text>
+     </g>
+    </g>
+   </g>
+   <g id="g2-patch_3">
+    <path d="M 37.417323 80.787402 
+L 491.414173 80.787402 
+" style="fill: none; stroke: #c3c2b7; stroke-width: 0.9; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g2-line2d_21">
+    <path d="M 90.298326 35.766559 
+L 459.44454 35.766559 
+" clip-path="url(#g2-p2e91f3d3e7)" style="fill: none; stroke: #2a78d6; stroke-width: 3.2"/>
+   </g>
+   <g id="g2-line2d_22">
+    <path d="M 90.298326 39.101436 
+L 90.298326 32.431681 
+" clip-path="url(#g2-p2e91f3d3e7)" style="fill: none; stroke: #2a78d6; stroke-width: 2.2; stroke-linecap: square"/>
+   </g>
+   <g id="g2-text_13">
+    <text style="font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="90.298326" y="48.357656" transform="rotate(-0 90.298326 48.357656)">33,1%</text>
+   </g>
+   <g id="g2-line2d_23">
+    <path d="M 459.44454 39.101436 
+L 459.44454 32.431681 
+" clip-path="url(#g2-p2e91f3d3e7)" style="fill: none; stroke: #2a78d6; stroke-width: 2.2; stroke-linecap: square"/>
+   </g>
+   <g id="g2-text_14">
+    <text style="font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="459.44454" y="48.357656" transform="rotate(-0 459.44454 48.357656)">68,9%</text>
+   </g>
+   <g id="g2-text_15">
+    <text style="font-weight: 700; font-size: 10px; font-family: 'Segoe UI'; text-anchor: middle; fill: #0b0b0b" x="274.871433" y="48.727812" transform="rotate(-0 274.871433 48.727812)">51,0%</text>
+   </g>
+   <g id="g2-line2d_24">
+    <path d="M 68.158296 63.557202 
+L 437.285483 63.557202 
+" clip-path="url(#g2-p2e91f3d3e7)" style="fill: none; stroke: #eb6834; stroke-width: 3.2"/>
+   </g>
+   <g id="g2-line2d_25">
+    <path d="M 68.158296 66.89208 
+L 68.158296 60.222325 
+" clip-path="url(#g2-p2e91f3d3e7)" style="fill: none; stroke: #eb6834; stroke-width: 2.2; stroke-linecap: square"/>
+   </g>
+   <g id="g2-text_16">
+    <text style="font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="68.158296" y="76.1483" transform="rotate(-0 68.158296 76.1483)">31,0%</text>
+   </g>
+   <g id="g2-line2d_26">
+    <path d="M 437.285483 66.89208 
+L 437.285483 60.222325 
+" clip-path="url(#g2-p2e91f3d3e7)" style="fill: none; stroke: #eb6834; stroke-width: 2.2; stroke-linecap: square"/>
+   </g>
+   <g id="g2-text_17">
+    <text style="font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="437.285483" y="76.1483" transform="rotate(-0 437.285483 76.1483)">66,8%</text>
+   </g>
+   <g id="g2-text_18">
+    <text style="font-weight: 700; font-size: 10px; font-family: 'Segoe UI'; text-anchor: middle; fill: #0b0b0b" x="252.72189" y="76.518456" transform="rotate(-0 252.72189 76.518456)">48,9%</text>
+   </g>
+   <g id="g2-line2d_27">
+    <path d="M 274.871433 35.766559 
+" clip-path="url(#g2-p2e91f3d3e7)" style="fill: none; stroke: #2a78d6; stroke-width: 1.5; stroke-linecap: square"/>
+    <defs>
+     <path id="g2-mca29f68942" d="M 0 5 
+C 1.326016 5 2.597899 4.473168 3.535534 3.535534 
+C 4.473168 2.597899 5 1.326016 5 0 
+C 5 -1.326016 4.473168 -2.597899 3.535534 -3.535534 
+C 2.597899 -4.473168 1.326016 -5 0 -5 
+C -1.326016 -5 -2.597899 -4.473168 -3.535534 -3.535534 
+C -4.473168 -2.597899 -5 -1.326016 -5 0 
+C -5 1.326016 -4.473168 2.597899 -3.535534 3.535534 
+C -2.597899 4.473168 -1.326016 5 0 5 
+z
+" style="stroke: #ffffff; stroke-width: 1.8"/>
+    </defs>
+    <g clip-path="url(#g2-p2e91f3d3e7)">
+     <use xlink:href="#g2-mca29f68942" x="274.871433" y="35.766559" style="fill: #2a78d6; stroke: #ffffff; stroke-width: 1.8"/>
+    </g>
+   </g>
+   <g id="g2-line2d_28">
+    <path d="M 252.72189 63.557202 
+" clip-path="url(#g2-p2e91f3d3e7)" style="fill: none; stroke: #eb6834; stroke-width: 1.5; stroke-linecap: square"/>
+    <defs>
+     <path id="g2-m58f12d327b" d="M 0 5 
+C 1.326016 5 2.597899 4.473168 3.535534 3.535534 
+C 4.473168 2.597899 5 1.326016 5 0 
+C 5 -1.326016 4.473168 -2.597899 3.535534 -3.535534 
+C 2.597899 -4.473168 1.326016 -5 0 -5 
+C -1.326016 -5 -2.597899 -4.473168 -3.535534 -3.535534 
+C -4.473168 -2.597899 -5 -1.326016 -5 0 
+C -5 1.326016 -4.473168 2.597899 -3.535534 3.535534 
+C -2.597899 4.473168 -1.326016 5 0 5 
+z
+" style="stroke: #ffffff; stroke-width: 1.8"/>
+    </defs>
+    <g clip-path="url(#g2-p2e91f3d3e7)">
+     <use xlink:href="#g2-m58f12d327b" x="252.72189" y="63.557202" style="fill: #eb6834; stroke: #ffffff; stroke-width: 1.8"/>
+    </g>
+   </g>
+   <g id="g2-line2d_29">
+    <path d="M 269.861674 30.20843 
+" clip-path="url(#g2-p2e91f3d3e7)" style="fill: none; stroke: #0b0b0b; stroke-width: 1.5; stroke-linecap: square"/>
+    <defs>
+     <path id="g2-m81cf3a970c" d="M -0 4 
+L 4 -4 
+L -4 -4 
+z
+" style="stroke: #ffffff; stroke-width: 1.2; stroke-linejoin: miter"/>
+    </defs>
+    <g clip-path="url(#g2-p2e91f3d3e7)">
+     <use xlink:href="#g2-m81cf3a970c" x="269.861674" y="30.20843" style="fill: #0b0b0b; stroke: #ffffff; stroke-width: 1.2; stroke-linejoin: miter"/>
+    </g>
+   </g>
+   <g id="g2-line2d_30">
+    <path d="M 255.16652 57.999074 
+" clip-path="url(#g2-p2e91f3d3e7)" style="fill: none; stroke: #0b0b0b; stroke-width: 1.5; stroke-linecap: square"/>
+    <g clip-path="url(#g2-p2e91f3d3e7)">
+     <use xlink:href="#g2-m81cf3a970c" x="255.16652" y="57.999074" style="fill: #0b0b0b; stroke: #ffffff; stroke-width: 1.2; stroke-linejoin: miter"/>
+    </g>
+   </g>
+  </g>
+  <g id="g2-legend_1">
+   <g id="g2-line2d_31">
+    <defs>
+     <path id="g2-m61b90020a9" d="M 0 4 
+C 1.060812 4 2.078319 3.578535 2.828427 2.828427 
+C 3.578535 2.078319 4 1.060812 4 0 
+C 4 -1.060812 3.578535 -2.078319 2.828427 -2.828427 
+C 2.078319 -3.578535 1.060812 -4 0 -4 
+C -1.060812 -4 -2.078319 -3.578535 -2.828427 -2.828427 
+C -3.578535 -2.078319 -4 -1.060812 -4 0 
+C -4 1.060812 -3.578535 2.078319 -2.828427 2.828427 
+C -2.078319 3.578535 -1.060812 4 0 4 
+z
+" style="stroke: #ffffff"/>
+    </defs>
+    <g>
+     <use xlink:href="#g2-m61b90020a9" x="121.66942" y="11.612812" style="fill: #52514e; stroke: #ffffff"/>
+    </g>
+   </g>
+   <g id="g2-text_19">
+    <text style="font-size: 9px; font-family: 'Segoe UI'; text-anchor: start; fill: #52514e" x="132.46942" y="14.762812" transform="rotate(-0 132.46942 14.762812)">estimativa da amostra</text>
+   </g>
+   <g id="g2-line2d_32">
+    <path d="M 233.01067 11.612812 
+L 239.31067 11.612812 
+L 245.61067 11.612812 
+" style="fill: none; stroke: #52514e; stroke-width: 3; stroke-linecap: square"/>
+   </g>
+   <g id="g2-text_20">
+    <text style="font-size: 9px; font-family: 'Segoe UI'; text-anchor: start; fill: #52514e" x="250.11067" y="14.762812" transform="rotate(-0 250.11067 14.762812)">IC de 95%</text>
+   </g>
+   <g id="g2-line2d_33">
+    <defs>
+     <path id="g2-m4f675f55fb" d="M -0 4 
+L 4 -4 
+L -4 -4 
+z
+" style="stroke: #ffffff; stroke-linejoin: miter"/>
+    </defs>
+    <g>
+     <use xlink:href="#g2-m4f675f55fb" x="309.884732" y="11.612812" style="fill: #0b0b0b; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+   </g>
+   <g id="g2-text_21">
+    <text style="font-size: 9px; font-family: 'Segoe UI'; text-anchor: start; fill: #52514e" x="320.684732" y="14.762812" transform="rotate(-0 320.684732 14.762812)">valor real da população</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="g2-p2e91f3d3e7">
+   <rect x="37.417323" y="24.094488" width="453.99685" height="56.692913"/>
+  </clipPath>
+ </defs>
+</svg>
+</figure>
+    <p>Com 95% de confiança, a proporção fica entre <b>33,1% e 68,9%</b> na PB e entre <b>31,0% e 66,8%</b> no RN. Os dois ICs contêm o valor real e se sobrepõem quase por inteiro; a margem é larga (±17,9 p.p.) porque n = 30.</p>
+  </section>
+</div></section>
+
+<!-- ===================== Quadrante 4 (inferior direito) ===================== -->
+<section class="quadrante q4"><div class="cartao" data-nome="4 (inferior direito)">
+  <section class="bloco">
+    <p class="continua">5 · Inferência estatística (continuação)</p>
+    <h2 class="secao"><span class="num">5.2</span>Testes de hipóteses (α = 5%)</h2>
+    <p>O teste F decide a suposição sobre as variâncias; depois, o teste t compara as médias. H<sub>1</sub> é sempre bilateral (≠), e H<sub>0</sub> é rejeitada quando o p-valor &lt; 0,05.</p>
+    <figure><svg xmlns:xlink="http://www.w3.org/1999/xlink" class="grafico" viewBox="0 0 498.897638 124.724409" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-14T19:50:10.984058</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.9, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="g3-figure_1">
+  <g id="g3-patch_1">
+   <path d="M 0 124.724409 
+L 498.897638 124.724409 
+L 498.897638 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="g3-axes_1">
+   <g id="g3-patch_2">
+    <path d="M 32.428346 86.456693 
+L 250.993026 86.456693 
+L 250.993026 24.094488 
+L 32.428346 24.094488 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="g3-matplotlib.axis_1">
+    <g id="g3-xtick_1">
+     <g id="g3-line2d_1">
+      <path d="M 48.573584 86.456693 
+L 48.573584 24.094488 
+" clip-path="url(#g3-pea426aa8de)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g3-line2d_2"/>
+     <g id="g3-text_1">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="48.573584" y="99.229974" transform="rotate(-0 48.573584 99.229974)">4,50</text>
+     </g>
+    </g>
+    <g id="g3-xtick_2">
+     <g id="g3-line2d_3">
+      <path d="M 79.907784 86.456693 
+L 79.907784 24.094488 
+" clip-path="url(#g3-pea426aa8de)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g3-line2d_4"/>
+     <g id="g3-text_2">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="79.907784" y="99.229974" transform="rotate(-0 79.907784 99.229974)">4,75</text>
+     </g>
+    </g>
+    <g id="g3-xtick_3">
+     <g id="g3-line2d_5">
+      <path d="M 111.241985 86.456693 
+L 111.241985 24.094488 
+" clip-path="url(#g3-pea426aa8de)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g3-line2d_6"/>
+     <g id="g3-text_3">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="111.241985" y="99.229974" transform="rotate(-0 111.241985 99.229974)">5,00</text>
+     </g>
+    </g>
+    <g id="g3-xtick_4">
+     <g id="g3-line2d_7">
+      <path d="M 142.576185 86.456693 
+L 142.576185 24.094488 
+" clip-path="url(#g3-pea426aa8de)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g3-line2d_8"/>
+     <g id="g3-text_4">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="142.576185" y="99.229974" transform="rotate(-0 142.576185 99.229974)">5,25</text>
+     </g>
+    </g>
+    <g id="g3-xtick_5">
+     <g id="g3-line2d_9">
+      <path d="M 173.910386 86.456693 
+L 173.910386 24.094488 
+" clip-path="url(#g3-pea426aa8de)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g3-line2d_10"/>
+     <g id="g3-text_5">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="173.910386" y="99.229974" transform="rotate(-0 173.910386 99.229974)">5,50</text>
+     </g>
+    </g>
+    <g id="g3-xtick_6">
+     <g id="g3-line2d_11">
+      <path d="M 205.244587 86.456693 
+L 205.244587 24.094488 
+" clip-path="url(#g3-pea426aa8de)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g3-line2d_12"/>
+     <g id="g3-text_6">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="205.244587" y="99.229974" transform="rotate(-0 205.244587 99.229974)">5,75</text>
+     </g>
+    </g>
+    <g id="g3-xtick_7">
+     <g id="g3-line2d_13">
+      <path d="M 236.578787 86.456693 
+L 236.578787 24.094488 
+" clip-path="url(#g3-pea426aa8de)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g3-line2d_14"/>
+     <g id="g3-text_7">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="236.578787" y="99.229974" transform="rotate(-0 236.578787 99.229974)">6,00</text>
+     </g>
+    </g>
+    <g id="g3-text_8">
+     <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="141.710686" y="113.418255" transform="rotate(-0 141.710686 113.418255)">IDEB médio (anos iniciais)</text>
+    </g>
+   </g>
+   <g id="g3-matplotlib.axis_2">
+    <g id="g3-ytick_1">
+     <g id="g3-line2d_15"/>
+     <g id="g3-text_9">
+      <text style="font-weight: 700; font-size: 11px; font-family: 'Segoe UI'; text-anchor: end; fill: #0b0b0b" x="26.428346" y="41.529537" transform="rotate(-0 26.428346 41.529537)">PB</text>
+     </g>
+    </g>
+    <g id="g3-ytick_2">
+     <g id="g3-line2d_16"/>
+     <g id="g3-text_10">
+      <text style="font-weight: 700; font-size: 11px; font-family: 'Segoe UI'; text-anchor: end; fill: #0b0b0b" x="26.428346" y="71.225824" transform="rotate(-0 26.428346 71.225824)">RN</text>
+     </g>
+    </g>
+   </g>
+   <g id="g3-patch_3">
+    <path d="M 32.428346 86.456693 
+L 250.993026 86.456693 
+" style="fill: none; stroke: #c3c2b7; stroke-width: 0.9; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g3-line2d_17">
+    <path d="M 135.526319 37.457818 
+L 229.841605 37.457818 
+" clip-path="url(#g3-pea426aa8de)" style="fill: none; stroke: #2a78d6; stroke-width: 3.2"/>
+   </g>
+   <g id="g3-line2d_18">
+    <path d="M 135.526319 41.318335 
+L 135.526319 33.5973 
+" clip-path="url(#g3-pea426aa8de)" style="fill: none; stroke: #2a78d6; stroke-width: 2.2; stroke-linecap: square"/>
+   </g>
+   <g id="g3-text_11">
+    <text style="font-size: 9px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="135.526319" y="50.653814" transform="rotate(-0 135.526319 50.653814)">5,19</text>
+   </g>
+   <g id="g3-line2d_19">
+    <path d="M 229.841605 41.318335 
+L 229.841605 33.5973 
+" clip-path="url(#g3-pea426aa8de)" style="fill: none; stroke: #2a78d6; stroke-width: 2.2; stroke-linecap: square"/>
+   </g>
+   <g id="g3-text_12">
+    <text style="font-size: 9px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="229.841605" y="50.653814" transform="rotate(-0 229.841605 50.653814)">5,95</text>
+   </g>
+   <g id="g3-text_13">
+    <text style="font-weight: 700; font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #0b0b0b" x="182.683962" y="51.02397" transform="rotate(-0 182.683962 51.02397)">5,57</text>
+   </g>
+   <g id="g3-line2d_20">
+    <path d="M 53.579767 67.154106 
+L 131.303162 67.154106 
+" clip-path="url(#g3-pea426aa8de)" style="fill: none; stroke: #eb6834; stroke-width: 3.2"/>
+   </g>
+   <g id="g3-line2d_21">
+    <path d="M 53.579767 71.014623 
+L 53.579767 63.293588 
+" clip-path="url(#g3-pea426aa8de)" style="fill: none; stroke: #eb6834; stroke-width: 2.2; stroke-linecap: square"/>
+   </g>
+   <g id="g3-text_14">
+    <text style="font-size: 9px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="53.579767" y="80.350102" transform="rotate(-0 53.579767 80.350102)">4,54</text>
+   </g>
+   <g id="g3-line2d_22">
+    <path d="M 131.303162 71.014623 
+L 131.303162 63.293588 
+" clip-path="url(#g3-pea426aa8de)" style="fill: none; stroke: #eb6834; stroke-width: 2.2; stroke-linecap: square"/>
+   </g>
+   <g id="g3-text_15">
+    <text style="font-size: 9px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="131.303162" y="80.350102" transform="rotate(-0 131.303162 80.350102)">5,16</text>
+   </g>
+   <g id="g3-text_16">
+    <text style="font-weight: 700; font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #0b0b0b" x="92.441465" y="80.720258" transform="rotate(-0 92.441465 80.720258)">4,85</text>
+   </g>
+   <g id="g3-line2d_23">
+    <path d="M 182.683962 37.457818 
+" clip-path="url(#g3-pea426aa8de)" style="fill: none; stroke: #2a78d6; stroke-width: 1.5; stroke-linecap: square"/>
+    <defs>
+     <path id="g3-m5b2333ae65" d="M 0 5 
+C 1.326016 5 2.597899 4.473168 3.535534 3.535534 
+C 4.473168 2.597899 5 1.326016 5 0 
+C 5 -1.326016 4.473168 -2.597899 3.535534 -3.535534 
+C 2.597899 -4.473168 1.326016 -5 0 -5 
+C -1.326016 -5 -2.597899 -4.473168 -3.535534 -3.535534 
+C -4.473168 -2.597899 -5 -1.326016 -5 0 
+C -5 1.326016 -4.473168 2.597899 -3.535534 3.535534 
+C -2.597899 4.473168 -1.326016 5 0 5 
+z
+" style="stroke: #ffffff; stroke-width: 1.8"/>
+    </defs>
+    <g clip-path="url(#g3-pea426aa8de)">
+     <use xlink:href="#g3-m5b2333ae65" x="182.683962" y="37.457818" style="fill: #2a78d6; stroke: #ffffff; stroke-width: 1.8"/>
+    </g>
+   </g>
+   <g id="g3-line2d_24">
+    <path d="M 92.441465 67.154106 
+" clip-path="url(#g3-pea426aa8de)" style="fill: none; stroke: #eb6834; stroke-width: 1.5; stroke-linecap: square"/>
+    <defs>
+     <path id="g3-m6646d64db6" d="M 0 5 
+C 1.326016 5 2.597899 4.473168 3.535534 3.535534 
+C 4.473168 2.597899 5 1.326016 5 0 
+C 5 -1.326016 4.473168 -2.597899 3.535534 -3.535534 
+C 2.597899 -4.473168 1.326016 -5 0 -5 
+C -1.326016 -5 -2.597899 -4.473168 -3.535534 -3.535534 
+C -4.473168 -2.597899 -5 -1.326016 -5 0 
+C -5 1.326016 -4.473168 2.597899 -3.535534 3.535534 
+C -2.597899 4.473168 -1.326016 5 0 5 
+z
+" style="stroke: #ffffff; stroke-width: 1.8"/>
+    </defs>
+    <g clip-path="url(#g3-pea426aa8de)">
+     <use xlink:href="#g3-m6646d64db6" x="92.441465" y="67.154106" style="fill: #eb6834; stroke: #ffffff; stroke-width: 1.8"/>
+    </g>
+   </g>
+   <g id="g3-line2d_25">
+    <path d="M 154.330121 30.924634 
+" clip-path="url(#g3-pea426aa8de)" style="fill: none; stroke: #0b0b0b; stroke-width: 1.5; stroke-linecap: square"/>
+    <defs>
+     <path id="g3-m02ccfa4e0c" d="M -0 4 
+L 4 -4 
+L -4 -4 
+z
+" style="stroke: #ffffff; stroke-width: 1.2; stroke-linejoin: miter"/>
+    </defs>
+    <g clip-path="url(#g3-pea426aa8de)">
+     <use xlink:href="#g3-m02ccfa4e0c" x="154.330121" y="30.924634" style="fill: #0b0b0b; stroke: #ffffff; stroke-width: 1.2; stroke-linejoin: miter"/>
+    </g>
+   </g>
+   <g id="g3-line2d_26">
+    <path d="M 90.92341 60.620922 
+" clip-path="url(#g3-pea426aa8de)" style="fill: none; stroke: #0b0b0b; stroke-width: 1.5; stroke-linecap: square"/>
+    <g clip-path="url(#g3-pea426aa8de)">
+     <use xlink:href="#g3-m02ccfa4e0c" x="90.92341" y="60.620922" style="fill: #0b0b0b; stroke: #ffffff; stroke-width: 1.2; stroke-linejoin: miter"/>
+    </g>
+   </g>
+  </g>
+  <g id="g3-axes_2">
+   <g id="g3-patch_4">
+    <path d="M 272.849494 86.456693 
+L 491.414173 86.456693 
+L 491.414173 24.094488 
+L 272.849494 24.094488 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="g3-matplotlib.axis_3">
+    <g id="g3-xtick_8">
+     <g id="g3-line2d_27">
+      <path d="M 292.676903 86.456693 
+L 292.676903 24.094488 
+" clip-path="url(#g3-p8f93ddcd95)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g3-line2d_28"/>
+     <g id="g3-text_17">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="292.676903" y="99.229974" transform="rotate(-0 292.676903 99.229974)">1,70</text>
+     </g>
+    </g>
+    <g id="g3-xtick_9">
+     <g id="g3-line2d_29">
+      <path d="M 322.911136 86.456693 
+L 322.911136 24.094488 
+" clip-path="url(#g3-p8f93ddcd95)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g3-line2d_30"/>
+     <g id="g3-text_18">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="322.911136" y="99.229974" transform="rotate(-0 322.911136 99.229974)">1,75</text>
+     </g>
+    </g>
+    <g id="g3-xtick_10">
+     <g id="g3-line2d_31">
+      <path d="M 353.145368 86.456693 
+L 353.145368 24.094488 
+" clip-path="url(#g3-p8f93ddcd95)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g3-line2d_32"/>
+     <g id="g3-text_19">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="353.145368" y="99.229974" transform="rotate(-0 353.145368 99.229974)">1,80</text>
+     </g>
+    </g>
+    <g id="g3-xtick_11">
+     <g id="g3-line2d_33">
+      <path d="M 383.379601 86.456693 
+L 383.379601 24.094488 
+" clip-path="url(#g3-p8f93ddcd95)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g3-line2d_34"/>
+     <g id="g3-text_20">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="383.379601" y="99.229974" transform="rotate(-0 383.379601 99.229974)">1,85</text>
+     </g>
+    </g>
+    <g id="g3-xtick_12">
+     <g id="g3-line2d_35">
+      <path d="M 413.613834 86.456693 
+L 413.613834 24.094488 
+" clip-path="url(#g3-p8f93ddcd95)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g3-line2d_36"/>
+     <g id="g3-text_21">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="413.613834" y="99.229974" transform="rotate(-0 413.613834 99.229974)">1,90</text>
+     </g>
+    </g>
+    <g id="g3-xtick_13">
+     <g id="g3-line2d_37">
+      <path d="M 443.848066 86.456693 
+L 443.848066 24.094488 
+" clip-path="url(#g3-p8f93ddcd95)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g3-line2d_38"/>
+     <g id="g3-text_22">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="443.848066" y="99.229974" transform="rotate(-0 443.848066 99.229974)">1,95</text>
+     </g>
+    </g>
+    <g id="g3-xtick_14">
+     <g id="g3-line2d_39">
+      <path d="M 474.082299 86.456693 
+L 474.082299 24.094488 
+" clip-path="url(#g3-p8f93ddcd95)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="g3-line2d_40"/>
+     <g id="g3-text_23">
+      <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="474.082299" y="99.229974" transform="rotate(-0 474.082299 99.229974)">2,00</text>
+     </g>
+    </g>
+    <g id="g3-text_24">
+     <text style="font-size: 10.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="382.131834" y="113.418255" transform="rotate(-0 382.131834 113.418255)">Salário médio (em salários mínimos)</text>
+    </g>
+   </g>
+   <g id="g3-matplotlib.axis_4">
+    <g id="g3-ytick_3">
+     <g id="g3-line2d_41"/>
+    </g>
+    <g id="g3-ytick_4">
+     <g id="g3-line2d_42"/>
+    </g>
+   </g>
+   <g id="g3-patch_5">
+    <path d="M 272.849494 86.456693 
+L 491.414173 86.456693 
+" style="fill: none; stroke: #c3c2b7; stroke-width: 0.9; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g3-line2d_43">
+    <path d="M 294.000914 37.457818 
+L 384.071205 37.457818 
+" clip-path="url(#g3-p8f93ddcd95)" style="fill: none; stroke: #2a78d6; stroke-width: 3.2"/>
+   </g>
+   <g id="g3-line2d_44">
+    <path d="M 294.000914 41.318335 
+L 294.000914 33.5973 
+" clip-path="url(#g3-p8f93ddcd95)" style="fill: none; stroke: #2a78d6; stroke-width: 2.2; stroke-linecap: square"/>
+   </g>
+   <g id="g3-text_25">
+    <text style="font-size: 9px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="294.000914" y="50.653814" transform="rotate(-0 294.000914 50.653814)">1,70</text>
+   </g>
+   <g id="g3-line2d_45">
+    <path d="M 384.071205 41.318335 
+L 384.071205 33.5973 
+" clip-path="url(#g3-p8f93ddcd95)" style="fill: none; stroke: #2a78d6; stroke-width: 2.2; stroke-linecap: square"/>
+   </g>
+   <g id="g3-text_26">
+    <text style="font-size: 9px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="384.071205" y="50.653814" transform="rotate(-0 384.071205 50.653814)">1,85</text>
+   </g>
+   <g id="g3-text_27">
+    <text style="font-weight: 700; font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #0b0b0b" x="339.03606" y="51.02397" transform="rotate(-0 339.03606 51.02397)">1,78</text>
+   </g>
+   <g id="g3-line2d_46">
+    <path d="M 332.777529 67.154106 
+L 470.262753 67.154106 
+" clip-path="url(#g3-p8f93ddcd95)" style="fill: none; stroke: #eb6834; stroke-width: 3.2"/>
+   </g>
+   <g id="g3-line2d_47">
+    <path d="M 332.777529 71.014623 
+L 332.777529 63.293588 
+" clip-path="url(#g3-p8f93ddcd95)" style="fill: none; stroke: #eb6834; stroke-width: 2.2; stroke-linecap: square"/>
+   </g>
+   <g id="g3-text_28">
+    <text style="font-size: 9px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="332.777529" y="80.350102" transform="rotate(-0 332.777529 80.350102)">1,77</text>
+   </g>
+   <g id="g3-line2d_48">
+    <path d="M 470.262753 71.014623 
+L 470.262753 63.293588 
+" clip-path="url(#g3-p8f93ddcd95)" style="fill: none; stroke: #eb6834; stroke-width: 2.2; stroke-linecap: square"/>
+   </g>
+   <g id="g3-text_29">
+    <text style="font-size: 9px; font-family: 'Segoe UI'; text-anchor: middle; fill: #52514e" x="470.262753" y="80.350102" transform="rotate(-0 470.262753 80.350102)">1,99</text>
+   </g>
+   <g id="g3-text_30">
+    <text style="font-weight: 700; font-size: 9.5px; font-family: 'Segoe UI'; text-anchor: middle; fill: #0b0b0b" x="401.520141" y="80.720258" transform="rotate(-0 401.520141 80.720258)">1,88</text>
+   </g>
+   <g id="g3-line2d_49">
+    <path d="M 339.03606 37.457818 
+" clip-path="url(#g3-p8f93ddcd95)" style="fill: none; stroke: #2a78d6; stroke-width: 1.5; stroke-linecap: square"/>
+    <g clip-path="url(#g3-p8f93ddcd95)">
+     <use xlink:href="#g3-m5b2333ae65" x="339.03606" y="37.457818" style="fill: #2a78d6; stroke: #ffffff; stroke-width: 1.8"/>
+    </g>
+   </g>
+   <g id="g3-line2d_50">
+    <path d="M 401.520141 67.154106 
+" clip-path="url(#g3-p8f93ddcd95)" style="fill: none; stroke: #eb6834; stroke-width: 1.5; stroke-linecap: square"/>
+    <g clip-path="url(#g3-p8f93ddcd95)">
+     <use xlink:href="#g3-m6646d64db6" x="401.520141" y="67.154106" style="fill: #eb6834; stroke: #ffffff; stroke-width: 1.8"/>
+    </g>
+   </g>
+   <g id="g3-line2d_51">
+    <path d="M 353.687687 30.924634 
+" clip-path="url(#g3-p8f93ddcd95)" style="fill: none; stroke: #0b0b0b; stroke-width: 1.5; stroke-linecap: square"/>
+    <g clip-path="url(#g3-p8f93ddcd95)">
+     <use xlink:href="#g3-m02ccfa4e0c" x="353.687687" y="30.924634" style="fill: #0b0b0b; stroke: #ffffff; stroke-width: 1.2; stroke-linejoin: miter"/>
+    </g>
+   </g>
+   <g id="g3-line2d_52">
+    <path d="M 372.335959 60.620922 
+" clip-path="url(#g3-p8f93ddcd95)" style="fill: none; stroke: #0b0b0b; stroke-width: 1.5; stroke-linecap: square"/>
+    <g clip-path="url(#g3-p8f93ddcd95)">
+     <use xlink:href="#g3-m02ccfa4e0c" x="372.335959" y="60.620922" style="fill: #0b0b0b; stroke: #ffffff; stroke-width: 1.2; stroke-linejoin: miter"/>
+    </g>
+   </g>
+  </g>
+  <g id="g3-legend_1">
+   <g id="g3-line2d_53">
+    <defs>
+     <path id="g3-me38e19d5f0" d="M 0 4 
+C 1.060812 4 2.078319 3.578535 2.828427 2.828427 
+C 3.578535 2.078319 4 1.060812 4 0 
+C 4 -1.060812 3.578535 -2.078319 2.828427 -2.828427 
+C 2.078319 -3.578535 1.060812 -4 0 -4 
+C -1.060812 -4 -2.078319 -3.578535 -2.828427 -2.828427 
+C -3.578535 -2.078319 -4 -1.060812 -4 0 
+C -4 1.060812 -3.578535 2.078319 -2.828427 2.828427 
+C -2.078319 3.578535 -1.060812 4 0 4 
+z
+" style="stroke: #ffffff"/>
+    </defs>
+    <g>
+     <use xlink:href="#g3-me38e19d5f0" x="107.170279" y="11.743594" style="fill: #52514e; stroke: #ffffff"/>
+    </g>
+   </g>
+   <g id="g3-text_31">
+    <text style="font-size: 9px; font-family: 'Segoe UI'; text-anchor: start; fill: #52514e" x="117.970279" y="14.893594" transform="rotate(-0 117.970279 14.893594)">média da amostra</text>
+   </g>
+   <g id="g3-line2d_54">
+    <path d="M 202.979498 11.743594 
+L 209.279498 11.743594 
+L 215.579498 11.743594 
+" style="fill: none; stroke: #52514e; stroke-width: 3; stroke-linecap: square"/>
+   </g>
+   <g id="g3-text_32">
+    <text style="font-size: 9px; font-family: 'Segoe UI'; text-anchor: start; fill: #52514e" x="220.079498" y="14.893594" transform="rotate(-0 220.079498 14.893594)">IC de 95% da média</text>
+   </g>
+   <g id="g3-line2d_55">
+    <defs>
+     <path id="g3-mde69ed4a8c" d="M -0 4 
+L 4 -4 
+L -4 -4 
+z
+" style="stroke: #ffffff; stroke-linejoin: miter"/>
+    </defs>
+    <g>
+     <use xlink:href="#g3-mde69ed4a8c" x="319.180748" y="11.743594" style="fill: #0b0b0b; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+   </g>
+   <g id="g3-text_33">
+    <text style="font-size: 9px; font-family: 'Segoe UI'; text-anchor: start; fill: #52514e" x="329.980748" y="14.893594" transform="rotate(-0 329.980748 14.893594)">média real da população</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="g3-pea426aa8de">
+   <rect x="32.428346" y="24.094488" width="218.564679" height="62.362205"/>
+  </clipPath>
+  <clipPath id="g3-p8f93ddcd95">
+   <rect x="272.849494" y="24.094488" width="218.564679" height="62.362205"/>
+  </clipPath>
+ </defs>
+</svg>
+</figure>
+    <table class="testes">
+  <colgroup><col style="width:28%"><col style="width:26%"><col style="width:19%"><col style="width:27%"></colgroup>
+  <thead><tr><th>Comparação PB × RN</th><th>Teste</th><th>Resultado</th><th>Decisão</th></tr></thead>
+  <tbody><tr class=""><td><b>Renda até 1/2 SM: proporções</b><span class="h0">H<sub>0</sub>: p<sub>PB</sub> = p<sub>RN</sub></span></td><td>z para duas proporções</td><td>z = 0,17<br>p-valor = 0,868</td><td class="decisao">Não rejeita H<sub>0</sub>: sem diferença</td></tr><tr class="var-f"><td><b>IDEB: variâncias</b><span class="h0">H<sub>0</sub>: σ²<sub>PB</sub> = σ²<sub>RN</sub></span></td><td>F com 29 e 29 gl</td><td>F = 1,47<br>p-valor = 0,303</td><td class="decisao">Não rejeita H<sub>0</sub>: variâncias iguais</td></tr><tr class="rejeita"><td><b>IDEB: médias</b><span class="h0">H<sub>0</sub>: μ<sub>PB</sub> = μ<sub>RN</sub></span></td><td>t, variâncias iguais (58 gl)</td><td>t = 3,02<br>p-valor = 0,004</td><td class="decisao">Rejeita H<sub>0</sub>: média da PB maior</td></tr><tr class="var-f"><td><b>Salário: variâncias</b><span class="h0">H<sub>0</sub>: σ²<sub>PB</sub> = σ²<sub>RN</sub></span></td><td>F com 29 e 29 gl</td><td>F = 0,43<br>p-valor = 0,026</td><td class="decisao">Rejeita H<sub>0</sub>: variâncias diferentes</td></tr><tr class=""><td><b>Salário: médias</b><span class="h0">H<sub>0</sub>: μ<sub>PB</sub> = μ<sub>RN</sub></span></td><td>t de Welch, variâncias diferentes (50 gl)</td><td>t = −1,56<br>p-valor = 0,126</td><td class="decisao">Não rejeita H<sub>0</sub>: sem diferença</td></tr></tbody>
+</table>
+    <p class="nota">O teste de Shapiro-Wilk aponta desvios da normalidade, mas com n = 30 por estado o Teorema Central do Limite sustenta os testes t. Com ou sem a suposição de variâncias iguais, as decisões sobre as médias não mudam.</p>
+  </section>
+
+  <section class="bloco">
+    <h2 class="secao"><span class="num">6</span>Conclusão</h2>
+    <ul class="conclusao">
+      <li><b>A educação separa os estados:</b> o IDEB dos anos iniciais é maior na PB, na amostra (5,57 × 4,85; diferença de 0,72, com IC de 95% de 0,24 a 1,20) e na população (5,34 × 4,84).</li>
+      <li><b>Renda e salário aproximam os estados:</b> em um município típico, cerca de metade da população tem renda per capita de até 1/2 SM, e o salário formal médio fica perto de 1,8 SM, sem diferença significativa.</li>
+      <li><b>O RN é mais heterogêneo no salário formal:</b> variância maior e o maior valor atípico, Riachuelo (RN, 2,9 SM).</li>
+      <li><b>As amostras representaram bem as populações:</b> todos os ICs contêm os valores reais, mas n = 30 deixa a proporção imprecisa (±17,9 p.p.).</li>
+      <li><b>Na prática:</b> com renda e salário parecidos, a vantagem da PB no IDEB não parece vir dessas variáveis; gestão e políticas educacionais merecem investigação.</li>
+    </ul>
+  </section>
+  <p class="assinatura">Análise em Python (pandas, SciPy, Matplotlib), reproduzível com a semente 20261116.</p>
+</div></section>
+
+<script>
+  // Verificação automática: marca no <body> os quadrantes cujo conteúdo invadiu a margem interna
+  // (o fim do último elemento passou do limite do conteúdo do cartão).
+  const transbordando = [...document.querySelectorAll('.cartao')].map(c => {
+    const estilo = getComputedStyle(c);
+    const limite = c.getBoundingClientRect().bottom - parseFloat(estilo.paddingBottom) - parseFloat(estilo.borderBottomWidth);
+    const fundo = Math.max(...[...c.children].map(f => f.getBoundingClientRect().bottom));
+    const excesso = (fundo - limite) * 25.4 / 96;
+    return excesso > 0.2 ? c.dataset.nome + ' +' + excesso.toFixed(1) + 'mm' : null;
+  }).filter(Boolean);
+  document.body.dataset.transbordando = transbordando.join('; ');
+</script>
+</body>
+</html>

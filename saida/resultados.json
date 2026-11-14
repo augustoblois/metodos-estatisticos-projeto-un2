@@ -1,0 +1,867 @@
+{
+  "semente": 20261116,
+  "n": 30,
+  "alfa": 0.05,
+  "tamanho_populacao": {
+    "PB": 223,
+    "RN": 167
+  },
+  "tamanho_base_sorteio": {
+    "PB": 217,
+    "RN": 161
+  },
+  "sem_ideb": {
+    "PB": [
+      "Baía da Traição",
+      "Barra de Santa Rosa",
+      "Santana dos Garrotes",
+      "São José de Princesa",
+      "São José do Brejo do Cruz",
+      "Vista Serrana"
+    ],
+    "RN": [
+      "Água Nova",
+      "Jardim de Angicos",
+      "Paraú",
+      "Pedra Grande",
+      "São Fernando",
+      "Serra Negra do Norte"
+    ]
+  },
+  "amostras": {
+    "PB": [
+      {
+        "ordem_sorteio": 25,
+        "municipio": "Barra de São Miguel",
+        "ideb": 6.2,
+        "renda": 45.7,
+        "salario": 1.7
+      },
+      {
+        "ordem_sorteio": 20,
+        "municipio": "Bernardino Batista",
+        "ideb": 5.5,
+        "renda": 53.9,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 26,
+        "municipio": "Bom Jesus",
+        "ideb": 5.0,
+        "renda": 48.6,
+        "salario": 1.6
+      },
+      {
+        "ordem_sorteio": 12,
+        "municipio": "Bonito de Santa Fé",
+        "ideb": 5.4,
+        "renda": 50.8,
+        "salario": 2.0
+      },
+      {
+        "ordem_sorteio": 3,
+        "municipio": "Boqueirão",
+        "ideb": 5.0,
+        "renda": 44.0,
+        "salario": 1.9
+      },
+      {
+        "ordem_sorteio": 23,
+        "municipio": "Cabaceiras",
+        "ideb": 7.7,
+        "renda": 46.8,
+        "salario": 1.9
+      },
+      {
+        "ordem_sorteio": 19,
+        "municipio": "Camalaú",
+        "ideb": 5.8,
+        "renda": 51.9,
+        "salario": 1.6
+      },
+      {
+        "ordem_sorteio": 21,
+        "municipio": "Carrapateira",
+        "ideb": 6.7,
+        "renda": 55.9,
+        "salario": 2.4
+      },
+      {
+        "ordem_sorteio": 18,
+        "municipio": "Congo",
+        "ideb": 6.5,
+        "renda": 50.6,
+        "salario": 1.6
+      },
+      {
+        "ordem_sorteio": 4,
+        "municipio": "Coremas",
+        "ideb": 4.7,
+        "renda": 51.8,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 5,
+        "municipio": "Coxixola",
+        "ideb": 8.2,
+        "renda": 46.3,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 8,
+        "municipio": "Cubati",
+        "ideb": 7.1,
+        "renda": 51.2,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 22,
+        "municipio": "Frei Martinho",
+        "ideb": 5.6,
+        "renda": 45.9,
+        "salario": 1.9
+      },
+      {
+        "ordem_sorteio": 10,
+        "municipio": "Gurinhém",
+        "ideb": 4.5,
+        "renda": 50.6,
+        "salario": 1.9
+      },
+      {
+        "ordem_sorteio": 6,
+        "municipio": "Itapororoca",
+        "ideb": 5.3,
+        "renda": 52.5,
+        "salario": 1.7
+      },
+      {
+        "ordem_sorteio": 9,
+        "municipio": "Jacaraú",
+        "ideb": 4.7,
+        "renda": 51.9,
+        "salario": 2.0
+      },
+      {
+        "ordem_sorteio": 13,
+        "municipio": "Juarez Távora",
+        "ideb": 5.5,
+        "renda": 48.7,
+        "salario": 1.6
+      },
+      {
+        "ordem_sorteio": 7,
+        "municipio": "Lastro",
+        "ideb": 5.6,
+        "renda": 54.0,
+        "salario": 1.6
+      },
+      {
+        "ordem_sorteio": 14,
+        "municipio": "Maturéia",
+        "ideb": 5.1,
+        "renda": 54.8,
+        "salario": 1.9
+      },
+      {
+        "ordem_sorteio": 2,
+        "municipio": "Pedro Régis",
+        "ideb": 3.9,
+        "renda": 52.5,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 28,
+        "municipio": "Riachão do Bacamarte",
+        "ideb": 4.1,
+        "renda": 47.9,
+        "salario": 1.7
+      },
+      {
+        "ordem_sorteio": 15,
+        "municipio": "Santana de Mangueira",
+        "ideb": 4.7,
+        "renda": 60.4,
+        "salario": 1.9
+      },
+      {
+        "ordem_sorteio": 29,
+        "municipio": "São Domingos",
+        "ideb": 5.3,
+        "renda": 51.7,
+        "salario": 1.5
+      },
+      {
+        "ordem_sorteio": 24,
+        "municipio": "São José dos Cordeiros",
+        "ideb": 5.6,
+        "renda": 51.7,
+        "salario": 1.3
+      },
+      {
+        "ordem_sorteio": 1,
+        "municipio": "São Sebastião do Umbuzeiro",
+        "ideb": 6.4,
+        "renda": 50.0,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 11,
+        "municipio": "Serra Grande",
+        "ideb": 6.8,
+        "renda": 54.6,
+        "salario": 2.0
+      },
+      {
+        "ordem_sorteio": 27,
+        "municipio": "Tacima",
+        "ideb": 5.1,
+        "renda": 56.6,
+        "salario": 1.7
+      },
+      {
+        "ordem_sorteio": 30,
+        "municipio": "Teixeira",
+        "ideb": 5.5,
+        "renda": 51.4,
+        "salario": 1.7
+      },
+      {
+        "ordem_sorteio": 17,
+        "municipio": "Tenório",
+        "ideb": 4.7,
+        "renda": 49.9,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 16,
+        "municipio": "Uiraúna",
+        "ideb": 4.9,
+        "renda": 47.8,
+        "salario": 1.6
+      }
+    ],
+    "RN": [
+      {
+        "ordem_sorteio": 22,
+        "municipio": "Acari",
+        "ideb": 6.4,
+        "renda": 43.5,
+        "salario": 1.5
+      },
+      {
+        "ordem_sorteio": 16,
+        "municipio": "Açu",
+        "ideb": 4.7,
+        "renda": 44.7,
+        "salario": 1.9
+      },
+      {
+        "ordem_sorteio": 6,
+        "municipio": "Afonso Bezerra",
+        "ideb": 4.3,
+        "renda": 51.5,
+        "salario": 1.6
+      },
+      {
+        "ordem_sorteio": 13,
+        "municipio": "Alto do Rodrigues",
+        "ideb": 6.0,
+        "renda": 42.9,
+        "salario": 2.1
+      },
+      {
+        "ordem_sorteio": 28,
+        "municipio": "Baraúna",
+        "ideb": 5.2,
+        "renda": 46.8,
+        "salario": 2.0
+      },
+      {
+        "ordem_sorteio": 15,
+        "municipio": "Bento Fernandes",
+        "ideb": 3.6,
+        "renda": 52.3,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 11,
+        "municipio": "Caiçara do Rio do Vento",
+        "ideb": 4.2,
+        "renda": 51.6,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 26,
+        "municipio": "Coronel Ezequiel",
+        "ideb": 4.7,
+        "renda": 52.8,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 21,
+        "municipio": "Coronel João Pessoa",
+        "ideb": 4.4,
+        "renda": 52.4,
+        "salario": 2.0
+      },
+      {
+        "ordem_sorteio": 2,
+        "municipio": "Encanto",
+        "ideb": 5.5,
+        "renda": 48.3,
+        "salario": 1.4
+      },
+      {
+        "ordem_sorteio": 5,
+        "municipio": "Ipueira",
+        "ideb": 7.6,
+        "renda": 37.5,
+        "salario": 2.0
+      },
+      {
+        "ordem_sorteio": 12,
+        "municipio": "João Câmara",
+        "ideb": 4.3,
+        "renda": 48.0,
+        "salario": 2.1
+      },
+      {
+        "ordem_sorteio": 8,
+        "municipio": "José da Penha",
+        "ideb": 5.1,
+        "renda": 47.4,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 18,
+        "municipio": "Monte das Gameleiras",
+        "ideb": 4.2,
+        "renda": 50.2,
+        "salario": 2.0
+      },
+      {
+        "ordem_sorteio": 10,
+        "municipio": "Passa e Fica",
+        "ideb": 5.0,
+        "renda": 50.8,
+        "salario": 1.4
+      },
+      {
+        "ordem_sorteio": 20,
+        "municipio": "Pedro Velho",
+        "ideb": 4.1,
+        "renda": 50.9,
+        "salario": 1.9
+      },
+      {
+        "ordem_sorteio": 25,
+        "municipio": "Pendências",
+        "ideb": 4.5,
+        "renda": 47.4,
+        "salario": 1.9
+      },
+      {
+        "ordem_sorteio": 27,
+        "municipio": "Pilões",
+        "ideb": 4.7,
+        "renda": 50.0,
+        "salario": 2.3
+      },
+      {
+        "ordem_sorteio": 4,
+        "municipio": "Riacho da Cruz",
+        "ideb": 5.2,
+        "renda": 50.1,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 14,
+        "municipio": "Riachuelo",
+        "ideb": 4.4,
+        "renda": 51.5,
+        "salario": 2.9
+      },
+      {
+        "ordem_sorteio": 7,
+        "municipio": "Ruy Barbosa",
+        "ideb": 5.3,
+        "renda": 52.1,
+        "salario": 2.0
+      },
+      {
+        "ordem_sorteio": 1,
+        "municipio": "Santa Cruz",
+        "ideb": 4.9,
+        "renda": 49.0,
+        "salario": 1.6
+      },
+      {
+        "ordem_sorteio": 24,
+        "municipio": "São Francisco do Oeste",
+        "ideb": 5.8,
+        "renda": 44.8,
+        "salario": 1.7
+      },
+      {
+        "ordem_sorteio": 30,
+        "municipio": "São Tomé",
+        "ideb": 3.9,
+        "renda": 50.5,
+        "salario": 2.1
+      },
+      {
+        "ordem_sorteio": 23,
+        "municipio": "Serra Caiada",
+        "ideb": 4.3,
+        "renda": 52.4,
+        "salario": 1.6
+      },
+      {
+        "ordem_sorteio": 9,
+        "municipio": "Sítio Novo",
+        "ideb": 5.0,
+        "renda": 52.9,
+        "salario": 2.3
+      },
+      {
+        "ordem_sorteio": 3,
+        "municipio": "Taipu",
+        "ideb": 4.2,
+        "renda": 50.0,
+        "salario": 1.6
+      },
+      {
+        "ordem_sorteio": 17,
+        "municipio": "Tenente Laurentino Cruz",
+        "ideb": 4.9,
+        "renda": 48.8,
+        "salario": 2.0
+      },
+      {
+        "ordem_sorteio": 29,
+        "municipio": "Várzea",
+        "ideb": 3.9,
+        "renda": 47.2,
+        "salario": 1.6
+      },
+      {
+        "ordem_sorteio": 19,
+        "municipio": "Vera Cruz",
+        "ideb": 5.2,
+        "renda": 47.7,
+        "salario": 1.9
+      }
+    ]
+  },
+  "descritivas": {
+    "PB": {
+      "populacao": {
+        "ideb": {
+          "n": 217,
+          "media": 5.343778801843317,
+          "mediana": 5.2,
+          "variancia": 0.6704797298732188,
+          "dp": 0.8188282664107406,
+          "minimo": 3.6,
+          "q1": 4.8,
+          "q3": 5.8,
+          "maximo": 8.2,
+          "aiq": 1.0,
+          "cv": 0.1532301947319168,
+          "assimetria": 0.7268422437066108
+        },
+        "renda": {
+          "n": 223,
+          "media": 50.527802690582966,
+          "mediana": 50.8,
+          "variancia": 13.578150777212487,
+          "dp": 3.684854240972428,
+          "minimo": 35.7,
+          "q1": 48.6,
+          "q3": 53.0,
+          "maximo": 60.4,
+          "aiq": 4.399999999999999,
+          "cv": 0.07292726073083693,
+          "assimetria": -0.757857554052022
+        },
+        "salario": {
+          "n": 223,
+          "media": 1.8008968609865472,
+          "mediana": 1.8,
+          "variancia": 0.05129964407086408,
+          "dp": 0.22649424732399734,
+          "minimo": 1.2,
+          "q1": 1.6,
+          "q3": 1.9,
+          "maximo": 2.7,
+          "aiq": 0.2999999999999998,
+          "cv": 0.12576747299116386,
+          "assimetria": 0.991573501125112
+        }
+      },
+      "amostra": {
+        "ideb": {
+          "n": 30,
+          "media": 5.569999999999999,
+          "mediana": 5.45,
+          "variancia": 1.0152758620689653,
+          "dp": 1.0076089827254247,
+          "minimo": 3.9,
+          "q1": 4.925000000000001,
+          "q3": 6.1,
+          "maximo": 8.2,
+          "aiq": 1.174999999999999,
+          "cv": 0.1808992787657854,
+          "assimetria": 0.8581560661815265
+        },
+        "renda": {
+          "n": 30,
+          "media": 51.01333333333333,
+          "mediana": 51.3,
+          "variancia": 12.854298850574708,
+          "dp": 3.585289228301492,
+          "minimo": 44.0,
+          "q1": 48.625,
+          "q3": 52.5,
+          "maximo": 60.4,
+          "aiq": 3.875,
+          "cv": 0.07028141456419548,
+          "assimetria": 0.30293051899895124
+        },
+        "salario": {
+          "n": 30,
+          "media": 1.7766666666666668,
+          "mediana": 1.8,
+          "variancia": 0.03978160919540229,
+          "dp": 0.19945327571990962,
+          "minimo": 1.3,
+          "q1": 1.625,
+          "q3": 1.9,
+          "maximo": 2.4,
+          "aiq": 0.2749999999999999,
+          "cv": 0.11226263173728496,
+          "assimetria": 0.568711119195429
+        }
+      }
+    },
+    "RN": {
+      "populacao": {
+        "ideb": {
+          "n": 161,
+          "media": 4.8378881987577635,
+          "mediana": 4.8,
+          "variancia": 0.4404899502334015,
+          "dp": 0.6636941692025036,
+          "minimo": 3.6,
+          "q1": 4.4,
+          "q3": 5.2,
+          "maximo": 7.6,
+          "aiq": 0.7999999999999998,
+          "cv": 0.13718675213968812,
+          "assimetria": 0.7838643182747808
+        },
+        "renda": {
+          "n": 167,
+          "media": 49.103592814371254,
+          "mediana": 50.0,
+          "variancia": 19.362262540786688,
+          "dp": 4.400257099396203,
+          "minimo": 35.5,
+          "q1": 47.25,
+          "q3": 51.95,
+          "maximo": 61.4,
+          "aiq": 4.700000000000003,
+          "cv": 0.08961171366891041,
+          "assimetria": -0.7710139889287543
+        },
+        "salario": {
+          "n": 167,
+          "media": 1.8317365269461077,
+          "mediana": 1.8,
+          "variancia": 0.09426225393524328,
+          "dp": 0.3070215854549046,
+          "minimo": 1.2,
+          "q1": 1.6,
+          "q3": 2.0,
+          "maximo": 3.3,
+          "aiq": 0.3999999999999999,
+          "cv": 0.1676123071950607,
+          "assimetria": 1.2701844428005076
+        }
+      },
+      "amostra": {
+        "ideb": {
+          "n": 30,
+          "media": 4.85,
+          "mediana": 4.7,
+          "variancia": 0.6894827586206895,
+          "dp": 0.8303509851988432,
+          "minimo": 3.6,
+          "q1": 4.3,
+          "q3": 5.2,
+          "maximo": 7.6,
+          "aiq": 0.9000000000000004,
+          "cv": 0.17120638870079244,
+          "assimetria": 1.404748698503649
+        },
+        "renda": {
+          "n": 30,
+          "media": 48.866666666666674,
+          "mediana": 50.0,
+          "variancia": 12.345057471264365,
+          "dp": 3.51355339667186,
+          "minimo": 37.5,
+          "q1": 47.4,
+          "q3": 51.5,
+          "maximo": 52.9,
+          "aiq": 4.100000000000001,
+          "cv": 0.07190081985003806,
+          "assimetria": -1.3835353206035796
+        },
+        "salario": {
+          "n": 30,
+          "media": 1.88,
+          "mediana": 1.9,
+          "variancia": 0.09268965517241379,
+          "dp": 0.30444975804295493,
+          "minimo": 1.4,
+          "q1": 1.625,
+          "q3": 2.0,
+          "maximo": 2.9,
+          "aiq": 0.375,
+          "cv": 0.16194136066114626,
+          "assimetria": 1.1226970556191092
+        }
+      }
+    }
+  },
+  "atipicos_salario": {
+    "PB": [
+      {
+        "municipio": "Carrapateira",
+        "salario": 2.4
+      }
+    ],
+    "RN": [
+      {
+        "municipio": "Riachuelo",
+        "salario": 2.9
+      }
+    ]
+  },
+  "q3_ic": {
+    "PB": {
+      "p": 0.5101333333333333,
+      "n": 30,
+      "z": 1.959963984540054,
+      "ep": 0.09126834346321028,
+      "erro": 0.17888266611652381,
+      "li": 0.3312506672168095,
+      "ls": 0.6890159994498571,
+      "contem_valor_real": true,
+      "valor_real": 0.5052780269058297
+    },
+    "RN": {
+      "p": 0.48866666666666675,
+      "n": 30,
+      "z": 1.959963984540054,
+      "ep": 0.09126363926477978,
+      "erro": 0.1788734460570239,
+      "li": 0.30979322060964287,
+      "ls": 0.6675401127236906,
+      "contem_valor_real": true,
+      "valor_real": 0.49103592814371255
+    }
+  },
+  "q3_teste": {
+    "p_comum": 0.4994,
+    "ep": 0.1290993519219468,
+    "z": 0.16628020471896157,
+    "z_critico": 1.959963984540054,
+    "p_valor": 0.8679364435223678,
+    "rejeita_h0": false
+  },
+  "q3_conferencia_t": {
+    "PB": {
+      "media": 51.01333333333333,
+      "ic": [
+        49.67456433343284,
+        52.352102333233816
+      ]
+    },
+    "RN": {
+      "media": 48.866666666666674,
+      "ic": [
+        47.55468426652214,
+        50.17864906681121
+      ]
+    },
+    "teste": {
+      "f": {
+        "s2_1": 12.854298850574708,
+        "s2_2": 12.345057471264365,
+        "f": 1.0412506284799163,
+        "gl1": 29,
+        "gl2": 29,
+        "f_crit_inf": 0.47596477431003137,
+        "f_crit_sup": 2.100995817284211,
+        "p_valor": 0.914072436816846,
+        "rejeita_h0": false
+      },
+      "t": {
+        "variancias_iguais": true,
+        "media_1": 51.01333333333333,
+        "media_2": 48.866666666666674,
+        "diferenca": 2.146666666666654,
+        "t": 2.3422352689956276,
+        "gl": 58.0,
+        "t_critico": 2.0017174841452356,
+        "p_valor": 0.022622788619840947,
+        "ic_dif_li": 0.31208571906568294,
+        "ic_dif_ls": 3.981247614267625,
+        "rejeita_h0": true
+      },
+      "outro_t": {
+        "variancias_iguais": false,
+        "media_1": 51.01333333333333,
+        "media_2": 48.866666666666674,
+        "diferenca": 2.146666666666654,
+        "t": 2.3422352689956276,
+        "gl": 57.97632341034123,
+        "t_critico": 2.00173488926309,
+        "p_valor": 0.022624234746529148,
+        "ic_dif_li": 0.31206976721540447,
+        "ic_dif_ls": 3.981263566117904,
+        "rejeita_h0": true
+      },
+      "levene_p": 0.8837471569321788,
+      "shapiro_p": {
+        "PB": 0.8261794117843984,
+        "RN": 0.003827492291727312
+      }
+    }
+  },
+  "q4_ideb": {
+    "f": {
+      "s2_1": 1.0152758620689653,
+      "s2_2": 0.6894827586206895,
+      "f": 1.472518129532383,
+      "gl1": 29,
+      "gl2": 29,
+      "f_crit_inf": 0.47596477431003137,
+      "f_crit_sup": 2.100995817284211,
+      "p_valor": 0.3030807597256389,
+      "rejeita_h0": false
+    },
+    "t": {
+      "variancias_iguais": true,
+      "media_1": 5.569999999999999,
+      "media_2": 4.85,
+      "diferenca": 0.7199999999999998,
+      "t": 3.020380628052473,
+      "gl": 58.0,
+      "t_critico": 2.0017174841452356,
+      "p_valor": 0.0037506335823103694,
+      "ic_dif_li": 0.2428294820862123,
+      "ic_dif_ls": 1.1971705179137873,
+      "rejeita_h0": true
+    },
+    "outro_t": {
+      "variancias_iguais": false,
+      "media_1": 5.569999999999999,
+      "media_2": 4.85,
+      "diferenca": 0.7199999999999998,
+      "t": 3.020380628052473,
+      "gl": 55.95634618096072,
+      "t_critico": 2.0032752066028587,
+      "p_valor": 0.0038001915041892503,
+      "ic_dif_li": 0.24245815134760546,
+      "ic_dif_ls": 1.197541848652394,
+      "rejeita_h0": true
+    },
+    "levene_p": 0.3932547763590873,
+    "shapiro_p": {
+      "PB": 0.1013599033262913,
+      "RN": 0.010037140815571947
+    }
+  },
+  "q5_salario": {
+    "f": {
+      "s2_1": 0.03978160919540229,
+      "s2_2": 0.09268965517241379,
+      "f": 0.42919146825396814,
+      "gl1": 29,
+      "gl2": 29,
+      "f_crit_inf": 0.47596477431003137,
+      "f_crit_sup": 2.100995817284211,
+      "p_valor": 0.026021022498584522,
+      "rejeita_h0": true
+    },
+    "t": {
+      "variancias_iguais": false,
+      "media_1": 1.7766666666666668,
+      "media_2": 1.88,
+      "diferenca": -0.10333333333333306,
+      "t": -1.5550352054659726,
+      "gl": 50.02093683715517,
+      "t_critico": 2.0085382822657296,
+      "p_valor": 0.12624263728668106,
+      "ic_dif_li": -0.23680230889387796,
+      "ic_dif_ls": 0.03013564222721185,
+      "rejeita_h0": false
+    },
+    "outro_t": {
+      "variancias_iguais": true,
+      "media_1": 1.7766666666666668,
+      "media_2": 1.88,
+      "diferenca": -0.10333333333333306,
+      "t": -1.5550352054659722,
+      "gl": 58.0,
+      "t_critico": 2.0017174841452356,
+      "p_valor": 0.12537788755554866,
+      "ic_dif_li": -0.23634906140256273,
+      "ic_dif_ls": 0.029682394735896622,
+      "rejeita_h0": false
+    },
+    "levene_p": 0.09741597645778038,
+    "shapiro_p": {
+      "PB": 0.047739435017490554,
+      "RN": 0.0177498139316485
+    }
+  },
+  "ic_medias": {
+    "ideb": {
+      "PB": {
+        "media": 5.569999999999999,
+        "li": 5.1937526223977395,
+        "ls": 5.946247377602259,
+        "valor_real": 5.343778801843317,
+        "contem_valor_real": true
+      },
+      "RN": {
+        "media": 4.85,
+        "li": 4.539941846463617,
+        "ls": 5.160058153536382,
+        "valor_real": 4.8378881987577635,
+        "contem_valor_real": true
+      }
+    },
+    "salario": {
+      "PB": {
+        "media": 1.7766666666666668,
+        "li": 1.7021895895163472,
+        "ls": 1.8511437438169864,
+        "valor_real": 1.8008968609865472,
+        "contem_valor_real": true
+      },
+      "RN": {
+        "media": 1.88,
+        "li": 1.766316592012242,
+        "ls": 1.993683407987758,
+        "valor_real": 1.8317365269461077,
+        "contem_valor_real": true
+      }
+    }
+  }
+}
