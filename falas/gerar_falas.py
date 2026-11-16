@@ -118,6 +118,10 @@ PARTES = [
             ("Por que vocês tiraram 6 municípios de cada estado?",
              "Eles não têm IDEB divulgado, e cada município da amostra precisava das três variáveis. Conferimos o "
              "efeito: sem eles, as médias de renda e salário mudam menos de 0,1."),
+            ("Então a amostra é aleatória entre todos os 223 municípios?",
+             "Entre os 217 que têm as três variáveis (161 no RN). É uma adaptação do enunciado, que fala dos 223 e "
+             "dos 167, e por isso ela aparece no cartaz. O efeito é pequeno: a renda média dos 217 é 50,47%, contra "
+             "50,53% nos 223, e no salário a diferença é menor que 0,01 SM."),
             ("Como vocês garantem que o sorteio foi aleatório?",
              "O computador sorteou com um gerador de números aleatórios. A semente fixa permite repetir o sorteio, "
              "e a planilha mostra a ordem em que cada município saiu."),
@@ -229,6 +233,9 @@ PARTES = [
             ("Qual estado é mais desigual?",
              "Depende da variável. No salário, o RN varia mais (desvio padrão 0,31 contra 0,23). No IDEB, a PB varia "
              "mais (0,82 contra 0,66)."),
+            ("Vocês dizem que a renda é parecida, mas o teste deu diferença. Qual vale?",
+             "As duas coisas. A diferença é pequena (50,5% contra 49,1% na população), e o teste que {p4} apresenta "
+             "mostra que ela é grande demais para ser só acaso do sorteio."),
         ],
     },
     {
@@ -254,13 +261,18 @@ PARTES = [
              "quartil mais 1,5 vez a distância entre os quartis."),
             ("Aponte para o gráfico da seção 5.1.",
              "Agora a inferência. Calculamos o intervalo de confiança de 95% para a proporção da população com "
-             "renda de até meio salário mínimo. Na Paraíba, a estimativa é 51%, e o intervalo vai de 33,1% a "
-             "68,9%. No RN, a estimativa é 48,9%, e o intervalo vai de 31,0% a 66,8%."),
-            ("Aponte para os triângulos pretos e passe a palavra.",
+             "renda de até meio salário mínimo. Cada município da planilha traz o seu percentual, então a "
+             "estimativa é a média dos 30 percentuais, e o intervalo usa o quanto eles variam de um município para "
+             "outro. Na Paraíba, a estimativa é 51,0%, e o intervalo vai de 49,7% a 52,4%. No RN, a estimativa é "
+             "48,9%, e o intervalo vai de 47,6% a 50,2%."),
+            ("Aponte para os triângulos pretos.",
              "Como conhecemos a população, conferimos o resultado: o valor real, que é o triângulo, ficou dentro "
-             "dos dois intervalos. Os intervalos são largos, de mais ou menos 17,9 pontos percentuais, porque a "
-             "amostra tem só 30 municípios. E eles se sobrepõem quase por inteiro, o que já sugere que os dois "
-             "estados são parecidos nesse indicador. Agora, {p4} vai mostrar os testes de hipóteses."),
+             "dos dois intervalos. A margem é de cerca de 1,3 ponto percentual para cada lado."),
+            ("Aponte para a nota embaixo do gráfico e passe a palavra.",
+             "Essa nota explica por que não usamos a fórmula clássica da proporção: ela supõe respostas de sim ou "
+             "não, uma por pessoa, e os nossos dados são percentuais de municípios. Com ela, a margem iria a 17,9 "
+             "pontos, muito maior que a variação real. Agora, {p4} vai mostrar se a diferença entre os estados é "
+             "significativa."),
         ],
         "conceitos": [
             ("Histograma",
@@ -284,41 +296,51 @@ PARTES = [
             ("Proporção estimada (p̂, “p chapéu”)",
              "A média das proporções dos 30 municípios sorteados: 51,0% na PB e 48,9% no RN."),
             ("Intervalo de confiança de 95%",
-             "Faixa calculada pela fórmula p̂ ± 1,96 × √(p̂(1 − p̂)/n). Ter 95% de confiança quer dizer que, se "
+             "Faixa calculada pela fórmula p̂ ± t × s/√n, em que s é o desvio padrão das 30 proporções e t = 2,045 "
+             "vem da distribuição t com 29 graus de liberdade. Ter 95% de confiança quer dizer que, se "
              "repetíssemos o sorteio muitas vezes, cerca de 95% dos intervalos calculados assim conteriam o valor "
              "real."),
+            ("Erro padrão",
+             "Quanto a estimativa mudaria de uma amostra para outra. Para uma média, é s/√n: na PB, "
+             "3,59 ÷ √30 = 0,65 ponto percentual."),
             ("Margem de erro",
-             "O pedaço que somamos e subtraímos da estimativa: 1,96 vez o erro padrão. Aqui deu 17,9 pontos "
-             "percentuais, porque 30 municípios é pouco para essa fórmula."),
+             "O pedaço que somamos e subtraímos da estimativa: t vezes o erro padrão. Aqui deu cerca de 1,3 ponto "
+             "percentual para cada lado."),
             ("Ponto percentual (p.p.)",
-             "A diferença entre duas porcentagens. De 51,0% para 33,1% são 17,9 pontos percentuais."),
+             "A diferença entre duas porcentagens. De 51,0% para 49,7% são 1,3 ponto percentual."),
             ("Valor real",
              "A média das proporções de todos os municípios do estado: 50,5% na PB e 49,1% no RN. Só dá para "
              "conferir porque temos a população inteira."),
+            ("Fórmula binomial (a que não usamos)",
+             "p̂ ± 1,96 × √(p̂(1 − p̂)/n). Serve quando cada observação é um sim ou não, como perguntar a 30 "
+             "pessoas se ganham até meio salário mínimo. Os nossos 30 dados são percentuais de municípios, que "
+             "variam bem menos: com ela, o erro padrão ficaria 14 vezes maior que o real, e a margem iria a "
+             "±17,9 pontos."),
         ],
         "numeros": [
             ("Salário da amostra, PB", "1,3 a 2,4 SM. Desvio padrão 0,20. AIQ 0,275."),
             ("Salário da amostra, RN", "1,4 a 2,9 SM. Desvio padrão 0,30. AIQ 0,375."),
             ("Concentração na PB", "24 dos 30 municípios de 1,6 a 1,9 SM"),
             ("Valores atípicos", "Carrapateira (PB), 2,4 SM, limite 2,31. Riachuelo (RN), 2,9 SM, limite 2,56."),
-            ("IC da proporção, PB", "51,0%, de 33,1% a 68,9%. Valor real: 50,5%."),
-            ("IC da proporção, RN", "48,9%, de 31,0% a 66,8%. Valor real: 49,1%."),
-            ("Margem de erro", "±17,9 pontos percentuais"),
+            ("Fórmula do IC", "p̂ ± t × s/√n, com t = 2,045 (29 graus de liberdade)"),
+            ("IC da proporção, PB", "51,0%, de 49,7% a 52,4%. Valor real: 50,5%."),
+            ("IC da proporção, RN", "48,9%, de 47,6% a 50,2%. Valor real: 49,1%."),
+            ("Margem de erro", "±1,3 ponto percentual (a fórmula binomial daria ±17,9)"),
         ],
         "perguntas": [
             ("O que quer dizer “95% de confiança”?",
              "Que o método acerta em 95% das amostras possíveis: se repetíssemos o sorteio muitas vezes, cerca de "
              "95% dos intervalos conteriam o valor real. No nosso caso, conferimos, e os dois acertaram."),
-            ("Por que o intervalo é tão largo?",
-             "A fórmula da proporção trata cada um dos 30 municípios como um único “sim ou não”. Com proporção "
-             "perto de 50% e só 30 observações, a margem fica grande. Na prática, as proporções dos municípios "
-             "variam bem menos (desvio padrão de uns 3,6 pontos percentuais). Se a renda fosse tratada como uma "
-             "média, pelo teste t, o intervalo ficaria com cerca de 1,3 ponto para cada lado, e a diferença entre "
-             "os estados daria significativa (p-valor 0,023). Usamos a fórmula de proporção porque é a que a "
-             "questão pede."),
+            ("Por que vocês não usaram a fórmula da proporção, p̂ ± z·√(p̂(1 − p̂)/n)?",
+             "Porque ela supõe que cada observação é um sim ou não de uma pessoa. Os nossos 30 dados são "
+             "percentuais de municípios, que variam pouco de um para outro (desvio padrão de uns 3,6 pontos). Com "
+             "ela, o erro padrão ficaria 14 vezes maior que o real, a margem iria a ±17,9 pontos, e o teste não "
+             "enxergaria nem a diferença que existe na população. O intervalo t usa a variação real entre os "
+             "municípios."),
             ("Como vocês calcularam a proporção de cada estado?",
              "Pela média das proporções dos 30 municípios sorteados. Como as planilhas não trazem o número de "
-             "habitantes, cada município pesa igual."),
+             "habitantes, cada município pesa igual, e o resultado vale para o município típico. A proporção de "
+             "pessoas do estado inteiro exigiria pesar cada município pela sua população."),
             ("Por que Carrapateira e Riachuelo são atípicos?",
              "Pela regra do boxplot: o salário deles passa do limite de cima (Q3 + 1,5 × AIQ), que é 2,31 SM na "
              "PB e 2,56 SM no RN. Os dados não dizem a causa; em município pequeno, poucos empregadores bastam "
@@ -327,9 +349,10 @@ PARTES = [
              "A média. Ela fica um pouco abaixo da mediana nos dois estados (PB 1,78 e 1,80; RN 1,88 e 1,90), "
              "porque no meio da distribuição os valores se espalham um pouco mais para baixo. A cauda longa, "
              "porém, é a da direita."),
-            ("Por que usar z (a distribuição normal) no intervalo da proporção?",
-             "Porque, quando n × p̂ e n × (1 − p̂) passam de 5 (aqui, cerca de 15), a proporção da amostra tem "
-             "distribuição aproximadamente normal."),
+            ("Por que usar t no intervalo?",
+             "Porque não conhecemos o desvio padrão da população e usamos o da amostra (s). A distribuição t, com "
+             "29 graus de liberdade, leva em conta essa incerteza a mais: o valor é 2,045, um pouco maior que o "
+             "1,96 da normal."),
         ],
     },
     {
@@ -342,28 +365,29 @@ PARTES = [
              "significância de 5%. Em todos os testes, a hipótese nula, H zero, diz que não há diferença entre "
              "Paraíba e Rio Grande do Norte, e a hipótese alternativa diz que há. Quando o p-valor fica abaixo de "
              "0,05, rejeitamos H zero."),
-            ("Aponte para a primeira linha da tabela, das proporções.",
-             "Na proporção da população com renda de até meio salário mínimo, o teste z para duas proporções deu "
-             "p-valor de 0,868, bem acima de 0,05. Então não há diferença significativa, como {p3} já tinha "
-             "adiantado pelos intervalos."),
+            ("Aponte para as duas linhas da renda.",
+             "Seguimos a dica do enunciado: primeiro o teste F compara as variâncias, porque o resultado decide "
+             "qual teste t usar. Na renda, o F deu p-valor de 0,914, então consideramos as variâncias iguais. O "
+             "teste t deu p-valor de 0,023, abaixo de 0,05, e rejeitamos H zero: a proporção de pessoas com renda "
+             "de até meio salário mínimo é maior na Paraíba, cerca de 2 pontos percentuais a mais."),
             ("Aponte para as duas linhas do IDEB.",
-             "Para comparar médias, seguimos a dica do enunciado: primeiro o teste F compara as variâncias, porque "
-             "o resultado decide qual teste t usar. No IDEB, o F deu p-valor de 0,303, então consideramos as "
-             "variâncias iguais e usamos o teste t com variância combinada. Ele deu p-valor de 0,004, e rejeitamos "
-             "H zero: a média do IDEB da Paraíba é maior, com diferença de 0,72 ponto."),
+             "No IDEB, o F deu p-valor de 0,303, então de novo consideramos as variâncias iguais e usamos o teste t "
+             "com variância combinada. Ele deu p-valor de 0,004, e rejeitamos H zero: a média do IDEB da Paraíba é "
+             "maior, com diferença de 0,72 ponto."),
             ("Aponte para as duas linhas do salário.",
              "No salário, o teste F deu p-valor de 0,026, então as variâncias são diferentes, e usamos o teste t de "
              "Welch, que é a versão para variâncias diferentes. Ele deu p-valor de 0,126, e não rejeitamos H zero: "
              "não há diferença significativa no salário."),
             ("Aponte para a seção 6, Conclusão.",
-             "Concluindo: a educação separa os estados, com a Paraíba à frente no IDEB. Renda e salário são "
-             "parecidos: cerca de metade da população tem renda de até meio salário mínimo, e o salário formal "
-             "fica perto de 1,8 salário mínimo. O RN é mais heterogêneo no salário. E as amostras representaram "
-             "bem as populações, porque todos os intervalos de confiança contêm os valores reais."),
+             "Concluindo: a educação separa os estados, com a Paraíba à frente no IDEB. Na renda, a diferença é "
+             "pequena, mas significativa: cerca de metade da população tem renda de até meio salário mínimo nos "
+             "dois estados, um pouco mais na Paraíba. O salário formal fica perto de 1,8 salário mínimo nos dois, e "
+             "o RN é mais heterogêneo. E os seis intervalos de confiança contêm os valores reais da população, como "
+             "se espera de intervalos de 95%."),
             ("Olhe para a professora para fechar.",
-             "Na prática, como renda e salário são parecidos, a vantagem da Paraíba no IDEB não parece vir dessas "
-             "variáveis, e vale investigar a gestão e as políticas educacionais. Agradecemos a atenção e estamos "
-             "abertos a perguntas."),
+             "Na prática, num município típico dos dois estados, cerca de metade da população vive com até meio "
+             "salário mínimo por pessoa, e a educação é o que mais separa os estados. Os testes comparam médias e "
+             "não mostram causas. Agradecemos a atenção e estamos abertos a perguntas."),
         ],
         "conceitos": [
             ("Teste de hipóteses",
@@ -383,9 +407,6 @@ PARTES = [
             ("Rejeitar ou não rejeitar H₀",
              "Rejeitar H₀ é concluir que há diferença. Não rejeitar quer dizer que a amostra não trouxe evidência "
              "de diferença; isso não prova que os estados são iguais."),
-            ("Teste z para duas proporções",
-             "Compara duas proporções. Mede quantos erros padrão separam as duas estimativas: deu z = 0,17, muito "
-             "longe do limite de 1,96."),
             ("Teste F",
              "Compara duas variâncias dividindo uma pela outra (F = s² da PB ÷ s² do RN). Com variâncias iguais, F "
              "fica perto de 1. Com 30 municípios por estado, um F entre 0,476 e 2,101 é compatível com variâncias "
@@ -400,20 +421,23 @@ PARTES = [
              "Número que define a forma exata das distribuições t e F. Depende do tamanho das amostras."),
             ("Intervalo da diferença",
              "No IDEB, a diferença entre as médias (0,72 ponto) tem intervalo de confiança de 95% de 0,24 a 1,20. "
-             "Como o intervalo não contém o zero, ele concorda com a rejeição de H₀."),
+             "Na renda, a diferença (2,1 pontos percentuais) vai de 0,3 a 4,0. Como nenhum dos dois contém o zero, "
+             "eles concordam com a rejeição de H₀."),
             ("Shapiro-Wilk e Teorema Central do Limite",
              "O Shapiro-Wilk testa se os dados parecem vir de uma distribuição normal, e apontou desvios em "
              "algumas variáveis. O Teorema Central do Limite diz que, com amostras de 30 ou mais, a média da "
              "amostra tem distribuição aproximadamente normal mesmo assim, e isso sustenta o teste t."),
         ],
         "numeros": [
-            ("Proporções (teste z)", "z = 0,17. p-valor 0,868. Não rejeita H₀."),
+            ("Renda, variâncias (F)", "F = 1,04. p-valor 0,914. Variâncias iguais."),
+            ("Renda, proporções (t combinado)", "t = 2,34 com 58 gl. p-valor 0,023. Rejeita H₀."),
+            ("Renda, diferença", "2,1 pontos percentuais, IC de 95% de 0,3 a 4,0"),
             ("IDEB, variâncias (F)", "F = 1,47. p-valor 0,303. Variâncias iguais."),
             ("IDEB, médias (t combinado)", "t = 3,02 com 58 gl. p-valor 0,004. Rejeita H₀."),
             ("IDEB, diferença das médias", "0,72 ponto, IC de 95% de 0,24 a 1,20"),
             ("Salário, variâncias (F)", "F = 0,43. p-valor 0,026. Variâncias diferentes."),
             ("Salário, médias (Welch)", "t = −1,56 com cerca de 50 gl. p-valor 0,126. Não rejeita H₀."),
-            ("Valores críticos", "z: ±1,96. t com 58 gl: ±2,00. t com 50 gl: ±2,01. F: 0,476 e 2,101."),
+            ("Valores críticos", "t com 58 gl: ±2,00. t com 50 gl: ±2,01. F: 0,476 e 2,101."),
         ],
         "perguntas": [
             ("O que é o p-valor?",
@@ -424,16 +448,24 @@ PARTES = [
              "Porque existem dois testes t: um para variâncias iguais e outro, o de Welch, para variâncias "
              "diferentes. O F diz qual suposição usar, como a dica do enunciado pede."),
             ("E se vocês tivessem usado o outro teste t?",
-             "A decisão seria a mesma. No IDEB, o de Welch daria p-valor 0,004; no salário, o t com variâncias "
-             "iguais daria 0,125."),
+             "A decisão seria a mesma. Na renda, o de Welch daria p-valor 0,023, e no IDEB, 0,004; no salário, o t "
+             "com variâncias iguais daria 0,125."),
             ("Os dados são normais? Dá para usar o teste t?",
-             "O teste de Shapiro-Wilk aponta desvios da normal no salário e no IDEB do RN. Com 30 municípios por "
-             "estado, o Teorema Central do Limite faz a média da amostra ter distribuição aproximadamente normal, "
-             "e o teste t continua válido."),
+             "O teste de Shapiro-Wilk aponta desvios da normal no salário e, no RN, também no IDEB e na renda. Com "
+             "30 municípios por estado, o Teorema Central do Limite faz a média da amostra ter distribuição "
+             "aproximadamente normal, e o teste t continua válido."),
             ("O teste F é confiável aqui?",
              "Ele é sensível à falta de normalidade. No salário, o teste de Levene, que não depende disso, deu "
              "p-valor 0,097 e não rejeitaria variâncias iguais. Como os dois testes t chegam na mesma conclusão, a "
              "decisão sobre as médias não muda."),
+            ("Na tabela a renda parece igual, e o teste diz que é diferente. Qual vale?",
+             "As duas coisas. A diferença é pequena: 51,0% contra 48,9% na amostra e 50,5% contra 49,1% na "
+             "população. O teste diz se ela poderia ser só acaso do sorteio, e o tamanho dela é outra pergunta. "
+             "Aqui ela é real e pequena."),
+            ("A renda explica a vantagem da Paraíba no IDEB?",
+             "O trabalho não responde isso. Comparamos a média de cada variável separadamente, e isso não mostra "
+             "causa. Para investigar, seria preciso relacionar IDEB e renda município por município, por exemplo "
+             "com correlação ou regressão, e mesmo assim correlação não prova causa."),
             ("Então as escolas da Paraíba são melhores?",
              "O teste mostra que a média do IDEB dos anos iniciais da rede pública é maior na PB, de 0,24 a 1,20 "
              "ponto a mais. Ele não mostra a causa, e o IDEB mede só essa etapa da rede pública."),
@@ -445,13 +477,14 @@ PARTES = [
 ]
 
 COMUM = [
-    "Em uma frase: a Paraíba tem IDEB maior que o Rio Grande do Norte, com diferença significativa, e renda e "
-    "salário são parecidos nos dois estados.",
+    "Em uma frase: a Paraíba tem IDEB maior que o Rio Grande do Norte, a proporção de pessoas com renda de até "
+    "meio salário mínimo é um pouco maior na Paraíba, e o salário formal não difere.",
     "As amostras têm 30 municípios por estado, sorteados por amostragem aleatória simples, sem reposição, com "
     "semente fixa (20261116).",
-    "Testes com nível de significância de 5%: no IDEB, p-valor 0,004 (há diferença); na renda, 0,868, e no "
+    "Testes com nível de significância de 5%: no IDEB, p-valor 0,004, e na renda, 0,023 (há diferença); no "
     "salário, 0,126 (sem diferença).",
-    "Os 6 intervalos de confiança do trabalho (2 de proporção e 4 de média) contêm os valores reais da população.",
+    "Os 6 intervalos de confiança do trabalho (2 de proporção e 4 de média) contêm os valores reais da população, "
+    "como se espera de intervalos de 95%.",
     "Se perguntarem algo de outra parte, responda o que souber ou passe para quem apresentou: metodologia com "
     "{p1}, tabela com {p2}, gráficos e intervalos com {p3}, testes e conclusão com {p4}.",
 ]

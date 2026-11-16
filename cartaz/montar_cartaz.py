@@ -52,7 +52,8 @@ def pval(p):
 # Se alguém mudar a semente ou os dados e as decisões mudarem, o script para aqui,
 # para ninguém imprimir um cartaz com texto contradizendo os números.
 decisoes = {
-    "proporções diferentes": R["q3_teste"]["rejeita_h0"],
+    "renda: variâncias diferentes": R["q3_teste"]["f"]["rejeita_h0"],
+    "renda: proporções diferentes": R["q3_teste"]["t"]["rejeita_h0"],
     "IDEB: variâncias diferentes": R["q4_ideb"]["f"]["rejeita_h0"],
     "IDEB: médias diferentes": R["q4_ideb"]["t"]["rejeita_h0"],
     "salário: variâncias diferentes": R["q5_salario"]["f"]["rejeita_h0"],
@@ -61,7 +62,8 @@ decisoes = {
         [R["q3_ic"][uf]["contem_valor_real"] for uf in ("PB", "RN")]
         + [R["ic_medias"][v][uf]["contem_valor_real"] for v in ("ideb", "salario") for uf in ("PB", "RN")]),
 }
-esperado = {"proporções diferentes": False, "IDEB: variâncias diferentes": False, "IDEB: médias diferentes": True,
+esperado = {"renda: variâncias diferentes": False, "renda: proporções diferentes": True,
+            "IDEB: variâncias diferentes": False, "IDEB: médias diferentes": True,
             "salário: variâncias diferentes": True, "salário: médias diferentes": False,
             "todos os ICs contêm o valor real": True}
 if decisoes != esperado:
@@ -85,13 +87,19 @@ for uf in ("PB", "RN"):
                     v[chave] = br(val, 3 if (est == "variancia" and var != "renda") else 2)
                     v[chave + "_1"] = br(val, 1)
 
-ic, tp = R["q3_ic"], R["q3_teste"]
+# Questão 3: IC t da proporção média dos municípios (valores já em %)
+ic, f3, t3 = R["q3_ic"], R["q3_teste"]["f"], R["q3_teste"]["t"]
 for uf in ("PB", "RN"):
-    v[f"p_{uf.lower()}"] = br(ic[uf]["p"] * 100, 1)
-    v[f"li_{uf.lower()}"] = br(ic[uf]["li"] * 100, 1)
-    v[f"ls_{uf.lower()}"] = br(ic[uf]["ls"] * 100, 1)
-    v[f"real_{uf.lower()}"] = br(ic[uf]["valor_real"] * 100, 1)
-v["margem"] = br(max(ic[uf]["erro"] for uf in ("PB", "RN")) * 100, 1)
+    v[f"p_{uf.lower()}"] = br(ic[uf]["media"], 1)
+    v[f"li_{uf.lower()}"] = br(ic[uf]["li"], 1)
+    v[f"ls_{uf.lower()}"] = br(ic[uf]["ls"], 1)
+    v[f"real_{uf.lower()}"] = br(ic[uf]["valor_real"], 1)
+v["margem"] = br(max(ic[uf]["ls"] - ic[uf]["media"] for uf in ("PB", "RN")), 1)
+v["t_ic"], v["gl_ic"] = br(ic["PB"]["t_critico"], 3), str(ic["PB"]["gl"])
+# margem que a fórmula binomial daria (citada no cartaz para explicar por que ela não serve aqui)
+v["margem_binomial"] = br(max(R["q3_binomial"][uf]["erro"] for uf in ("PB", "RN")) * 100, 1)
+v.update({"renda_dif": br(t3["diferenca"], 1), "renda_dif_li": br(t3["ic_dif_li"], 1),
+          "renda_dif_ls": br(t3["ic_dif_ls"], 1)})
 
 t4 = R["q4_ideb"]["t"]
 v.update({"ideb_dif": br(t4["diferenca"], 2), "ideb_dif_li": br(t4["ic_dif_li"], 2),
@@ -148,9 +156,13 @@ f4, f5, t5 = R["q4_ideb"]["f"], R["q5_salario"]["f"], R["q5_salario"]["t"]
 H0 = lambda s: f'<span class="h0">H<sub>0</sub>: {s}</span>'
 REJ, NAO = "Rejeita H<sub>0</sub>", "Não rejeita H<sub>0</sub>"
 testes = [
-    ("", "Renda até 1/2 SM: proporções", H0("p<sub>PB</sub> = p<sub>RN</sub>"), "z para duas proporções",
-     f"z = {br(tp['z'])}<br>p-valor = {pval(tp['p_valor'])}",
-     decisao(tp["rejeita_h0"], f"{REJ}: proporções diferentes", f"{NAO}: sem diferença"), tp["rejeita_h0"]),
+    ("var-f", "Renda: variâncias", H0("σ²<sub>PB</sub> = σ²<sub>RN</sub>"), f"F com {f3['gl1']} e {f3['gl2']} gl",
+     f"F = {br(f3['f'])}<br>p-valor = {pval(f3['p_valor'])}",
+     decisao(f3["rejeita_h0"], f"{REJ}: variâncias diferentes", f"{NAO}: variâncias iguais"), False),
+    ("", "Renda: proporções", H0("p<sub>PB</sub> = p<sub>RN</sub>"),
+     f"t, variâncias iguais ({br(t3['gl'], 0)} gl)",
+     f"t = {br(t3['t'])}<br>p-valor = {pval(t3['p_valor'])}",
+     decisao(t3["rejeita_h0"], f"{REJ}: proporção da PB maior", f"{NAO}: sem diferença"), t3["rejeita_h0"]),
     ("var-f", "IDEB: variâncias", H0("σ²<sub>PB</sub> = σ²<sub>RN</sub>"), f"F com {f4['gl1']} e {f4['gl2']} gl",
      f"F = {br(f4['f'])}<br>p-valor = {pval(f4['p_valor'])}",
      decisao(f4["rejeita_h0"], f"{REJ}: variâncias diferentes", f"{NAO}: variâncias iguais"), False),
@@ -243,17 +255,29 @@ if len(a2) != 1:
 L, A = a2[0].rect.width, a2[0].rect.height
 
 
-def recortar(destino, quadros):
+def recortar(origem, destino, quadros):
     novo = fitz.open()
     for x0, y0, x1, y1 in quadros:
         pag = novo.new_page(width=x1 - x0, height=y1 - y0)
-        pag.show_pdf_page(pag.rect, a2, 0, clip=fitz.Rect(x0, y0, x1, y1))
+        pag.show_pdf_page(pag.rect, origem, 0, clip=fitz.Rect(x0, y0, x1, y1))
     novo.save(destino)
 
 
-recortar(PASTA / "cartaz_4xA4.pdf", [(0, 0, L / 2, A / 2), (L / 2, 0, L, A / 2),
-                                    (0, A / 2, L / 2, A), (L / 2, A / 2, L, A)])
-recortar(PASTA / "cartaz_2xA3.pdf", [(0, 0, L, A / 2), (0, A / 2, L, A)])
+def quatro_quadrantes(larg, alt):
+    return [(0, 0, larg / 2, alt / 2), (larg / 2, 0, larg, alt / 2),
+            (0, alt / 2, larg / 2, alt), (larg / 2, alt / 2, larg, alt)]
+
+
+recortar(a2, PASTA / "cartaz_4xA4.pdf", quatro_quadrantes(L, A))
+recortar(a2, PASTA / "cartaz_2xA3.pdf", [(0, 0, L, A / 2), (0, A / 2, L, A)])
+
+# A1 (594 x 841 mm): o mesmo A2 ampliado √2 vezes. Como o PDF é vetorial, não perde qualidade.
+# Também sai em 4 folhas A3 (2 x 2), cada uma com um quadrante, para copiadora.
+a1 = fitz.open()
+pag = a1.new_page(width=L * 2 ** 0.5, height=A * 2 ** 0.5)
+pag.show_pdf_page(pag.rect, a2, 0)
+a1.save(PASTA / "cartaz_A1.pdf")
+recortar(a1, PASTA / "cartaz_4xA3.pdf", quatro_quadrantes(pag.rect.width, pag.rect.height))
 
 # ---------------------------------------------------------------- pendências do grupo
 if "?" in CFG["grupo"] or any(nome.startswith("Integrante") for nome in CFG["integrantes"]):

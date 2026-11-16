@@ -157,7 +157,7 @@
           <li><b>Salário</b>: salário médio mensal dos trabalhadores formais, em salários mínimos (SM).</li>
         </ul></dd>
       <dt>Métodos</dt>
-      <dd>Estatística descritiva, intervalo de confiança (IC) de 95% e testes z (proporções), F (variâncias) e t (médias), com α = 5%.</dd>
+      <dd>Estatística descritiva, intervalo de confiança (IC) de 95% e testes F (variâncias) e t (médias), com α = 5%.</dd>
       <dt>Fonte</dt>
       <dd>IBGE Cidades e Estados, planilhas fornecidas pela docente.</dd>
     </dl>
@@ -208,9 +208,10 @@
   <section class="bloco">
     <h2 class="secao"><span class="num">5</span>Inferência estatística</h2>
     <h3>5.1 · IC de 95% para a proporção com renda per capita de até 1/2 SM</h3>
-    <p class="formula"><b>p&#770; ± z·√(p&#770;(1 − p&#770;)/n)</b>, com z = 1,96, n = ${n} e p&#770; = média das proporções dos ${n} municípios.</p>
+    <p class="formula"><b>p&#770; ± t·s/√n</b>, com p&#770; = média e s = desvio padrão das ${n} proporções municipais e t<sub>${gl_ic}</sub> = ${t_ic}.</p>
     <figure>${grafico_ic}</figure>
-    <p>Com 95% de confiança, a proporção fica entre <b>${li_pb}% e ${ls_pb}%</b> na PB e entre <b>${li_rn}% e ${ls_rn}%</b> no RN. Os dois ICs contêm o valor real e se sobrepõem quase por inteiro; a margem é larga (±${margem} p.p.) porque n = ${n}.</p>
+    <p>Com 95% de confiança, a proporção média dos municípios fica entre <b>${li_pb}% e ${ls_pb}%</b> na PB e entre <b>${li_rn}% e ${ls_rn}%</b> no RN (margem de ±${margem} p.p.). Os dois ICs contêm o valor real.</p>
+    <p class="nota">Não usamos p&#770; ± z·√(p&#770;(1 − p&#770;)/n): ela supõe respostas sim/não de pessoas e daria ±${margem_binomial} p.p. aqui.</p>
   </section>
 </div></section>
 
@@ -229,10 +230,10 @@
     <h2 class="secao"><span class="num">6</span>Conclusão</h2>
     <ul class="conclusao">
       <li><b>A educação separa os estados:</b> o IDEB dos anos iniciais é maior na PB, na amostra (${ideb_pb_am_media} × ${ideb_rn_am_media}; diferença de ${ideb_dif}, com IC de 95% de ${ideb_dif_li} a ${ideb_dif_ls}) e na população (${ideb_pb_pop_media} × ${ideb_rn_pop_media}).</li>
-      <li><b>Renda e salário aproximam os estados:</b> em um município típico, cerca de metade da população tem renda per capita de até 1/2 SM, e o salário formal médio fica perto de 1,8 SM, sem diferença significativa.</li>
-      <li><b>O RN é mais heterogêneo no salário formal:</b> variância maior e o maior valor atípico, ${atipicos_rn}.</li>
-      <li><b>As amostras representaram bem as populações:</b> todos os ICs contêm os valores reais, mas n = ${n} deixa a proporção imprecisa (±${margem} p.p.).</li>
-      <li><b>Na prática:</b> com renda e salário parecidos, a vantagem da PB no IDEB não parece vir dessas variáveis; gestão e políticas educacionais merecem investigação.</li>
+      <li><b>Renda: diferença pequena, mas significativa:</b> ${p_pb}% × ${p_rn}% com renda de até 1/2 SM per capita (diferença de ${renda_dif} p.p.; IC de ${renda_dif_li} a ${renda_dif_ls}); na população, ${real_pb}% × ${real_rn}%.</li>
+      <li><b>O salário formal não difere:</b> fica perto de 1,8 SM nos dois estados, mas o RN é mais heterogêneo (variância maior e o maior valor atípico, ${atipicos_rn}).</li>
+      <li><b>Conferência:</b> os 6 ICs contêm o valor real da população, o esperado para ICs de 95%.</li>
+      <li><b>Na prática:</b> cerca de metade da população do município típico vive com até 1/2 SM per capita, e a educação é o que mais separa os estados; os testes não indicam causas.</li>
     </ul>
   </section>
   <p class="assinatura">Análise em Python (pandas, SciPy, Matplotlib), reproduzível com a semente ${semente}.</p>

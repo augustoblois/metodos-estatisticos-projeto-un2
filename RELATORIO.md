@@ -12,9 +12,10 @@ Todos os caminhos abaixo partem da pasta `projeto-un2`.
 
 | Arquivo | Para que serve |
 |---|---|
-| `cartaz/cartaz_A2.pdf` | O cartaz inteiro em 1 página A2 (42 × 59,4 cm). Para gráfica. Como é vetorial, amplia para A1 sem perder qualidade. |
+| `cartaz/cartaz_A2.pdf` | O cartaz inteiro em 1 página A2 (42 × 59,4 cm), para gráfica. É o maior tamanho da série A que cabe na cartolina padrão (50 × 66 cm). |
 | `cartaz/cartaz_4xA4.pdf` | O mesmo cartaz em 4 folhas A4, para imprimir em casa e colar 2 × 2 na cartolina. |
 | `cartaz/cartaz_2xA3.pdf` | O mesmo cartaz em 2 folhas A3 deitadas, para copiadora. |
+| `cartaz/cartaz_A1.pdf`, `cartaz/cartaz_4xA3.pdf` | O cartaz ampliado para A1 (59,4 × 84,1 cm): 1 folha para gráfica ou 4 folhas A3 coladas 2 × 2. Precisa de suporte maior que a cartolina. |
 | `cartaz/cartaz.html` | Versão de tela, abre no navegador. É gerado pelo script, então não adianta editar à mão. |
 | `dados/amostras.xlsx` | As planilhas das amostras: abas "Amostra 1 - PB", "Amostra 2 - RN" e "Sobre os dados". Este é o arquivo que vai para o Google Drive. |
 | `saida/resultados.json` | Todos os números calculados. O cartaz lê daqui. |
@@ -36,6 +37,7 @@ Falta 1 coisa: liberar a pasta do Google Drive para "Qualquer pessoa com o link"
   - PB, 223 → 217: Baía da Traição, Barra de Santa Rosa, Santana dos Garrotes, São José de Princesa, São José do Brejo do Cruz, Vista Serrana.
   - RN, 167 → 161: Água Nova, Jardim de Angicos, Paraú, Pedra Grande, São Fernando, Serra Negra do Norte.
   - O efeito é desprezível: a média da renda na base de 217 municípios é 50,47%, contra 50,53% nos 223; no RN, 49,06% contra 49,10%. O salário muda menos de 0,01 SM.
+  - É uma adaptação do enunciado, que pede o sorteio entre todos os 223 e 167 municípios. Por isso ela aparece no cartaz (fluxo 223 → 217 → 30 e nota com asterisco).
 - A planilha lista os municípios em ordem alfabética, e a coluna "Ordem no sorteio" mostra em que ordem cada um saiu.
 
 **Amostra 1 (PB):** Barra de São Miguel, Bernardino Batista, Bom Jesus, Bonito de Santa Fé, Boqueirão, Cabaceiras, Camalaú, Carrapateira, Congo, Coremas, Coxixola, Cubati, Frei Martinho, Gurinhém, Itapororoca, Jacaraú, Juarez Távora, Lastro, Maturéia, Pedro Régis, Riachão do Bacamarte, Santana de Mangueira, São Domingos, São José dos Cordeiros, São Sebastião do Umbuzeiro, Serra Grande, Tacima, Teixeira, Tenório, Uiraúna.
@@ -116,27 +118,38 @@ O gráfico do quadrante 3 tem, para cada amostra, um histograma (classes de 0,2 
 
 ### Questão 3: IC de 95% para a proporção e teste de diferença de proporções
 
-**Estimativa:** a proporção de cada amostra (p̂, lê-se "p chapéu") é a média das 30 proporções municipais da variável renda: p̂_PB = 0,5101 (51,0%) e p̂_RN = 0,4887 (48,9%).
+**Estimativa:** cada município da planilha traz o percentual da sua população com renda per capita de até 1/2 SM. A proporção de cada amostra (p̂, lê-se "p chapéu") é a média dos 30 percentuais: p̂_PB = 51,01% e p̂_RN = 48,87%. Como cada município pesa igual, p̂ estima a proporção do município típico (seção 6, pergunta 5).
 
-**Intervalo de confiança (IC):** p̂ ± z·√(p̂(1 − p̂)/n), com z = 1,96 (95%) e n = 30.
+**Intervalo de confiança (IC):** p̂ ± t·s/√n, em que s é o desvio padrão dos 30 percentuais e t = 2,045 (distribuição t com 29 gl). É o mesmo IC da média usado no quadrante 4, aplicado às proporções municipais.
 
-| | p̂ | Erro padrão | Margem de erro | IC de 95% | Valor real (média de todos os municípios) | Contém? |
-|---|---:|---:|---:|---|---:|---|
-| PB | 51,0% | 0,0913 | ±17,9 p.p. | 33,1% a 68,9% | 50,5% | sim |
-| RN | 48,9% | 0,0913 | ±17,9 p.p. | 31,0% a 66,8% | 49,1% | sim |
+| | p̂ | s | Erro padrão (s/√n) | Margem de erro | IC de 95% | Valor real (média de todos os municípios) | Contém? |
+|---|---:|---:|---:|---:|---|---:|---|
+| PB | 51,01% | 3,59 | 0,65 p.p. | ±1,34 p.p. | 49,67% a 52,35% | 50,53% | sim |
+| RN | 48,87% | 3,51 | 0,64 p.p. | ±1,31 p.p. | 47,55% a 50,18% | 49,10% | sim |
 
-Conta da PB: √(0,5101 × 0,4899 / 30) = 0,0913; 1,96 × 0,0913 = 0,179; 0,510 ± 0,179.
+Conta da PB: 3,585 / √30 = 0,655; 2,045 × 0,655 = 1,34; 51,01 ± 1,34.
 
-*Interpretação:* com 95% de confiança, a proporção da população com renda per capita de até 1/2 SM está entre 33,1% e 68,9% na PB e entre 31,0% e 66,8% no RN. "95% de confiança" quer dizer que, se o sorteio fosse repetido muitas vezes, cerca de 95% dos intervalos calculados desse jeito conteriam o valor real. Aqui dá para conferir, porque a população é conhecida: os dois intervalos acertaram. Os intervalos se sobrepõem quase por inteiro, e a margem é larga (±17,9 pontos percentuais) porque n = 30 é pequeno para essa fórmula.
+*Interpretação:* com 95% de confiança, a proporção média dos municípios com renda per capita de até 1/2 SM está entre 49,67% e 52,35% na PB e entre 47,55% e 50,18% no RN. "95% de confiança" quer dizer que, se o sorteio fosse repetido muitas vezes, cerca de 95% dos intervalos calculados desse jeito conteriam o valor real. Aqui dá para conferir, porque a população é conhecida: os dois intervalos acertaram. Eles se sobrepõem só um pouco (de 49,67% a 50,18%).
 
-**Teste de hipóteses (teste z para duas proporções):**
+**Por que não a fórmula binomial p̂ ± z·√(p̂(1 − p̂)/n):** ela supõe n respostas sim/não, uma por pessoa (cada pessoa tem ou não tem renda de até 1/2 SM). Os nossos 30 dados são percentuais de municípios, que variam bem menos: o desvio padrão entre municípios é de cerca de 3,6 p.p., contra 50 p.p. de uma resposta sim/não com p perto de 50%. Aplicada aqui, a fórmula daria erro padrão de 9,1 p.p. (14 vezes o real), IC de 33,1% a 68,9% na PB e de 31,0% a 66,8% no RN, e o teste z de duas proporções daria z = 0,17 (p-valor 0,868), sem enxergar a diferença que existe na população. A versão anterior do cartaz usava essa fórmula; ela foi trocada em 16/11/2026.
 
-- H₀: p_PB = p_RN (as proporções são iguais) · H₁: p_PB ≠ p_RN (bilateral) · α = 5%.
-- Proporção combinada: p̄ = (30 × 0,5101 + 30 × 0,4887) / 60 = 0,4994.
-- Erro padrão: √(0,4994 × 0,5006 × (1/30 + 1/30)) = 0,1291.
-- z = (0,5101 − 0,4887) / 0,1291 = 0,17. Valores críticos: ±1,96. p-valor = 0,868.
-- **Decisão:** como |z| < 1,96 (ou p-valor > 0,05), não se rejeita H₀.
-- **Conclusão:** ao nível de 5%, não há evidência de diferença entre as proporções da PB e do RN. Nos dois estados, a proporção fica perto de 50%.
+**Teste de hipóteses (mesmo roteiro das questões 4 e 5):**
+
+Passo 1, teste F:
+
+- H₀: σ²_PB = σ²_RN · H₁: σ²_PB ≠ σ²_RN.
+- F = s²_PB / s²_RN = 12,854 / 12,345 = 1,04, com 29 e 29 gl. Região de não rejeição: de 0,476 a 2,101. p-valor = 0,914.
+- **Decisão:** não se rejeita H₀. Suposição adotada: variâncias iguais.
+
+Passo 2, teste t com variância combinada:
+
+- H₀: p_PB = p_RN (as proporções médias são iguais) · H₁: p_PB ≠ p_RN (bilateral) · α = 5%.
+- Variância combinada: s²_p = (29 × 12,854 + 29 × 12,345) / 58 = 12,600.
+- Erro padrão: √(12,600 × (1/30 + 1/30)) = 0,9165.
+- t = (51,013 − 48,867) / 0,9165 = 2,34, com 58 gl. Valores críticos: ±2,00. p-valor = 0,023.
+- **Decisão:** rejeita-se H₀.
+- **Conclusão:** ao nível de 5%, a proporção média de pessoas com renda per capita de até 1/2 SM é maior na PB. A diferença estimada é de 2,15 p.p., e o IC de 95% da diferença vai de 0,31 a 3,98 p.p. A diferença é pequena e real: a população confirma (50,53% contra 49,10%, diferença de 1,42 p.p.).
+- **Robustez:** o t de Welch dá o mesmo resultado (p-valor = 0,023), e o teste de Levene não rejeita variâncias iguais (p-valor = 0,88).
 
 ### Questão 4: médias do IDEB (α = 5%)
 
@@ -196,9 +209,9 @@ Somando com os 2 ICs da proporção, os 6 intervalos contêm o valor real.
 3. **Quartis pelo método linear (tipo 7).** É o padrão do R (`quantile()` e `summary()`) e do Excel (QUARTIL.INC). Por isso o Q1 do salário dá 1,625, um valor que não aparece nos dados: ele fica entre dois valores da lista.
 4. **Moda não calculada,** conforme a observação do próprio enunciado.
 5. **Arredondamento pela regra da ABNT NBR 5891:** quando o que sobra é exatamente 5, arredonda-se para o algarismo par (1,625 → 1,62; 4,925 → 4,92; 48,625 → 48,62). O Excel arredondaria 1,625 para 1,63; a diferença está só na última casa.
-6. **Proporção = média das 30 proporções municipais, com n = 30.** As planilhas trazem a proporção de cada município, sem o número de habitantes, então cada município pesa igual. O "valor real" usado para conferir é a média de todos os municípios do estado (seção 6, pergunta 5).
+6. **Proporção = média das 30 proporções municipais, com IC e teste t.** As planilhas trazem a proporção de cada município, sem o número de habitantes, então cada município pesa igual. Como cada dado é um percentual municipal, o erro padrão vem da variação entre os 30 municípios (s/√n). A fórmula binomial p̂(1 − p̂)/n supõe respostas sim/não de pessoas e não se aplica (seção 3, Questão 3). O "valor real" usado para conferir é a média de todos os municípios do estado (seção 6, pergunta 5).
 7. **Teste F antes do t,** seguindo a dica do enunciado: o F decide a suposição sobre as variâncias. Variâncias iguais levam ao t com variância combinada; diferentes, ao t de Welch.
-8. **Normalidade:** o teste de Shapiro-Wilk aponta desvios da normal em algumas variáveis (p-valores: IDEB PB 0,10 e RN 0,010; salário PB 0,048 e RN 0,018). Com n = 30 por estado, o Teorema Central do Limite garante que a média amostral tem distribuição aproximadamente normal, o que sustenta os testes t.
+8. **Normalidade:** o teste de Shapiro-Wilk aponta desvios da normal em algumas variáveis (p-valores: IDEB PB 0,10 e RN 0,010; renda PB 0,83 e RN 0,004; salário PB 0,048 e RN 0,018). Com n = 30 por estado, o Teorema Central do Limite garante que a média amostral tem distribuição aproximadamente normal, o que sustenta os testes t.
 9. **Conferência com o valor real,** a mesma ideia da linha `mu1>=lim_inf & mu1<=lim_sup` do script de exemplo da professora.
 10. **Ferramenta:** Python (pandas, SciPy, Matplotlib) no lugar do R. As fórmulas são as mesmas. Os comandos equivalentes no R estão abaixo; eles não foram rodados aqui (o R não está instalado nesta máquina), mas `var.test` e `t.test` usam exatamente as fórmulas acima, então devem dar os mesmos números.
 
@@ -207,6 +220,9 @@ library(readxl)
 pb <- read_excel("amostras.xlsx", sheet = "Amostra 1 - PB")
 rn <- read_excel("amostras.xlsx", sheet = "Amostra 2 - RN")
 # coluna 3 = IDEB, coluna 4 = renda, coluna 5 = salário
+t.test(pb[[4]])$conf.int                    # renda, IC da PB: 49,67 a 52,35
+var.test(pb[[4]], rn[[4]])                  # renda: F = 1,04; p-valor = 0,914
+t.test(pb[[4]], rn[[4]], var.equal = TRUE)  # renda: t = 2,34; p-valor = 0,023
 var.test(pb[[3]], rn[[3]])                  # IDEB: F = 1,47; p-valor = 0,303
 t.test(pb[[3]], rn[[3]], var.equal = TRUE)  # IDEB: t = 3,02; p-valor = 0,004
 var.test(pb[[5]], rn[[5]])                  # salário: F = 0,43; p-valor = 0,026
@@ -217,7 +233,7 @@ t.test(pb[[5]], rn[[5]])                    # salário (Welch, padrão do R): t 
 
 ## 5. Roteiro da apresentação
 
-O enunciado exige que todos participem. A divisão abaixo segue os 4 quadrantes do cartaz e a ordem dos nomes no `config.json`: Augusto (parte 1), Pedro (parte 2), Luy (parte 3) e Luiz (parte 4), uns 8 minutos no total. Cada um tem a versão completa da sua parte em `falas/falas (Nome).pdf`, com as explicações e as perguntas prováveis. Para trocar quem fala o quê, mude a ordem dos nomes no `config.json` e gere de novo (seção 8.3).
+O enunciado exige que todos participem. A divisão abaixo segue os 4 quadrantes do cartaz e a ordem dos nomes no `config.json`: Augusto (parte 1), Pedro (parte 2), Luy (parte 3) e Luiz (parte 4), uns 9 minutos no total. Cada um tem a versão completa da sua parte em `falas/falas (Nome).pdf`, com as explicações e as perguntas prováveis. Para trocar quem fala o quê, mude a ordem dos nomes no `config.json` e gere de novo (seção 8.3).
 
 **Pessoa 1, quadrante superior esquerdo (título, objetivo, metodologia).** Apontar para o fluxo 223 → 217 → 30.
 
@@ -229,11 +245,11 @@ O enunciado exige que todos participem. A divisão abaixo segue os 4 quadrantes 
 
 **Pessoa 3, quadrante inferior esquerdo (gráficos do salário e IC da proporção).** Apontar para as barras centrais do histograma, para os pontos atípicos e para os triângulos do gráfico do IC.
 
-> Aqui está o salário médio em cada amostra. O histograma mostra quantos municípios caem em cada faixa de 0,2 salário mínimo, e o boxplot resume a distribuição: a caixa vai do primeiro ao terceiro quartil, a linha é a mediana e o losango é a média. A PB é bem concentrada: 24 dos 30 municípios estão de 1,6 a 1,9 salário mínimo. O RN é mais espalhado, de 1,4 a 2,9. Os dois têm cauda à direita, e cada um tem um valor atípico: Carrapateira na PB, com 2,4, e Riachuelo no RN, com 2,9. Embaixo está o intervalo de confiança de 95% para a proporção da população com renda de até meio salário mínimo: de 33,1% a 68,9% na PB e de 31,0% a 66,8% no RN. Os dois acertaram o valor real, que é o triângulo, e quase coincidem. São largos porque a amostra tem só 30 municípios.
+> Aqui está o salário médio em cada amostra. O histograma mostra quantos municípios caem em cada faixa de 0,2 salário mínimo, e o boxplot resume a distribuição: a caixa vai do primeiro ao terceiro quartil, a linha é a mediana e o losango é a média. A PB é bem concentrada: 24 dos 30 municípios estão de 1,6 a 1,9 salário mínimo. O RN é mais espalhado, de 1,4 a 2,9. Os dois têm cauda à direita, e cada um tem um valor atípico: Carrapateira na PB, com 2,4, e Riachuelo no RN, com 2,9. Embaixo está o intervalo de confiança de 95% para a proporção da população com renda de até meio salário mínimo. A estimativa é a média dos 30 percentuais de cada estado, e o intervalo usa o quanto eles variam entre os municípios: de 49,7% a 52,4% na PB e de 47,6% a 50,2% no RN. Os dois acertaram o valor real, que é o triângulo. A nota embaixo explica por que não usamos a fórmula clássica da proporção: ela supõe respostas de sim ou não de pessoas, e os nossos dados são percentuais de municípios.
 
 **Pessoa 4, quadrante inferior direito (testes de hipóteses e conclusão).** Apontar para a tabela de testes, linha por linha, e depois para a conclusão.
 
-> Para comparar os estados, usamos testes de hipóteses com nível de significância de 5%. Na proporção da renda, o teste z deu p-valor de 0,868, então não há diferença significativa. Para as médias, seguimos a dica do enunciado: primeiro o teste F compara as variâncias, e o resultado decide qual teste t usar. No IDEB, o F não rejeitou variâncias iguais, então usamos o t com variâncias iguais: p-valor de 0,004, rejeitamos a igualdade, e a média da PB é maior. No salário, o F rejeitou variâncias iguais, então usamos o t de Welch: p-valor de 0,126, sem diferença significativa. Concluindo: a educação separa os estados, com a PB à frente no IDEB, enquanto renda e salário são parecidos. O RN é mais heterogêneo no salário. E as amostras representaram bem as populações, porque todos os intervalos de confiança contêm os valores reais.
+> Para comparar os estados, usamos testes de hipóteses com nível de significância de 5%, sempre seguindo a dica do enunciado: primeiro o teste F compara as variâncias, e o resultado decide qual teste t usar. Na renda, o F não rejeitou variâncias iguais, e o t deu p-valor de 0,023: a proporção de pessoas com renda de até meio salário mínimo é um pouco maior na PB, cerca de 2 pontos. No IDEB, o F também não rejeitou variâncias iguais, e o t deu p-valor de 0,004: a média da PB é maior. No salário, o F rejeitou variâncias iguais, então usamos o t de Welch: p-valor de 0,126, sem diferença significativa. Concluindo: a educação é o que mais separa os estados, com a PB à frente no IDEB; na renda, a diferença é pequena, mas significativa; o salário não difere, e o RN é mais heterogêneo. Os seis intervalos de confiança contêm os valores reais, como se espera de intervalos de 95%. Os testes comparam médias e não mostram causas.
 
 Dica: cada um deve ler a seção da Questão correspondente (seção 3) e a lista de perguntas abaixo, porque a professora pode perguntar para qualquer integrante.
 
@@ -241,19 +257,21 @@ Dica: cada um deve ler a seção da Questão correspondente (seção 3) e a list
 
 ## 6. Perguntas que a professora pode fazer
 
-1. **Por que 6 municípios de cada estado ficaram fora do sorteio?** Eles não têm IDEB divulgado, e cada município da amostra precisava das 3 variáveis. As médias de renda e salário mudam menos de 0,1 com a exclusão.
+1. **Por que 6 municípios de cada estado ficaram fora do sorteio?** Eles não têm IDEB divulgado, e cada município da amostra precisava das 3 variáveis. As médias de renda e salário mudam menos de 0,1 com a exclusão. É uma adaptação do enunciado (que fala dos 223 e dos 167), e por isso ela aparece no cartaz.
 2. **Por que não calcularam a moda?** As variáveis são quantitativas contínuas, e o enunciado diz que nesse caso a moda não faz sentido. Se ela insistir: os valores que mais se repetem são 4,7 no IDEB da PB (17 municípios na população, 4 na amostra) e 1,8 SM no salário das duas populações (53 municípios na PB, 29 no RN). Essas repetições existem só porque o IBGE arredonda para uma casa decimal; com mais casas, quase todo valor seria único.
 3. **Por que a variância da população divide por N e a da amostra por n − 1?** Na população temos todos os municípios, então a variância é o parâmetro. Na amostra, dividir por n compensaria mal o fato de a média amostral estar "ajustada" aos próprios dados, e a variância sairia menor que a real, em média. Dividir por n − 1 corrige esse viés.
-4. **Por que o IC da proporção é tão largo (±17,9 p.p.)?** A fórmula p̂(1 − p̂)/n trata cada um dos 30 municípios como um único "sim ou não". Com p̂ perto de 50% e n = 30, a margem fica grande. Na prática, as proporções municipais variam bem menos (desvio padrão de cerca de 3,6 p.p.). Se a renda fosse tratada como uma variável numérica e comparada pelo teste t, o IC da média ficaria com cerca de ±1,3 p.p., e a diferença entre os estados (51,0% contra 48,9%) daria significativa (t = 2,34; p-valor = 0,023). Usamos a fórmula de proporção porque é a que a questão pede; essa diferença de método é a principal ressalva do trabalho.
+4. **Por que não usaram a fórmula da proporção p̂ ± z·√(p̂(1 − p̂)/n)?** Ela supõe que cada observação é um sim ou não de uma pessoa. Os nossos 30 dados são percentuais de municípios, com desvio padrão de cerca de 3,6 p.p. Com a fórmula binomial, o erro padrão ficaria 14 vezes maior que o real (9,1 contra 0,65 p.p.), o IC iria a ±17,9 p.p., e o teste z (p-valor 0,868) não enxergaria a diferença que existe na população (50,53% contra 49,10%). O IC t usa a variação real entre os municípios e continua estimando uma proporção: a do município típico.
 5. **A "proporção de indivíduos" que vocês estimaram é a proporção do estado?** É a proporção do município médio. Cada município pesa igual, então João Pessoa e Natal contam o mesmo que um município de 2 mil habitantes. A proporção de pessoas do estado inteiro exigiria pesar pelo número de habitantes, que não está nas planilhas.
-6. **Por que no IDEB usaram o t com variâncias iguais e no salário o de Welch?** Por causa do teste F, como a dica do enunciado pede. No IDEB, o F não rejeitou variâncias iguais (p-valor 0,303); no salário, rejeitou (p-valor 0,026). Nos dois casos, o outro teste t daria a mesma decisão.
-7. **Os dados são normais? Pode usar o teste t?** O Shapiro-Wilk aponta desvios da normal (salário nos dois estados, IDEB no RN). Com 30 municípios por estado, o Teorema Central do Limite faz a média amostral ter distribuição aproximadamente normal, e o teste t continua válido.
+6. **Por que na renda e no IDEB usaram o t com variâncias iguais e no salário o de Welch?** Por causa do teste F, como a dica do enunciado pede. Na renda e no IDEB, o F não rejeitou variâncias iguais (p-valores 0,914 e 0,303); no salário, rejeitou (p-valor 0,026). Nos três casos, o outro teste t daria a mesma decisão.
+7. **Os dados são normais? Pode usar o teste t?** O Shapiro-Wilk aponta desvios da normal (salário nos dois estados, IDEB e renda no RN). Com 30 municípios por estado, o Teorema Central do Limite faz a média amostral ter distribuição aproximadamente normal, e o teste t continua válido.
 8. **O teste F é confiável aqui?** Ele é sensível à falta de normalidade. No salário, o teste de Levene, que não depende disso, deu p-valor 0,097 (não rejeitaria variâncias iguais). Como os dois testes t chegam na mesma conclusão, a decisão sobre as médias não muda.
 9. **O que é o p-valor?** É a probabilidade de observar uma diferença tão grande quanto a da amostra, ou maior, se H₀ fosse verdadeira. No IDEB, p-valor = 0,004: se as médias fossem iguais, uma diferença como a nossa apareceria em só 0,4% das amostras, então rejeitamos H₀. Ele não mede a probabilidade de H₀ ser verdadeira.
 10. **A diferença no IDEB quer dizer que a escola da PB é melhor?** O teste mostra que a média do IDEB dos anos iniciais da rede pública é maior na PB (0,72 ponto, entre 0,24 e 1,20 com 95% de confiança). Ele não mostra a causa, e o IDEB mede só uma etapa da rede pública.
+    - **E a renda explica essa vantagem?** O trabalho não responde isso. Comparar a média de cada variável separadamente não mostra causa; para investigar, seria preciso relacionar IDEB e renda município por município (correlação ou regressão), e mesmo assim correlação não prova causa.
+    - **Na tabela a renda aparece parecida, e o teste diz que é diferente. Qual vale?** As duas coisas: a diferença é pequena (50,53% contra 49,10% na população), e o teste mostra que ela é grande demais para ser só acaso do sorteio.
 11. **Por que a média do IDEB na amostra da PB (5,57) ficou acima da população (5,34)?** Variação de amostragem: o sorteio pegou vários municípios de IDEB alto. O IC de 95% da média (5,19 a 5,95) contém o valor real.
 12. **No script de exemplo, o IC da média usa z e o desvio padrão da população. Por que vocês usaram t?** Na prática, quem tem só a amostra não conhece o desvio padrão da população, então usa s e a distribuição t. Com o desvio padrão da população (como no exemplo), os intervalos seriam: IDEB PB 5,28 a 5,86; IDEB RN 4,61 a 5,09; salário PB 1,70 a 1,86; salário RN 1,77 a 1,99. Todos também contêm o valor real.
-13. **Por que usar z no IC da proporção?** Pela aproximação normal da binomial, que vale quando n·p̂ e n·(1 − p̂) são pelo menos 5. Aqui, 30 × 0,51 ≈ 15.
+13. **Por que t no IC da proporção?** Porque o desvio padrão da população é desconhecido e usamos o da amostra (s). Com 29 gl, t = 2,045, um pouco maior que o 1,96 da normal.
 14. **E se fosse outra amostra?** Os números mudariam um pouco. O IC de 95% acerta o valor real em cerca de 95% das amostras possíveis; aqui os 6 intervalos acertaram.
 15. **Por que o Q1 do salário é 1,625 se nenhum município tem 1,625?** O quartil é calculado por interpolação entre dois valores da lista ordenada (método padrão do R e do Excel). No cartaz, aparece arredondado como 1,62 pela regra da ABNT.
 16. **Por que Carrapateira e Riachuelo são atípicos?** Pela regra do boxplot: o salário deles passa de Q3 + 1,5·AIQ (2,31 SM na PB e 2,56 SM no RN). Os dados não dizem a causa.
@@ -278,7 +296,6 @@ Dica: cada um deve ler a seção da Questão correspondente (seção 3) e a list
 - **H₀ / H₁:** hipótese nula (não há diferença) / hipótese alternativa (há diferença).
 - **α (nível de significância):** o risco aceito de rejeitar H₀ quando ela é verdadeira; aqui, 5%.
 - **p-valor:** probabilidade de ver uma diferença tão grande quanto a observada se H₀ fosse verdadeira; p-valor < 0,05 leva a rejeitar H₀.
-- **Teste z de duas proporções:** compara duas proporções.
 - **Teste F:** compara duas variâncias (razão s²₁/s²₂).
 - **Teste t (variância combinada / Welch):** compara duas médias, supondo variâncias iguais / diferentes.
 - **gl (graus de liberdade):** parâmetro das distribuições t e F que depende do tamanho das amostras.
@@ -329,6 +346,7 @@ Em qualquer opção: imprimir colorido e em "Tamanho real" (100%), sem "Ajustar 
 
 - **4 folhas A4, em casa (plano mais seguro):** imprima o `cartaz_4xA4.pdf`. Folha 1 = canto superior esquerdo, 2 = superior direito, 3 = inferior esquerdo, 4 = inferior direito. Cole 2 × 2 numa cartolina (50 × 66 cm), deixando as folhas encostadas; o espaço entre os quadros já faz parte do desenho. O conjunto ocupa 42 × 59,4 cm e sobra uma moldura de 3 a 4 cm.
 - **2 folhas A3, em copiadora:** imprima o `cartaz_2xA3.pdf` (folhas deitadas). Folha 1 = metade de cima, 2 = metade de baixo. Cole uma sobre a outra na cartolina.
-- **1 folha A2, em gráfica:** leve o `cartaz_A2.pdf`. Se a gráfica oferecer A1, pode ampliar sem perder qualidade. Ela pode imprimir direto em papel mais grosso, e aí a cartolina vira só o suporte.
+- **1 folha A2, em gráfica:** leve o `cartaz_A2.pdf`. Ela pode imprimir direto em papel mais grosso, e aí a cartolina vira só o suporte. 
+- **Versão A1 (59,4 × 84,1 cm):** `cartaz_A1.pdf` (1 folha, para gráfica) ou `cartaz_4xA3.pdf` (4 folhas A3 em pé, coladas 2 × 2, mesma ordem das folhas A4). Não cabe na cartolina de 50 × 66 cm: precisa de suporte maior, como papel paraná (80 × 100 cm) ou duas cartolinas emendadas.
 
 O enunciado aceita "partes impressas e coladas" em cartolina ou semelhante, então as três opções valem. Como a apresentação é na segunda, a impressão em casa evita depender do horário de gráfica.

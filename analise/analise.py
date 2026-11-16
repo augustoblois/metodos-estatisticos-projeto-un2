@@ -322,8 +322,10 @@ def comparar_medias(x1, x2):
 
 def ic_media(x, valor_real):
     # IC de 95% para a média com σ desconhecido: x̄ ± t·s/√n (t com n − 1 graus de liberdade)
-    li, ls = stats.t.interval(0.95, len(x) - 1, loc=np.mean(x), scale=stats.sem(x))
-    return {"media": float(np.mean(x)), "li": float(li), "ls": float(ls), "valor_real": float(valor_real),
+    gl = len(x) - 1
+    li, ls = stats.t.interval(0.95, gl, loc=np.mean(x), scale=stats.sem(x))
+    return {"media": float(np.mean(x)), "li": float(li), "ls": float(ls), "gl": gl,
+            "t_critico": float(stats.t.ppf(0.975, gl)), "valor_real": float(valor_real),
             "contem_valor_real": bool(li <= valor_real <= ls)}
 
 
@@ -372,14 +374,15 @@ def grafico_medias(ic_medias):
     plt.close(fig)
 
 
-def grafico_ic(ics, parametros):
+def grafico_ic(ics):
+    # IC da questão 3 (valores já em %): estimativa, IC de 95% e valor real de cada estado
     estilo_graficos()
     altura_mm = 42
     fig, ax = plt.subplots(figsize=(176 / 25.4, altura_mm / 25.4))
     fig.subplots_adjust(left=0.075, right=0.985, top=1 - 8.5 / altura_mm, bottom=13.5 / altura_mm)
     for y, uf in [(1, "PB"), (0, "RN")]:
         ic, cor = ics[uf], COR[uf]
-        li, ls, p = ic["li"] * 100, ic["ls"] * 100, ic["p"] * 100
+        li, ls, p = ic["li"], ic["ls"], ic["media"]
         ax.plot([li, ls], [y, y], color=cor, linewidth=3.2, solid_capstyle="butt", zorder=3)
         for borda in (li, ls):
             ax.plot([borda, borda], [y - 0.12, y + 0.12], color=cor, linewidth=2.2, zorder=3)
@@ -390,7 +393,7 @@ def grafico_ic(ics, parametros):
         ax.text(p, y - 0.2, f"{p:.1f}%".replace(".", ","), ha="center", va="top",
                 fontsize=10, color=TINTA, fontweight="bold")
         # valor real da população: triângulo apontando para a linha, por cima (não esconde a bolinha)
-        ax.plot([parametros[uf] * 100], [y + 0.2], marker="v", markersize=8, color=TINTA,
+        ax.plot([ic["valor_real"]], [y + 0.2], marker="v", markersize=8, color=TINTA,
                 markeredgecolor="white", markeredgewidth=1.2, zorder=6)
     ax.set_yticks([1, 0], ["PB", "RN"], fontsize=11, fontweight="bold", color=TINTA)
     ax.set_ylim(-0.62, 1.42)
@@ -403,13 +406,13 @@ def grafico_ic(ics, parametros):
     ]
     fig.legend(handles=simbolos, loc="upper center", bbox_to_anchor=(0.53, 1.0), ncol=3, frameon=False,
                fontsize=9, handlelength=1.4, handletextpad=0.5, columnspacing=1.5, labelcolor=TINTA_2)
-    lo = min(ic["li"] for ic in ics.values()) * 100
-    hi = max(ic["ls"] for ic in ics.values()) * 100
-    ax.set_xlim(np.floor(lo / 5) * 5 - 2, np.ceil(hi / 5) * 5 + 2)
-    ax.xaxis.set_major_locator(MultipleLocator(5))
+    lo = min(ic["li"] for ic in ics.values())
+    hi = max(ic["ls"] for ic in ics.values())
+    ax.set_xlim(np.floor(lo) - 0.5, np.ceil(hi) + 0.5)  # meia unidade de folga: nenhum rótulo do eixo fica cortado na borda
+    ax.xaxis.set_major_locator(MultipleLocator(1))
     ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:.0f}%"))
     ax.grid(axis="x", color=GRADE, linewidth=0.6, zorder=0)
-    ax.set_xlabel("Proporção da população com renda per capita de até 1/2 salário mínimo")
+    ax.set_xlabel("% da população com renda per capita de até 1/2 SM (média dos municípios)")
     fig.savefig(SAIDA / "graficos" / "ic_proporcoes.svg")
     fig.savefig(SAIDA / "graficos" / "ic_proporcoes.png", dpi=200)
     plt.close(fig)
@@ -448,24 +451,19 @@ def main():
 
     atipicos = grafico_salario(amostras, desc)
 
-    # Questão 3: a proporção de cada amostra é a média das 30 proporções municipais (em 0 a 1)
-    p_hat = {uf: amostras[uf]["renda"].mean() / 100 for uf in ("PB", "RN")}
-    p_real = {uf: pops[uf]["renda"].mean() / 100 for uf in ("PB", "RN")}  # valor da população inteira
-    ics = {uf: ic_proporcao(p_hat[uf], N) for uf in ("PB", "RN")}
-    for uf in ics:
-        ics[uf]["contem_valor_real"] = bool(ics[uf]["li"] <= p_real[uf] <= ics[uf]["ls"])
-        ics[uf]["valor_real"] = p_real[uf]
-    teste_prop = teste_duas_proporcoes(p_hat["PB"], N, p_hat["RN"], N)
-    grafico_ic(ics, p_real)
+    # Questão 3: cada município traz o percentual da sua população com renda de até 1/2 SM.
+    # A estimativa p̂ é a média dos 30 percentuais, e o IC usa a variação real entre os municípios:
+    # p̂ ± t·s/√n, o mesmo IC t da média. A comparação PB × RN segue o roteiro das questões 4 e 5:
+    # o teste F decide a suposição sobre as variâncias, e o teste t compara as proporções médias.
+    renda = {uf: amostras[uf]["renda"].to_numpy() for uf in ("PB", "RN")}
+    ics = {uf: ic_media(renda[uf], pops[uf]["renda"].mean()) for uf in ("PB", "RN")}
+    teste_renda = comparar_medias(renda["PB"], renda["RN"])
+    grafico_ic(ics)
 
-    # Conferência (não é o método pedido): tratar a proporção municipal como variável
-    # quantitativa e usar o IC t da média. Fica no relatório para responder possíveis perguntas.
-    conferencia_renda = {uf: {"media": amostras[uf]["renda"].mean(),
-                              "ic": stats.t.interval(0.95, N - 1, loc=amostras[uf]["renda"].mean(),
-                                                     scale=stats.sem(amostras[uf]["renda"]))}
-                         for uf in ("PB", "RN")}
-    conferencia_renda["teste"] = comparar_medias(amostras["PB"]["renda"].to_numpy(),
-                                                 amostras["RN"]["renda"].to_numpy())
+    # Só para o relatório: a fórmula binomial p̂ ± z·√(p̂(1 − p̂)/n) supõe n respostas sim/não de
+    # pessoas. Aplicada aos 30 percentuais, ela exagera o erro padrão em cerca de 14 vezes.
+    binomial = {uf: ic_proporcao(renda[uf].mean() / 100, N) for uf in ("PB", "RN")}
+    binomial["teste_z"] = teste_duas_proporcoes(binomial["PB"]["p"], N, binomial["RN"]["p"], N)
 
     # Questões 4 e 5
     ideb = comparar_medias(amostras["PB"]["ideb"].to_numpy(), amostras["RN"]["ideb"].to_numpy())
@@ -482,7 +480,7 @@ def main():
         "amostras": {uf: amostras[uf].drop(columns="uf").to_dict("records") for uf in amostras},
         "descritivas": desc,
         "atipicos_salario": atipicos,
-        "q3_ic": ics, "q3_teste": teste_prop, "q3_conferencia_t": conferencia_renda,
+        "q3_ic": ics, "q3_teste": teste_renda, "q3_binomial": binomial,
         "q4_ideb": ideb, "q5_salario": salario, "ic_medias": ic_medias,
     }
     SAIDA.mkdir(parents=True, exist_ok=True)
