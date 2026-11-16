@@ -4,8 +4,8 @@ Projeto da Unidade II · Métodos Estatísticos Aplicados às Ciências Tecnoló
 
 Roteiro do script (cada bloco responde a uma parte do enunciado):
   1. Lê as planilhas da professora: todos os municípios da PB (223) e do RN (167).
-  2. Sorteia uma amostra aleatória simples (AAS) de 30 municípios por estado.
-  3. Salva as amostras em dados/amostras.xlsx (é o arquivo do link pedido no cartaz).
+  2. Reproduz o sorteio original de 30 municípios entre os elegíveis de cada estado.
+  3. Confere o manifesto original; mantém dados/amostras.xlsx sem alterações.
   4. Questão 1: estatísticas descritivas da população e da amostra.
   5. Questão 2: histograma + boxplot do salário em cada amostra.
   6. Questões 3 a 5: intervalos de confiança e testes de hipóteses.
@@ -35,7 +35,7 @@ ARQ_RN = PASTA / "dados-originais" / "rn" / "dados_rn.xlsx"
 ARQ_AMOSTRAS = PASTA / "dados" / "amostras.xlsx"
 SAIDA = PASTA / "saida"
 
-SEMENTE = 20261116  # data da apresentação, fixada ANTES do sorteio: rodar de novo sorteia os mesmos municípios
+SEMENTE = 20261116  # semente publicada no projeto original; sequência e base preservadas
 N = 30              # tamanho de cada amostra (enunciado)
 ALFA = 0.05         # nível de significância de todos os testes
 VARIAVEIS = ["ideb", "renda", "salario"]
@@ -82,43 +82,6 @@ def sortear(pop, rng):
     amostra.insert(0, "ordem_sorteio", np.arange(1, N + 1))
     amostra = amostra.sort_values("municipio", key=chave_alfabetica).reset_index(drop=True)
     return base, amostra
-
-
-def salvar_amostras(amostras, bases, pops):
-    cabecalho = {
-        "municipio": "Município",
-        "ideb": "IDEB – Anos iniciais (rede pública)",
-        "renda": "% da população com renda per capita de até 1/2 salário mínimo",
-        "salario": "Salário médio mensal dos trabalhadores formais (salários mínimos)",
-        "ordem_sorteio": "Ordem no sorteio",
-    }
-    sobre = pd.DataFrame({
-        "Item": ["Disciplina", "Fonte dos dados", "População", "Base de sorteio", "Amostragem",
-                 "Semente", "Variáveis"],
-        "Descrição": [
-            "Métodos Estatísticos Aplicados às Ciências Tecnológicas (UFPB) · Projeto da Unidade II",
-            "IBGE Cidades e Estados (ibge.gov.br/cidades-e-estados), planilhas fornecidas pela docente",
-            f"PB: {len(pops['PB'])} municípios · RN: {len(pops['RN'])} municípios",
-            f"Municípios com as 3 variáveis disponíveis · PB: {len(bases['PB'])} · RN: {len(bases['RN'])} "
-            "(6 municípios de cada estado não têm IDEB divulgado)",
-            f"Amostragem aleatória simples sem reposição, n = {N} por estado, sorteio por computador "
-            "(Python, numpy.random.default_rng(semente).choice, primeiro PB, depois RN)",
-            str(SEMENTE),
-            "; ".join(NOMES.values()),
-        ],
-    })
-    ARQ_AMOSTRAS.parent.mkdir(parents=True, exist_ok=True)
-    with pd.ExcelWriter(ARQ_AMOSTRAS, engine="openpyxl") as w:
-        for aba, uf in [("Amostra 1 - PB", "PB"), ("Amostra 2 - RN", "RN")]:
-            t = amostras[uf][["municipio"] + VARIAVEIS + ["ordem_sorteio"]].rename(columns=cabecalho)
-            t.insert(0, "Nº", range(1, N + 1))
-            t.to_excel(w, sheet_name=aba, index=False)
-        sobre.to_excel(w, sheet_name="Sobre os dados", index=False)
-        for ws in w.book.worksheets:  # só deixa as colunas largas o bastante para ler
-            for col in ws.columns:
-                largura = max(len(str(c.value)) for c in col if c.value is not None)
-                ws.column_dimensions[col[0].column_letter].width = min(max(8, largura + 2), 95)
-            ws.freeze_panes = "A2"
 
 
 # ----------------------------------------------------------------------------
@@ -267,20 +230,54 @@ def grafico_salario(amostras, desc):
 # ----------------------------------------------------------------------------
 # 5. Questões 3 a 5: inferência
 # ----------------------------------------------------------------------------
-def ic_proporcao(p, n, conf=0.95):
-    # IC para proporção: p̂ ± z·√(p̂(1 − p̂)/n)
-    z = stats.norm.ppf(1 - (1 - conf) / 2)
-    ep = np.sqrt(p * (1 - p) / n)
-    return {"p": p, "n": n, "z": z, "ep": ep, "erro": z * ep, "li": p - z * ep, "ls": p + z * ep}
+def ic_media_finita(x, tamanho_base, referencia):
+    """IC t aproximado para a média de uma base finita sob AAS sem reposição.
+
+    s² usa divisor n-1; a variância estimada da média é (1-n/M)s²/n.
+    A variância é de desenho; a calibração t é uma aproximação, não exata.
+    """
+    x = np.asarray(x, dtype=float)
+    n = len(x)
+    if not (2 <= n <= tamanho_base) or not np.isfinite(x).all():
+        raise ValueError('Amostra inválida para inferência de população finita')
+    fator = 1 - n / tamanho_base
+    ep = np.sqrt(fator * np.var(x, ddof=1) / n)
+    critico = stats.t.ppf(1 - ALFA / 2, n - 1)
+    media = float(x.mean())
+    erro = float(critico * ep)
+    return {'media': media, 'n': n, 'M': tamanho_base, 'fracao_amostral': n / tamanho_base,
+            'fpc': np.sqrt(fator), 'ep': ep, 'erro': erro, 'gl': n - 1,
+            't_critico': critico, 'li': media - erro, 'ls': media + erro,
+            'valor_real': float(referencia),
+            'contem_valor_real': bool(media - erro <= referencia <= media + erro),
+            'metodo': 'IC t aproximado, AAS sem reposição, correção de população finita'}
 
 
-def teste_duas_proporcoes(p1, n1, p2, n2):
-    # H0: p1 = p2 contra H1: p1 ≠ p2. Sob H0, as amostras se juntam numa proporção comum.
-    p_comum = (p1 * n1 + p2 * n2) / (n1 + n2)
-    ep = np.sqrt(p_comum * (1 - p_comum) * (1 / n1 + 1 / n2))
-    z = (p1 - p2) / ep
-    return {"p_comum": p_comum, "ep": ep, "z": z, "z_critico": stats.norm.ppf(1 - ALFA / 2),
-            "p_valor": 2 * stats.norm.sf(abs(z)), "rejeita_h0": bool(2 * stats.norm.sf(abs(z)) < ALFA)}
+def teste_medias_finitas(x1, x2, m1, m2):
+    """Diferença de médias: variância de desenho + aproximação t de Satterthwaite.
+
+    Não é o Welch iid exato: os componentes incorporam as frações amostrais.
+    Não se exige igualdade das variâncias; estados são sorteios separados.
+    """
+    x1, x2 = np.asarray(x1, dtype=float), np.asarray(x2, dtype=float)
+    n1, n2 = len(x1), len(x2)
+    a = (1 - n1 / m1) * np.var(x1, ddof=1) / n1
+    b = (1 - n2 / m2) * np.var(x2, ddof=1) / n2
+    ep = float(np.sqrt(a + b))
+    if ep <= 0:
+        raise ValueError('Erro padrão nulo: requer tratamento censitário/degenerado')
+    gl = float((a + b)**2 / (a*a / (n1-1) + b*b / (n2-1)))
+    diferenca = float(x1.mean() - x2.mean())
+    t = diferenca / ep
+    p = float(2 * stats.t.sf(abs(t), gl))
+    critico = float(stats.t.ppf(1 - ALFA/2, gl))
+    return {'metodo': 't aproximado de desenho, CPF e gl de Satterthwaite',
+            'variancias_iguais': False, 'M_1': m1, 'M_2': m2,
+            'media_1': float(x1.mean()), 'media_2': float(x2.mean()),
+            'diferenca': diferenca, 'ep': ep, 'componentes_variancia': [a, b],
+            't': t, 'gl': gl, 't_critico': critico, 'p_valor': p,
+            'ic_dif_li': diferenca - critico*ep, 'ic_dif_ls': diferenca + critico*ep,
+            'rejeita_h0': bool(p < ALFA)}
 
 
 def teste_f(x1, x2):
@@ -307,24 +304,18 @@ def teste_t(x1, x2, variancias_iguais):
             "ic_dif_li": float(ic.low), "ic_dif_ls": float(ic.high), "rejeita_h0": bool(r.pvalue < ALFA)}
 
 
-def comparar_medias(x1, x2):
-    # A dica do enunciado: primeiro o teste F decide a suposição sobre as variâncias,
-    # depois o teste t adequado compara as médias.
+def comparar_medias(x1, x2, m1, m2):
+    # F atende ao diagnóstico solicitado, sob modelo normal iid (sensível a desvios).
+    # A inferência principal usa o desenho finito, sem condicionar a escolha ao F.
     f = teste_f(x1, x2)
-    t = teste_t(x1, x2, variancias_iguais=not f["rejeita_h0"])
+    classico = teste_t(x1, x2, variancias_iguais=not f["rejeita_h0"])
+    t = teste_medias_finitas(x1, x2, m1, m2)
     # Conferências para o relatório (não vão para o cartaz):
     # o outro teste t, o teste de Levene (não exige normalidade) e o Shapiro-Wilk (normalidade).
     outro_t = teste_t(x1, x2, variancias_iguais=f["rejeita_h0"])
     levene_p = float(stats.levene(x1, x2, center="median").pvalue)
     normal = {k: float(stats.shapiro(x).pvalue) for k, x in (("PB", x1), ("RN", x2))}
-    return {"f": f, "t": t, "outro_t": outro_t, "levene_p": levene_p, "shapiro_p": normal}
-
-
-def ic_media(x, valor_real):
-    # IC de 95% para a média com σ desconhecido: x̄ ± t·s/√n (t com n − 1 graus de liberdade)
-    li, ls = stats.t.interval(0.95, len(x) - 1, loc=np.mean(x), scale=stats.sem(x))
-    return {"media": float(np.mean(x)), "li": float(li), "ls": float(ls), "valor_real": float(valor_real),
-            "contem_valor_real": bool(li <= valor_real <= ls)}
+    return {"f": f, "t": t, "classico_sem_cpf": classico, "outro_t": outro_t, "levene_p": levene_p, "shapiro_p": normal}
 
 
 def grafico_medias(ic_medias):
@@ -363,7 +354,7 @@ def grafico_medias(ic_medias):
                label="média da amostra"),
         Line2D([], [], color=TINTA_2, linewidth=3, label="IC de 95% da média"),
         Line2D([], [], marker="v", color=TINTA, linestyle="", markersize=8, markeredgecolor="white",
-               label="média real da população"),
+               label="média da base elegível"),
     ]
     fig.legend(handles=simbolos, loc="upper center", bbox_to_anchor=(0.53, 1.0), ncol=3, frameon=False,
                fontsize=9, handlelength=1.4, handletextpad=0.5, columnspacing=1.5, labelcolor=TINTA_2)
@@ -379,7 +370,7 @@ def grafico_ic(ics, parametros):
     fig.subplots_adjust(left=0.075, right=0.985, top=1 - 8.5 / altura_mm, bottom=13.5 / altura_mm)
     for y, uf in [(1, "PB"), (0, "RN")]:
         ic, cor = ics[uf], COR[uf]
-        li, ls, p = ic["li"] * 100, ic["ls"] * 100, ic["p"] * 100
+        li, ls, p = ic["li"], ic["ls"], ic["media"]
         ax.plot([li, ls], [y, y], color=cor, linewidth=3.2, solid_capstyle="butt", zorder=3)
         for borda in (li, ls):
             ax.plot([borda, borda], [y - 0.12, y + 0.12], color=cor, linewidth=2.2, zorder=3)
@@ -390,7 +381,7 @@ def grafico_ic(ics, parametros):
         ax.text(p, y - 0.2, f"{p:.1f}%".replace(".", ","), ha="center", va="top",
                 fontsize=10, color=TINTA, fontweight="bold")
         # valor real da população: triângulo apontando para a linha, por cima (não esconde a bolinha)
-        ax.plot([parametros[uf] * 100], [y + 0.2], marker="v", markersize=8, color=TINTA,
+        ax.plot([parametros[uf]], [y + 0.2], marker="v", markersize=8, color=TINTA,
                 markeredgecolor="white", markeredgewidth=1.2, zorder=6)
     ax.set_yticks([1, 0], ["PB", "RN"], fontsize=11, fontweight="bold", color=TINTA)
     ax.set_ylim(-0.62, 1.42)
@@ -399,19 +390,19 @@ def grafico_ic(ics, parametros):
                label="estimativa da amostra"),
         Line2D([], [], color=TINTA_2, linewidth=3, label="IC de 95%"),
         Line2D([], [], marker="v", color=TINTA, linestyle="", markersize=8, markeredgecolor="white",
-               label="valor real da população"),
+               label="média da base elegível"),
     ]
     fig.legend(handles=simbolos, loc="upper center", bbox_to_anchor=(0.53, 1.0), ncol=3, frameon=False,
                fontsize=9, handlelength=1.4, handletextpad=0.5, columnspacing=1.5, labelcolor=TINTA_2)
-    lo = min(ic["li"] for ic in ics.values()) * 100
-    hi = max(ic["ls"] for ic in ics.values()) * 100
-    ax.set_xlim(np.floor(lo / 5) * 5 - 2, np.ceil(hi / 5) * 5 + 2)
-    ax.xaxis.set_major_locator(MultipleLocator(5))
+    lo = min(ic["li"] for ic in ics.values())
+    hi = max(ic["ls"] for ic in ics.values())
+    ax.set_xlim(np.floor(lo) - 0.5, np.ceil(hi) + 0.5)
+    ax.xaxis.set_major_locator(MultipleLocator(1))
     ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:.0f}%"))
     ax.grid(axis="x", color=GRADE, linewidth=0.6, zorder=0)
-    ax.set_xlabel("Proporção da população com renda per capita de até 1/2 salário mínimo")
-    fig.savefig(SAIDA / "graficos" / "ic_proporcoes.svg")
-    fig.savefig(SAIDA / "graficos" / "ic_proporcoes.png", dpi=200)
+    ax.set_xlabel("Média dos percentuais municipais de população com renda até 1/2 SM")
+    fig.savefig(SAIDA / "graficos" / "ic_renda_media.svg")
+    fig.savefig(SAIDA / "graficos" / "ic_renda_media.png", dpi=200)
     plt.close(fig)
 
 
@@ -440,7 +431,6 @@ def main():
     bases, amostras = {}, {}
     for uf in ("PB", "RN"):  # a ordem importa: o mesmo gerador sorteia primeiro a PB, depois o RN
         bases[uf], amostras[uf] = sortear(pops[uf], rng)
-    salvar_amostras(amostras, bases, pops)
 
     desc = {uf: {"populacao": {v: descrever(pops[uf][v], populacao=True) for v in VARIAVEIS},
                  "amostra": {v: descrever(amostras[uf][v], populacao=False) for v in VARIAVEIS}}
@@ -448,30 +438,27 @@ def main():
 
     atipicos = grafico_salario(amostras, desc)
 
-    # Questão 3: a proporção de cada amostra é a média das 30 proporções municipais (em 0 a 1)
-    p_hat = {uf: amostras[uf]["renda"].mean() / 100 for uf in ("PB", "RN")}
-    p_real = {uf: pops[uf]["renda"].mean() / 100 for uf in ("PB", "RN")}  # valor da população inteira
-    ics = {uf: ic_proporcao(p_hat[uf], N) for uf in ("PB", "RN")}
-    for uf in ics:
-        ics[uf]["contem_valor_real"] = bool(ics[uf]["li"] <= p_real[uf] <= ics[uf]["ls"])
-        ics[uf]["valor_real"] = p_real[uf]
-    teste_prop = teste_duas_proporcoes(p_hat["PB"], N, p_hat["RN"], N)
-    grafico_ic(ics, p_real)
+    # Preserva exatamente o sorteio publicado, incluindo ordem e valores.
+    manifesto = json.loads((PASTA / 'dados/amostra_original.json').read_text(encoding='utf-8'))
+    atual = {uf: amostras[uf].drop(columns='uf').to_dict('records') for uf in amostras}
+    if manifesto['semente'] != SEMENTE or manifesto['amostras'] != atual:
+        raise ValueError('Sorteio/dados divergiram do manifesto original; não alterar silenciosamente')
 
-    # Conferência (não é o método pedido): tratar a proporção municipal como variável
-    # quantitativa e usar o IC t da média. Fica no relatório para responder possíveis perguntas.
-    conferencia_renda = {uf: {"media": amostras[uf]["renda"].mean(),
-                              "ic": stats.t.interval(0.95, N - 1, loc=amostras[uf]["renda"].mean(),
-                                                     scale=stats.sem(amostras[uf]["renda"]))}
-                         for uf in ("PB", "RN")}
-    conferencia_renda["teste"] = comparar_medias(amostras["PB"]["renda"].to_numpy(),
-                                                 amostras["RN"]["renda"].to_numpy())
+    # Questão 3: média municipal, em pontos percentuais, na base elegível finita.
+    referencias = {uf: float(bases[uf]['renda'].mean()) for uf in bases}
+    ics = {uf: ic_media_finita(amostras[uf]['renda'], len(bases[uf]), referencias[uf])
+           for uf in bases}
+    renda = comparar_medias(amostras['PB']['renda'], amostras['RN']['renda'],
+                           len(bases['PB']), len(bases['RN']))
+    grafico_ic(ics, referencias)
 
-    # Questões 4 e 5
-    ideb = comparar_medias(amostras["PB"]["ideb"].to_numpy(), amostras["RN"]["ideb"].to_numpy())
-    salario = comparar_medias(amostras["PB"]["salario"].to_numpy(), amostras["RN"]["salario"].to_numpy())
-    ic_medias = {var: {uf: ic_media(amostras[uf][var].to_numpy(), pops[uf][var].mean()) for uf in ("PB", "RN")}
-                 for var in ("ideb", "salario")}
+    # Questões 4 e 5: mesma população-alvo e correção finita em toda a inferência.
+    ideb = comparar_medias(amostras['PB']['ideb'], amostras['RN']['ideb'],
+                          len(bases['PB']), len(bases['RN']))
+    salario = comparar_medias(amostras['PB']['salario'], amostras['RN']['salario'],
+                             len(bases['PB']), len(bases['RN']))
+    ic_medias = {var: {uf: ic_media_finita(amostras[uf][var], len(bases[uf]), bases[uf][var].mean())
+                       for uf in bases} for var in ('ideb', 'salario')}
     grafico_medias(ic_medias)
 
     resultados = {
@@ -482,13 +469,25 @@ def main():
         "amostras": {uf: amostras[uf].drop(columns="uf").to_dict("records") for uf in amostras},
         "descritivas": desc,
         "atipicos_salario": atipicos,
-        "q3_ic": ics, "q3_teste": teste_prop, "q3_conferencia_t": conferencia_renda,
+        "q3_ic": ics, "q3_teste": renda['t'], "q3_diagnosticos": renda,
+        "descritivas_base_elegivel": {uf: {v: descrever(bases[uf][v], True) for v in VARIAVEIS} for uf in bases},
+        "metodologia": {
+            "parametro_q3": "Média não ponderada dos percentuais municipais na base com dados completos",
+            "adaptacao_enunciado": "Não estima proporção de indivíduos do estado; alinhar com a docente",
+            "populacao_alvo": "PB 217 e RN 161 municípios elegíveis; exclusões sem IDEB mantidas",
+            "cpf": "EP = sqrt((1-n/M)*s²/n), s² com divisor n-1",
+            "calibracao": "t aproximado; diferença com variância de desenho e gl de Satterthwaite",
+            "limites": "n=30 não garante normalidade; F clássico é diagnóstico sob modelo normal iid",
+            "sorteio": "Mesma semente, mesmos municípios, ordens e valores do manifesto original",
+            "referencias": ["https://online.stat.psu.edu/stat506/Lesson01",
+                            "https://www.itl.nist.gov/div898/handbook/eda/section3/eda353.htm"]
+        },
         "q4_ideb": ideb, "q5_salario": salario, "ic_medias": ic_medias,
     }
     SAIDA.mkdir(parents=True, exist_ok=True)
     (SAIDA / "resultados.json").write_text(json.dumps(para_json(resultados), ensure_ascii=False, indent=2),
                                            encoding="utf-8")
-    print("OK: dados/amostras.xlsx, saida/resultados.json e saida/graficos/ atualizados")
+    print("OK: sorteio preservado; resultados.json e gráficos atualizados. Planilha original mantida.")
 
 
 if __name__ == "__main__":

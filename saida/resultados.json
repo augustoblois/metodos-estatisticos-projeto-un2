@@ -652,95 +652,226 @@
   },
   "q3_ic": {
     "PB": {
-      "p": 0.5101333333333333,
-      "n": 30,
-      "z": 1.959963984540054,
-      "ep": 0.09126834346321028,
-      "erro": 0.17888266611652381,
-      "li": 0.3312506672168095,
-      "ls": 0.6890159994498571,
-      "contem_valor_real": true,
-      "valor_real": 0.5052780269058297
-    },
-    "RN": {
-      "p": 0.48866666666666675,
-      "n": 30,
-      "z": 1.959963984540054,
-      "ep": 0.09126363926477978,
-      "erro": 0.1788734460570239,
-      "li": 0.30979322060964287,
-      "ls": 0.6675401127236906,
-      "contem_valor_real": true,
-      "valor_real": 0.49103592814371255
-    }
-  },
-  "q3_teste": {
-    "p_comum": 0.4994,
-    "ep": 0.1290993519219468,
-    "z": 0.16628020471896157,
-    "z_critico": 1.959963984540054,
-    "p_valor": 0.8679364435223678,
-    "rejeita_h0": false
-  },
-  "q3_conferencia_t": {
-    "PB": {
       "media": 51.01333333333333,
-      "ic": [
-        49.67456433343284,
-        52.352102333233816
-      ]
+      "n": 30,
+      "M": 217,
+      "fracao_amostral": 0.1382488479262673,
+      "fpc": 0.9283055273312406,
+      "ep": 0.6076514034538446,
+      "erro": 1.2427866624273414,
+      "gl": 29,
+      "t_critico": 2.045229642132703,
+      "li": 49.770546670905986,
+      "ls": 52.25611999576067,
+      "valor_real": 50.47281105990783,
+      "contem_valor_real": true,
+      "metodo": "IC t aproximado, AAS sem reposição, correção de população finita"
     },
     "RN": {
       "media": 48.866666666666674,
-      "ic": [
-        47.55468426652214,
-        50.17864906681121
-      ]
+      "n": 30,
+      "M": 161,
+      "fracao_amostral": 0.18633540372670807,
+      "fpc": 0.9020335893265239,
+      "ep": 0.5786402510289937,
+      "erro": 1.1834521935356064,
+      "gl": 29,
+      "t_critico": 2.045229642132703,
+      "li": 47.683214473131066,
+      "ls": 50.05011886020228,
+      "valor_real": 49.05776397515529,
+      "contem_valor_real": true,
+      "metodo": "IC t aproximado, AAS sem reposição, correção de população finita"
+    }
+  },
+  "q3_teste": {
+    "metodo": "t aproximado de desenho, CPF e gl de Satterthwaite",
+    "variancias_iguais": false,
+    "M_1": 217,
+    "M_2": 161,
+    "media_1": 51.01333333333333,
+    "media_2": 48.866666666666674,
+    "diferenca": 2.146666666666654,
+    "ep": 0.8390856739513098,
+    "componentes_variancia": [
+      0.369240228119427,
+      0.33482454011089685
+    ],
+    "t": 2.558340266444854,
+    "gl": 57.86174551848535,
+    "t_critico": 2.001819323098519,
+    "p_valor": 0.013157573801921374,
+    "ic_dif_li": 0.4669687508157785,
+    "ic_dif_ls": 3.8263645825175296,
+    "rejeita_h0": true
+  },
+  "q3_diagnosticos": {
+    "f": {
+      "s2_1": 12.854298850574708,
+      "s2_2": 12.345057471264365,
+      "f": 1.0412506284799163,
+      "gl1": 29,
+      "gl2": 29,
+      "f_crit_inf": 0.4759647743100316,
+      "f_crit_sup": 2.100995817284211,
+      "p_valor": 0.9140724368168447,
+      "rejeita_h0": false
     },
-    "teste": {
-      "f": {
-        "s2_1": 12.854298850574708,
-        "s2_2": 12.345057471264365,
-        "f": 1.0412506284799163,
-        "gl1": 29,
-        "gl2": 29,
-        "f_crit_inf": 0.47596477431003137,
-        "f_crit_sup": 2.100995817284211,
-        "p_valor": 0.914072436816846,
-        "rejeita_h0": false
+    "t": {
+      "metodo": "t aproximado de desenho, CPF e gl de Satterthwaite",
+      "variancias_iguais": false,
+      "M_1": 217,
+      "M_2": 161,
+      "media_1": 51.01333333333333,
+      "media_2": 48.866666666666674,
+      "diferenca": 2.146666666666654,
+      "ep": 0.8390856739513098,
+      "componentes_variancia": [
+        0.369240228119427,
+        0.33482454011089685
+      ],
+      "t": 2.558340266444854,
+      "gl": 57.86174551848535,
+      "t_critico": 2.001819323098519,
+      "p_valor": 0.013157573801921374,
+      "ic_dif_li": 0.4669687508157785,
+      "ic_dif_ls": 3.8263645825175296,
+      "rejeita_h0": true
+    },
+    "classico_sem_cpf": {
+      "variancias_iguais": true,
+      "media_1": 51.01333333333333,
+      "media_2": 48.866666666666674,
+      "diferenca": 2.146666666666654,
+      "t": 2.3422352689956276,
+      "gl": 58.0,
+      "t_critico": 2.0017174841452356,
+      "p_valor": 0.022622788619840937,
+      "ic_dif_li": 0.31208571906568294,
+      "ic_dif_ls": 3.981247614267625,
+      "rejeita_h0": true
+    },
+    "outro_t": {
+      "variancias_iguais": false,
+      "media_1": 51.01333333333333,
+      "media_2": 48.866666666666674,
+      "diferenca": 2.146666666666654,
+      "t": 2.3422352689956276,
+      "gl": 57.97632341034123,
+      "t_critico": 2.0017348892630897,
+      "p_valor": 0.022624234746529172,
+      "ic_dif_li": 0.3120697672154049,
+      "ic_dif_ls": 3.981263566117903,
+      "rejeita_h0": true
+    },
+    "levene_p": 0.8837471569321644,
+    "shapiro_p": {
+      "PB": 0.8261794117843984,
+      "RN": 0.003827492291727312
+    }
+  },
+  "descritivas_base_elegivel": {
+    "PB": {
+      "ideb": {
+        "n": 217,
+        "media": 5.343778801843317,
+        "mediana": 5.2,
+        "variancia": 0.6704797298732188,
+        "dp": 0.8188282664107406,
+        "minimo": 3.6,
+        "q1": 4.8,
+        "q3": 5.8,
+        "maximo": 8.2,
+        "aiq": 1.0,
+        "cv": 0.1532301947319168,
+        "assimetria": 0.7268422437066108
       },
-      "t": {
-        "variancias_iguais": true,
-        "media_1": 51.01333333333333,
-        "media_2": 48.866666666666674,
-        "diferenca": 2.146666666666654,
-        "t": 2.3422352689956276,
-        "gl": 58.0,
-        "t_critico": 2.0017174841452356,
-        "p_valor": 0.022622788619840947,
-        "ic_dif_li": 0.31208571906568294,
-        "ic_dif_ls": 3.981247614267625,
-        "rejeita_h0": true
+      "renda": {
+        "n": 217,
+        "media": 50.47281105990783,
+        "mediana": 50.6,
+        "variancia": 13.76824693665187,
+        "dp": 3.710558844251344,
+        "minimo": 35.7,
+        "q1": 48.5,
+        "q3": 52.9,
+        "maximo": 60.4,
+        "aiq": 4.399999999999999,
+        "cv": 0.0735159933899295,
+        "assimetria": -0.7318257091061832
       },
-      "outro_t": {
-        "variancias_iguais": false,
-        "media_1": 51.01333333333333,
-        "media_2": 48.866666666666674,
-        "diferenca": 2.146666666666654,
-        "t": 2.3422352689956276,
-        "gl": 57.97632341034123,
-        "t_critico": 2.00173488926309,
-        "p_valor": 0.022624234746529148,
-        "ic_dif_li": 0.31206976721540447,
-        "ic_dif_ls": 3.981263566117904,
-        "rejeita_h0": true
+      "salario": {
+        "n": 217,
+        "media": 1.7990783410138247,
+        "mediana": 1.8,
+        "variancia": 0.05087472658157956,
+        "dp": 0.22555426527019956,
+        "minimo": 1.2,
+        "q1": 1.6,
+        "q3": 1.9,
+        "maximo": 2.7,
+        "aiq": 0.2999999999999998,
+        "cv": 0.12537211978389678,
+        "assimetria": 1.0138339043332651
+      }
+    },
+    "RN": {
+      "ideb": {
+        "n": 161,
+        "media": 4.8378881987577635,
+        "mediana": 4.8,
+        "variancia": 0.4404899502334015,
+        "dp": 0.6636941692025036,
+        "minimo": 3.6,
+        "q1": 4.4,
+        "q3": 5.2,
+        "maximo": 7.6,
+        "aiq": 0.7999999999999998,
+        "cv": 0.13718675213968812,
+        "assimetria": 0.7838643182747808
       },
-      "levene_p": 0.8837471569321788,
-      "shapiro_p": {
-        "PB": 0.8261794117843984,
-        "RN": 0.003827492291727312
+      "renda": {
+        "n": 161,
+        "media": 49.05776397515529,
+        "mediana": 50.0,
+        "variancia": 19.425793757956868,
+        "dp": 4.407470222015898,
+        "minimo": 35.5,
+        "q1": 47.4,
+        "q3": 51.9,
+        "maximo": 61.4,
+        "aiq": 4.5,
+        "cv": 0.08984246049713983,
+        "assimetria": -0.7942076667568895
+      },
+      "salario": {
+        "n": 161,
+        "media": 1.830434782608696,
+        "mediana": 1.8,
+        "variancia": 0.09217931406967322,
+        "dp": 0.3036104643612819,
+        "minimo": 1.2,
+        "q1": 1.6,
+        "q3": 2.0,
+        "maximo": 3.3,
+        "aiq": 0.3999999999999999,
+        "cv": 0.1658679496510566,
+        "assimetria": 1.3323644278793636
       }
     }
+  },
+  "metodologia": {
+    "parametro_q3": "Média não ponderada dos percentuais municipais na base com dados completos",
+    "adaptacao_enunciado": "Não estima proporção de indivíduos do estado; alinhar com a docente",
+    "populacao_alvo": "PB 217 e RN 161 municípios elegíveis; exclusões sem IDEB mantidas",
+    "cpf": "EP = sqrt((1-n/M)*s²/n), s² com divisor n-1",
+    "calibracao": "t aproximado; diferença com variância de desenho e gl de Satterthwaite",
+    "limites": "n=30 não garante normalidade; F clássico é diagnóstico sob modelo normal iid",
+    "sorteio": "Mesma semente, mesmos municípios, ordens e valores do manifesto original",
+    "referencias": [
+      "https://online.stat.psu.edu/stat506/Lesson01",
+      "https://www.itl.nist.gov/div898/handbook/eda/section3/eda353.htm"
+    ]
   },
   "q4_ideb": {
     "f": {
@@ -749,12 +880,33 @@
       "f": 1.472518129532383,
       "gl1": 29,
       "gl2": 29,
-      "f_crit_inf": 0.47596477431003137,
+      "f_crit_inf": 0.4759647743100316,
       "f_crit_sup": 2.100995817284211,
-      "p_valor": 0.3030807597256389,
+      "p_valor": 0.3030807597256394,
       "rejeita_h0": false
     },
     "t": {
+      "metodo": "t aproximado de desenho, CPF e gl de Satterthwaite",
+      "variancias_iguais": false,
+      "M_1": 217,
+      "M_2": 161,
+      "media_1": 5.569999999999999,
+      "media_2": 4.85,
+      "diferenca": 0.7199999999999998,
+      "ep": 0.2187786441620146,
+      "componentes_variancia": [
+        0.02916383812701943,
+        0.018700257014349964
+      ],
+      "t": 3.2909976325971293,
+      "gl": 55.3545805134796,
+      "t_critico": 2.003756281579314,
+      "p_valor": 0.0017411856675834426,
+      "ic_dif_li": 0.2816209174849575,
+      "ic_dif_ls": 1.158379082515042,
+      "rejeita_h0": true
+    },
+    "classico_sem_cpf": {
       "variancias_iguais": true,
       "media_1": 5.569999999999999,
       "media_2": 4.85,
@@ -762,7 +914,7 @@
       "t": 3.020380628052473,
       "gl": 58.0,
       "t_critico": 2.0017174841452356,
-      "p_valor": 0.0037506335823103694,
+      "p_valor": 0.003750633582310366,
       "ic_dif_li": 0.2428294820862123,
       "ic_dif_ls": 1.1971705179137873,
       "rejeita_h0": true
@@ -774,13 +926,13 @@
       "diferenca": 0.7199999999999998,
       "t": 3.020380628052473,
       "gl": 55.95634618096072,
-      "t_critico": 2.0032752066028587,
-      "p_valor": 0.0038001915041892503,
-      "ic_dif_li": 0.24245815134760546,
-      "ic_dif_ls": 1.197541848652394,
+      "t_critico": 2.0032752066028583,
+      "p_valor": 0.0038001915041892455,
+      "ic_dif_li": 0.2424581513476055,
+      "ic_dif_ls": 1.1975418486523939,
       "rejeita_h0": true
     },
-    "levene_p": 0.3932547763590873,
+    "levene_p": 0.393254776359086,
     "shapiro_p": {
       "PB": 0.1013599033262913,
       "RN": 0.010037140815571947
@@ -793,22 +945,43 @@
       "f": 0.42919146825396814,
       "gl1": 29,
       "gl2": 29,
-      "f_crit_inf": 0.47596477431003137,
+      "f_crit_inf": 0.4759647743100316,
       "f_crit_sup": 2.100995817284211,
-      "p_valor": 0.026021022498584522,
+      "p_valor": 0.02602102249858442,
       "rejeita_h0": true
     },
     "t": {
+      "metodo": "t aproximado de desenho, CPF e gl de Satterthwaite",
+      "variancias_iguais": false,
+      "M_1": 217,
+      "M_2": 161,
+      "media_1": 1.7766666666666668,
+      "media_2": 1.88,
+      "diferenca": -0.10333333333333306,
+      "ep": 0.06047041657153731,
+      "componentes_variancia": [
+        0.0011427282518494974,
+        0.002513943028485757
+      ],
+      "t": -1.7088245656632504,
+      "gl": 50.84965295438008,
+      "t_critico": 2.007727902158855,
+      "p_valor": 0.09358121299160846,
+      "ic_dif_li": -0.22474147593917773,
+      "ic_dif_ls": 0.01807480927251162,
+      "rejeita_h0": false
+    },
+    "classico_sem_cpf": {
       "variancias_iguais": false,
       "media_1": 1.7766666666666668,
       "media_2": 1.88,
       "diferenca": -0.10333333333333306,
       "t": -1.5550352054659726,
       "gl": 50.02093683715517,
-      "t_critico": 2.0085382822657296,
-      "p_valor": 0.12624263728668106,
-      "ic_dif_li": -0.23680230889387796,
-      "ic_dif_ls": 0.03013564222721185,
+      "t_critico": 2.008538282265729,
+      "p_valor": 0.12624263728668103,
+      "ic_dif_li": -0.23680230889387793,
+      "ic_dif_ls": 0.030135642227211823,
       "rejeita_h0": false
     },
     "outro_t": {
@@ -819,12 +992,12 @@
       "t": -1.5550352054659722,
       "gl": 58.0,
       "t_critico": 2.0017174841452356,
-      "p_valor": 0.12537788755554866,
+      "p_valor": 0.1253778875555487,
       "ic_dif_li": -0.23634906140256273,
       "ic_dif_ls": 0.029682394735896622,
       "rejeita_h0": false
     },
-    "levene_p": 0.09741597645778038,
+    "levene_p": 0.09741597645777994,
     "shapiro_p": {
       "PB": 0.047739435017490554,
       "RN": 0.0177498139316485
@@ -834,33 +1007,69 @@
     "ideb": {
       "PB": {
         "media": 5.569999999999999,
-        "li": 5.1937526223977395,
-        "ls": 5.946247377602259,
+        "n": 30,
+        "M": 217,
+        "fracao_amostral": 0.1382488479262673,
+        "fpc": 0.9283055273312406,
+        "ep": 0.17077423144906678,
+        "erro": 0.34927252027206224,
+        "gl": 29,
+        "t_critico": 2.045229642132703,
+        "li": 5.2207274797279375,
+        "ls": 5.919272520272061,
         "valor_real": 5.343778801843317,
-        "contem_valor_real": true
+        "contem_valor_real": true,
+        "metodo": "IC t aproximado, AAS sem reposição, correção de população finita"
       },
       "RN": {
         "media": 4.85,
-        "li": 4.539941846463617,
-        "ls": 5.160058153536382,
+        "n": 30,
+        "M": 161,
+        "fracao_amostral": 0.18633540372670807,
+        "fpc": 0.9020335893265239,
+        "ep": 0.13674888304607816,
+        "erro": 0.2796828691343773,
+        "gl": 29,
+        "t_critico": 2.045229642132703,
+        "li": 4.5703171308656225,
+        "ls": 5.129682869134377,
         "valor_real": 4.8378881987577635,
-        "contem_valor_real": true
+        "contem_valor_real": true,
+        "metodo": "IC t aproximado, AAS sem reposição, correção de população finita"
       }
     },
     "salario": {
       "PB": {
         "media": 1.7766666666666668,
-        "li": 1.7021895895163472,
-        "ls": 1.8511437438169864,
-        "valor_real": 1.8008968609865472,
-        "contem_valor_real": true
+        "n": 30,
+        "M": 217,
+        "fracao_amostral": 0.1382488479262673,
+        "fpc": 0.9283055273312406,
+        "ep": 0.03380426381167762,
+        "erro": 0.0691374823781169,
+        "gl": 29,
+        "t_critico": 2.045229642132703,
+        "li": 1.7075291842885498,
+        "ls": 1.8458041490447838,
+        "valor_real": 1.7990783410138247,
+        "contem_valor_real": true,
+        "metodo": "IC t aproximado, AAS sem reposição, correção de população finita"
       },
       "RN": {
         "media": 1.88,
-        "li": 1.766316592012242,
-        "ls": 1.993683407987758,
-        "valor_real": 1.8317365269461077,
-        "contem_valor_real": true
+        "n": 30,
+        "M": 161,
+        "fracao_amostral": 0.18633540372670807,
+        "fpc": 0.9020335893265239,
+        "ep": 0.05013923641705922,
+        "erro": 0.10254625255406902,
+        "gl": 29,
+        "t_critico": 2.045229642132703,
+        "li": 1.7774537474459309,
+        "ls": 1.982546252554069,
+        "valor_real": 1.830434782608696,
+        "contem_valor_real": true,
+        "metodo": "IC t aproximado, AAS sem reposição, correção de população finita"
       }
     }
   }

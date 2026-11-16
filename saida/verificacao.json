@@ -1,0 +1,318 @@
+{
+  "status": "aprovado",
+  "checagens": [
+    "Mesmos 60 municípios, dados, ordens e semente do original",
+    "PB: 30 municípios únicos",
+    "PB: nomes iguais na planilha original",
+    "PB: valores iguais na planilha original",
+    "PB/renda: EP com CPF conferido independentemente",
+    "PB/renda: margem e quantil t",
+    "PB/renda: referência é a base elegível",
+    "PB/renda: população e efeito da CPF coerentes",
+    "PB/ideb: EP com CPF conferido independentemente",
+    "PB/ideb: margem e quantil t",
+    "PB/ideb: referência é a base elegível",
+    "PB/ideb: população e efeito da CPF coerentes",
+    "PB/salario: EP com CPF conferido independentemente",
+    "PB/salario: margem e quantil t",
+    "PB/salario: referência é a base elegível",
+    "PB/salario: população e efeito da CPF coerentes",
+    "RN: 30 municípios únicos",
+    "RN: nomes iguais na planilha original",
+    "RN: valores iguais na planilha original",
+    "RN/renda: EP com CPF conferido independentemente",
+    "RN/renda: margem e quantil t",
+    "RN/renda: referência é a base elegível",
+    "RN/renda: população e efeito da CPF coerentes",
+    "RN/ideb: EP com CPF conferido independentemente",
+    "RN/ideb: margem e quantil t",
+    "RN/ideb: referência é a base elegível",
+    "RN/ideb: população e efeito da CPF coerentes",
+    "RN/salario: EP com CPF conferido independentemente",
+    "RN/salario: margem e quantil t",
+    "RN/salario: referência é a base elegível",
+    "RN/salario: população e efeito da CPF coerentes",
+    "renda: variância da diferença e gl conferidos",
+    "renda: p-valor conferido",
+    "renda: teste e IC da diferença concordam",
+    "ideb: variância da diferença e gl conferidos",
+    "ideb: p-valor conferido",
+    "ideb: teste e IC da diferença concordam",
+    "salario: variância da diferença e gl conferidos",
+    "salario: p-valor conferido",
+    "salario: teste e IC da diferença concordam",
+    "CPF: média dos estimadores coincide com a variância exata de todas as amostras",
+    "CPF: limite censitário tem erro padrão zero",
+    "cartaz/cartaz_A2.pdf: número de páginas",
+    "cartaz/cartaz_A2.pdf: texto extraível",
+    "cartaz/cartaz_A2.pdf: sem resultados antigos ou frases retiradas",
+    "cartaz/cartaz_A2.pdf: página 1 não vazia",
+    "cartaz/cartaz_A2.pdf: página 1 com texto dentro dos limites",
+    "cartaz/cartaz_4xA4.pdf: número de páginas",
+    "cartaz/cartaz_4xA4.pdf: texto extraível",
+    "cartaz/cartaz_4xA4.pdf: sem resultados antigos ou frases retiradas",
+    "cartaz/cartaz_4xA4.pdf: página 1 não vazia",
+    "cartaz/cartaz_4xA4.pdf: página 1 com texto dentro dos limites",
+    "cartaz/cartaz_4xA4.pdf: página 2 não vazia",
+    "cartaz/cartaz_4xA4.pdf: página 2 com texto dentro dos limites",
+    "cartaz/cartaz_4xA4.pdf: página 3 não vazia",
+    "cartaz/cartaz_4xA4.pdf: página 3 com texto dentro dos limites",
+    "cartaz/cartaz_4xA4.pdf: página 4 não vazia",
+    "cartaz/cartaz_4xA4.pdf: página 4 com texto dentro dos limites",
+    "cartaz/cartaz_2xA3.pdf: número de páginas",
+    "cartaz/cartaz_2xA3.pdf: texto extraível",
+    "cartaz/cartaz_2xA3.pdf: sem resultados antigos ou frases retiradas",
+    "cartaz/cartaz_2xA3.pdf: página 1 não vazia",
+    "cartaz/cartaz_2xA3.pdf: página 1 com texto dentro dos limites",
+    "cartaz/cartaz_2xA3.pdf: página 2 não vazia",
+    "cartaz/cartaz_2xA3.pdf: página 2 com texto dentro dos limites",
+    "falas/falas (Augusto Blois).pdf: número de páginas",
+    "falas/falas (Augusto Blois).pdf: texto extraível",
+    "falas/falas (Augusto Blois).pdf: sem resultados antigos ou frases retiradas",
+    "falas/falas (Augusto Blois).pdf: página 1 não vazia",
+    "falas/falas (Augusto Blois).pdf: página 1 com texto dentro dos limites",
+    "falas/falas (Augusto Blois).pdf: página 2 não vazia",
+    "falas/falas (Augusto Blois).pdf: página 2 com texto dentro dos limites",
+    "falas/falas (Augusto Blois).pdf: página 3 não vazia",
+    "falas/falas (Augusto Blois).pdf: página 3 com texto dentro dos limites",
+    "falas/falas (Augusto Blois).pdf: página 4 não vazia",
+    "falas/falas (Augusto Blois).pdf: página 4 com texto dentro dos limites",
+    "falas/falas (Augusto Blois).pdf: página 5 não vazia",
+    "falas/falas (Augusto Blois).pdf: página 5 com texto dentro dos limites",
+    "falas/falas (Augusto Blois).pdf: página 6 não vazia",
+    "falas/falas (Augusto Blois).pdf: página 6 com texto dentro dos limites",
+    "falas/falas (Pedro Luna).pdf: número de páginas",
+    "falas/falas (Pedro Luna).pdf: texto extraível",
+    "falas/falas (Pedro Luna).pdf: sem resultados antigos ou frases retiradas",
+    "falas/falas (Pedro Luna).pdf: página 1 não vazia",
+    "falas/falas (Pedro Luna).pdf: página 1 com texto dentro dos limites",
+    "falas/falas (Pedro Luna).pdf: página 2 não vazia",
+    "falas/falas (Pedro Luna).pdf: página 2 com texto dentro dos limites",
+    "falas/falas (Pedro Luna).pdf: página 3 não vazia",
+    "falas/falas (Pedro Luna).pdf: página 3 com texto dentro dos limites",
+    "falas/falas (Pedro Luna).pdf: página 4 não vazia",
+    "falas/falas (Pedro Luna).pdf: página 4 com texto dentro dos limites",
+    "falas/falas (Pedro Luna).pdf: página 5 não vazia",
+    "falas/falas (Pedro Luna).pdf: página 5 com texto dentro dos limites",
+    "falas/falas (Pedro Luna).pdf: página 6 não vazia",
+    "falas/falas (Pedro Luna).pdf: página 6 com texto dentro dos limites",
+    "falas/falas (Pedro Luna).pdf: página 7 não vazia",
+    "falas/falas (Pedro Luna).pdf: página 7 com texto dentro dos limites",
+    "falas/falas (Luy Koji).pdf: número de páginas",
+    "falas/falas (Luy Koji).pdf: texto extraível",
+    "falas/falas (Luy Koji).pdf: sem resultados antigos ou frases retiradas",
+    "falas/falas (Luy Koji).pdf: página 1 não vazia",
+    "falas/falas (Luy Koji).pdf: página 1 com texto dentro dos limites",
+    "falas/falas (Luy Koji).pdf: página 2 não vazia",
+    "falas/falas (Luy Koji).pdf: página 2 com texto dentro dos limites",
+    "falas/falas (Luy Koji).pdf: página 3 não vazia",
+    "falas/falas (Luy Koji).pdf: página 3 com texto dentro dos limites",
+    "falas/falas (Luy Koji).pdf: página 4 não vazia",
+    "falas/falas (Luy Koji).pdf: página 4 com texto dentro dos limites",
+    "falas/falas (Luy Koji).pdf: página 5 não vazia",
+    "falas/falas (Luy Koji).pdf: página 5 com texto dentro dos limites",
+    "falas/falas (Luy Koji).pdf: página 6 não vazia",
+    "falas/falas (Luy Koji).pdf: página 6 com texto dentro dos limites",
+    "falas/falas (Luy Koji).pdf: página 7 não vazia",
+    "falas/falas (Luy Koji).pdf: página 7 com texto dentro dos limites",
+    "falas/falas (Luiz Ramalho).pdf: número de páginas",
+    "falas/falas (Luiz Ramalho).pdf: texto extraível",
+    "falas/falas (Luiz Ramalho).pdf: sem resultados antigos ou frases retiradas",
+    "falas/falas (Luiz Ramalho).pdf: página 1 não vazia",
+    "falas/falas (Luiz Ramalho).pdf: página 1 com texto dentro dos limites",
+    "falas/falas (Luiz Ramalho).pdf: página 2 não vazia",
+    "falas/falas (Luiz Ramalho).pdf: página 2 com texto dentro dos limites",
+    "falas/falas (Luiz Ramalho).pdf: página 3 não vazia",
+    "falas/falas (Luiz Ramalho).pdf: página 3 com texto dentro dos limites",
+    "falas/falas (Luiz Ramalho).pdf: página 4 não vazia",
+    "falas/falas (Luiz Ramalho).pdf: página 4 com texto dentro dos limites",
+    "falas/falas (Luiz Ramalho).pdf: página 5 não vazia",
+    "falas/falas (Luiz Ramalho).pdf: página 5 com texto dentro dos limites",
+    "falas/falas (Luiz Ramalho).pdf: página 6 não vazia",
+    "falas/falas (Luiz Ramalho).pdf: página 6 com texto dentro dos limites",
+    "falas/falas (Luiz Ramalho).pdf: página 7 não vazia",
+    "falas/falas (Luiz Ramalho).pdf: página 7 com texto dentro dos limites",
+    "ic_renda_media: PNG e SVG gerados",
+    "medias_ic: PNG e SVG gerados",
+    "salario_hist_boxplot: PNG e SVG gerados"
+  ],
+  "pdfs": {
+    "cartaz/cartaz_A2.pdf": {
+      "paginas": 1,
+      "dimensoes_pt": [
+        [
+          1191.12,
+          1684.08
+        ]
+      ]
+    },
+    "cartaz/cartaz_4xA4.pdf": {
+      "paginas": 4,
+      "dimensoes_pt": [
+        [
+          595.56,
+          842.04
+        ],
+        [
+          595.56,
+          842.04
+        ],
+        [
+          595.56,
+          842.04
+        ],
+        [
+          595.56,
+          842.04
+        ]
+      ]
+    },
+    "cartaz/cartaz_2xA3.pdf": {
+      "paginas": 2,
+      "dimensoes_pt": [
+        [
+          1191.12,
+          842.04
+        ],
+        [
+          1191.12,
+          842.04
+        ]
+      ]
+    },
+    "falas/falas (Augusto Blois).pdf": {
+      "paginas": 6,
+      "dimensoes_pt": [
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ]
+      ]
+    },
+    "falas/falas (Pedro Luna).pdf": {
+      "paginas": 7,
+      "dimensoes_pt": [
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ]
+      ]
+    },
+    "falas/falas (Luy Koji).pdf": {
+      "paginas": 7,
+      "dimensoes_pt": [
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ]
+      ]
+    },
+    "falas/falas (Luiz Ramalho).pdf": {
+      "paginas": 7,
+      "dimensoes_pt": [
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ],
+        [
+          420.0,
+          594.96
+        ]
+      ]
+    }
+  },
+  "limites": "Conferência computacional não garante normalidade/cobertura exata nem acesso público ao Drive. Inspeção visual complementar executada na entrega.",
+  "inspecao_visual": {
+    "status": "concluída",
+    "metodo": "Renderização PyMuPDF a 105 dpi e leitura de todas as páginas das falas e dos quatro quadrantes do cartaz; recortes A3/A4 derivados da mesma A2.",
+    "observacoes": "Sem cortes, sobreposições ou páginas vazias observados. Link externo do Drive não validado."
+  }
+}
