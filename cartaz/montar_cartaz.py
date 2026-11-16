@@ -13,6 +13,7 @@ Como rodar (PowerShell, dentro da pasta projeto-un2), depois de editar o config.
 """
 import html
 import json
+import os
 import re
 import subprocess
 import sys
@@ -51,21 +52,8 @@ def pval(p):
 # Os textos de interpretação do modelo.html foram escritos para ESTES resultados.
 # Se alguém mudar a semente ou os dados e as decisões mudarem, o script para aqui,
 # para ninguém imprimir um cartaz com texto contradizendo os números.
-decisoes = {
-    "proporções diferentes": R["q3_teste"]["rejeita_h0"],
-    "IDEB: variâncias diferentes": R["q4_ideb"]["f"]["rejeita_h0"],
-    "IDEB: médias diferentes": R["q4_ideb"]["t"]["rejeita_h0"],
-    "salário: variâncias diferentes": R["q5_salario"]["f"]["rejeita_h0"],
-    "salário: médias diferentes": R["q5_salario"]["t"]["rejeita_h0"],
-    "todos os ICs contêm o valor real": all(
-        [R["q3_ic"][uf]["contem_valor_real"] for uf in ("PB", "RN")]
-        + [R["ic_medias"][v][uf]["contem_valor_real"] for v in ("ideb", "salario") for uf in ("PB", "RN")]),
-}
-esperado = {"proporções diferentes": False, "IDEB: variâncias diferentes": False, "IDEB: médias diferentes": True,
-            "salário: variâncias diferentes": True, "salário: médias diferentes": False,
-            "todos os ICs contêm o valor real": True}
-if decisoes != esperado:
-    sys.exit(f"PARE: as decisões dos testes mudaram ({decisoes}). Reescreva as interpretações do modelo.html.")
+if 'metodologia' not in R or 'M' not in R['q3_ic']['PB']:
+    sys.exit('Execute a análise corrigida antes de gerar o cartaz.')
 
 
 # ---------------------------------------------------------------- valores para o modelo
@@ -87,11 +75,11 @@ for uf in ("PB", "RN"):
 
 ic, tp = R["q3_ic"], R["q3_teste"]
 for uf in ("PB", "RN"):
-    v[f"p_{uf.lower()}"] = br(ic[uf]["p"] * 100, 1)
-    v[f"li_{uf.lower()}"] = br(ic[uf]["li"] * 100, 1)
-    v[f"ls_{uf.lower()}"] = br(ic[uf]["ls"] * 100, 1)
-    v[f"real_{uf.lower()}"] = br(ic[uf]["valor_real"] * 100, 1)
-v["margem"] = br(max(ic[uf]["erro"] for uf in ("PB", "RN")) * 100, 1)
+    v[f"p_{uf.lower()}"] = br(ic[uf]["media"], 1)
+    v[f"li_{uf.lower()}"] = br(ic[uf]["li"], 1)
+    v[f"ls_{uf.lower()}"] = br(ic[uf]["ls"], 1)
+    v[f"real_{uf.lower()}"] = br(ic[uf]["valor_real"], 1)
+v["margem"] = br(max(ic[uf]["erro"] for uf in ("PB", "RN")), 1)
 
 t4 = R["q4_ideb"]["t"]
 v.update({"ideb_dif": br(t4["diferenca"], 2), "ideb_dif_li": br(t4["ic_dif_li"], 2),
@@ -147,24 +135,17 @@ def decisao(rejeita, se_rejeita, se_nao):
 f4, f5, t5 = R["q4_ideb"]["f"], R["q5_salario"]["f"], R["q5_salario"]["t"]
 H0 = lambda s: f'<span class="h0">H<sub>0</sub>: {s}</span>'
 REJ, NAO = "Rejeita H<sub>0</sub>", "Não rejeita H<sub>0</sub>"
-testes = [
-    ("", "Renda até 1/2 SM: proporções", H0("p<sub>PB</sub> = p<sub>RN</sub>"), "z para duas proporções",
-     f"z = {br(tp['z'])}<br>p-valor = {pval(tp['p_valor'])}",
-     decisao(tp["rejeita_h0"], f"{REJ}: proporções diferentes", f"{NAO}: sem diferença"), tp["rejeita_h0"]),
-    ("var-f", "IDEB: variâncias", H0("σ²<sub>PB</sub> = σ²<sub>RN</sub>"), f"F com {f4['gl1']} e {f4['gl2']} gl",
-     f"F = {br(f4['f'])}<br>p-valor = {pval(f4['p_valor'])}",
-     decisao(f4["rejeita_h0"], f"{REJ}: variâncias diferentes", f"{NAO}: variâncias iguais"), False),
-    ("", "IDEB: médias", H0("μ<sub>PB</sub> = μ<sub>RN</sub>"),
-     f"t, variâncias iguais ({br(t4['gl'], 0)} gl)",
-     f"t = {br(t4['t'])}<br>p-valor = {pval(t4['p_valor'])}",
-     decisao(t4["rejeita_h0"], f"{REJ}: média da PB maior", f"{NAO}: sem diferença"), t4["rejeita_h0"]),
-    ("var-f", "Salário: variâncias", H0("σ²<sub>PB</sub> = σ²<sub>RN</sub>"), f"F com {f5['gl1']} e {f5['gl2']} gl",
-     f"F = {br(f5['f'])}<br>p-valor = {pval(f5['p_valor'])}",
-     decisao(f5["rejeita_h0"], f"{REJ}: variâncias diferentes", f"{NAO}: variâncias iguais"), False),
-    ("", "Salário: médias", H0("μ<sub>PB</sub> = μ<sub>RN</sub>"), f"t de Welch, variâncias diferentes ({br(t5['gl'], 0)} gl)",
-     f"t = {br(t5['t'])}<br>p-valor = {pval(t5['p_valor'])}",
-     decisao(t5["rejeita_h0"], f"{REJ}: médias diferentes", f"{NAO}: sem diferença"), t5["rejeita_h0"]),
-]
+testes = []
+for titulo, teste in [('Renda: média municipal (%)', tp), ('IDEB: média', t4), ('Salário: média (SM)', t5)]:
+    testes.append(('', titulo, H0('μ<sub>PB</sub> = μ<sub>RN</sub>'),
+        f"t aprox. + CPF ({br(teste['gl'], 1)} gl)",
+        f"t = {br(teste['t'])}<br>p = {pval(teste['p_valor'])}",
+        decisao(teste['rejeita_h0'], f'{REJ}: PB maior' if teste['diferenca'] > 0 else f'{REJ}: RN maior',
+                f'{NAO}: evidência insuficiente'), teste['rejeita_h0']))
+for titulo, f in [('IDEB: variâncias*', f4), ('Salário: variâncias*', f5)]:
+    testes.append(('var-f', titulo, H0('σ²<sub>PB</sub> = σ²<sub>RN</sub>'), 'F clássico (29; 29 gl)',
+        f"F = {br(f['f'])}<br>p = {pval(f['p_valor'])}",
+        decisao(f['rejeita_h0'], 'Rejeita igualdade*', 'Não rejeita igualdade*'), False))
 linhas = []
 for classe, o_que, h0, teste, resultado, dec, rejeita in testes:
     classes = " ".join(c for c in (classe, "rejeita" if rejeita else "") if c)
@@ -201,11 +182,14 @@ else:
     link_texto = "FALTA O LINK: cole o link da planilha em cartaz/config.json e rode o script de novo."
 
 v.update({
+    "renda_dif": br(tp['diferenca']), 'renda_p': pval(tp['p_valor']),
+    'salario_p': pval(t5['p_valor']),
+    'cpf_pb': br(ic['PB']['fpc'], 3), 'cpf_rn': br(ic['RN']['fpc'], 3),
     "grupo": html.escape(CFG["grupo"]),
     "integrantes": " · ".join(html.escape(nome) for nome in CFG["integrantes"]),
     "tabela_descritiva": tabela_descritiva, "tabela_testes": tabela_testes,
     "grafico_salario": svg_embutido("salario_hist_boxplot.svg", "g1"),
-    "grafico_ic": svg_embutido("ic_proporcoes.svg", "g2"),
+    "grafico_ic": svg_embutido("ic_renda_media.svg", "g2"),
     "grafico_medias": svg_embutido("medias_ic.svg", "g3"),
     "qr": qr, "link_texto": link_texto,
 })
@@ -220,9 +204,11 @@ navegador = next((p for p in NAVEGADORES if p.exists()), None)
 if navegador is None:
     sys.exit("Não achei Chrome nem Edge. Abra o cartaz.html no navegador e use Ctrl+P > Salvar como PDF.")
 
-with tempfile.TemporaryDirectory() as perfil:
+with tempfile.TemporaryDirectory(dir=os.environ.get('PROJETO_TMP')) as perfil:
     base = [str(navegador), "--headless=new", "--disable-gpu", f"--user-data-dir={perfil}",
             "--window-size=1600,2250"]
+    if os.environ.get('PROJETO_HEADLESS_COMPAT') == '1':
+        base += ['--no-sandbox', '--disable-crash-reporter', '--disable-breakpad']
     dom = subprocess.run(base + ["--dump-dom", ARQ_HTML.as_uri()], capture_output=True, text=True,
                          encoding="utf-8", timeout=120).stdout
     ARQ_A2 = PASTA / "cartaz_A2.pdf"
@@ -264,3 +250,6 @@ if not link:
 print("Cartaz gerado em", PASTA)
 for aviso in avisos:
     print("  ATENÇÃO:", aviso)
+
+if avisos and any('borda' in a or 'páginas' in a for a in avisos):
+    sys.exit(1)

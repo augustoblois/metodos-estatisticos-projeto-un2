@@ -1,0 +1,430 @@
+{
+  "origem": "GitHub main eb8c74e08e4d9818bc5beaaba0d7753a89eb893c",
+  "semente": 20261116,
+  "amostras": {
+    "PB": [
+      {
+        "ordem_sorteio": 25,
+        "municipio": "Barra de São Miguel",
+        "ideb": 6.2,
+        "renda": 45.7,
+        "salario": 1.7
+      },
+      {
+        "ordem_sorteio": 20,
+        "municipio": "Bernardino Batista",
+        "ideb": 5.5,
+        "renda": 53.9,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 26,
+        "municipio": "Bom Jesus",
+        "ideb": 5.0,
+        "renda": 48.6,
+        "salario": 1.6
+      },
+      {
+        "ordem_sorteio": 12,
+        "municipio": "Bonito de Santa Fé",
+        "ideb": 5.4,
+        "renda": 50.8,
+        "salario": 2.0
+      },
+      {
+        "ordem_sorteio": 3,
+        "municipio": "Boqueirão",
+        "ideb": 5.0,
+        "renda": 44.0,
+        "salario": 1.9
+      },
+      {
+        "ordem_sorteio": 23,
+        "municipio": "Cabaceiras",
+        "ideb": 7.7,
+        "renda": 46.8,
+        "salario": 1.9
+      },
+      {
+        "ordem_sorteio": 19,
+        "municipio": "Camalaú",
+        "ideb": 5.8,
+        "renda": 51.9,
+        "salario": 1.6
+      },
+      {
+        "ordem_sorteio": 21,
+        "municipio": "Carrapateira",
+        "ideb": 6.7,
+        "renda": 55.9,
+        "salario": 2.4
+      },
+      {
+        "ordem_sorteio": 18,
+        "municipio": "Congo",
+        "ideb": 6.5,
+        "renda": 50.6,
+        "salario": 1.6
+      },
+      {
+        "ordem_sorteio": 4,
+        "municipio": "Coremas",
+        "ideb": 4.7,
+        "renda": 51.8,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 5,
+        "municipio": "Coxixola",
+        "ideb": 8.2,
+        "renda": 46.3,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 8,
+        "municipio": "Cubati",
+        "ideb": 7.1,
+        "renda": 51.2,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 22,
+        "municipio": "Frei Martinho",
+        "ideb": 5.6,
+        "renda": 45.9,
+        "salario": 1.9
+      },
+      {
+        "ordem_sorteio": 10,
+        "municipio": "Gurinhém",
+        "ideb": 4.5,
+        "renda": 50.6,
+        "salario": 1.9
+      },
+      {
+        "ordem_sorteio": 6,
+        "municipio": "Itapororoca",
+        "ideb": 5.3,
+        "renda": 52.5,
+        "salario": 1.7
+      },
+      {
+        "ordem_sorteio": 9,
+        "municipio": "Jacaraú",
+        "ideb": 4.7,
+        "renda": 51.9,
+        "salario": 2.0
+      },
+      {
+        "ordem_sorteio": 13,
+        "municipio": "Juarez Távora",
+        "ideb": 5.5,
+        "renda": 48.7,
+        "salario": 1.6
+      },
+      {
+        "ordem_sorteio": 7,
+        "municipio": "Lastro",
+        "ideb": 5.6,
+        "renda": 54.0,
+        "salario": 1.6
+      },
+      {
+        "ordem_sorteio": 14,
+        "municipio": "Maturéia",
+        "ideb": 5.1,
+        "renda": 54.8,
+        "salario": 1.9
+      },
+      {
+        "ordem_sorteio": 2,
+        "municipio": "Pedro Régis",
+        "ideb": 3.9,
+        "renda": 52.5,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 28,
+        "municipio": "Riachão do Bacamarte",
+        "ideb": 4.1,
+        "renda": 47.9,
+        "salario": 1.7
+      },
+      {
+        "ordem_sorteio": 15,
+        "municipio": "Santana de Mangueira",
+        "ideb": 4.7,
+        "renda": 60.4,
+        "salario": 1.9
+      },
+      {
+        "ordem_sorteio": 29,
+        "municipio": "São Domingos",
+        "ideb": 5.3,
+        "renda": 51.7,
+        "salario": 1.5
+      },
+      {
+        "ordem_sorteio": 24,
+        "municipio": "São José dos Cordeiros",
+        "ideb": 5.6,
+        "renda": 51.7,
+        "salario": 1.3
+      },
+      {
+        "ordem_sorteio": 1,
+        "municipio": "São Sebastião do Umbuzeiro",
+        "ideb": 6.4,
+        "renda": 50.0,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 11,
+        "municipio": "Serra Grande",
+        "ideb": 6.8,
+        "renda": 54.6,
+        "salario": 2.0
+      },
+      {
+        "ordem_sorteio": 27,
+        "municipio": "Tacima",
+        "ideb": 5.1,
+        "renda": 56.6,
+        "salario": 1.7
+      },
+      {
+        "ordem_sorteio": 30,
+        "municipio": "Teixeira",
+        "ideb": 5.5,
+        "renda": 51.4,
+        "salario": 1.7
+      },
+      {
+        "ordem_sorteio": 17,
+        "municipio": "Tenório",
+        "ideb": 4.7,
+        "renda": 49.9,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 16,
+        "municipio": "Uiraúna",
+        "ideb": 4.9,
+        "renda": 47.8,
+        "salario": 1.6
+      }
+    ],
+    "RN": [
+      {
+        "ordem_sorteio": 22,
+        "municipio": "Acari",
+        "ideb": 6.4,
+        "renda": 43.5,
+        "salario": 1.5
+      },
+      {
+        "ordem_sorteio": 16,
+        "municipio": "Açu",
+        "ideb": 4.7,
+        "renda": 44.7,
+        "salario": 1.9
+      },
+      {
+        "ordem_sorteio": 6,
+        "municipio": "Afonso Bezerra",
+        "ideb": 4.3,
+        "renda": 51.5,
+        "salario": 1.6
+      },
+      {
+        "ordem_sorteio": 13,
+        "municipio": "Alto do Rodrigues",
+        "ideb": 6.0,
+        "renda": 42.9,
+        "salario": 2.1
+      },
+      {
+        "ordem_sorteio": 28,
+        "municipio": "Baraúna",
+        "ideb": 5.2,
+        "renda": 46.8,
+        "salario": 2.0
+      },
+      {
+        "ordem_sorteio": 15,
+        "municipio": "Bento Fernandes",
+        "ideb": 3.6,
+        "renda": 52.3,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 11,
+        "municipio": "Caiçara do Rio do Vento",
+        "ideb": 4.2,
+        "renda": 51.6,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 26,
+        "municipio": "Coronel Ezequiel",
+        "ideb": 4.7,
+        "renda": 52.8,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 21,
+        "municipio": "Coronel João Pessoa",
+        "ideb": 4.4,
+        "renda": 52.4,
+        "salario": 2.0
+      },
+      {
+        "ordem_sorteio": 2,
+        "municipio": "Encanto",
+        "ideb": 5.5,
+        "renda": 48.3,
+        "salario": 1.4
+      },
+      {
+        "ordem_sorteio": 5,
+        "municipio": "Ipueira",
+        "ideb": 7.6,
+        "renda": 37.5,
+        "salario": 2.0
+      },
+      {
+        "ordem_sorteio": 12,
+        "municipio": "João Câmara",
+        "ideb": 4.3,
+        "renda": 48.0,
+        "salario": 2.1
+      },
+      {
+        "ordem_sorteio": 8,
+        "municipio": "José da Penha",
+        "ideb": 5.1,
+        "renda": 47.4,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 18,
+        "municipio": "Monte das Gameleiras",
+        "ideb": 4.2,
+        "renda": 50.2,
+        "salario": 2.0
+      },
+      {
+        "ordem_sorteio": 10,
+        "municipio": "Passa e Fica",
+        "ideb": 5.0,
+        "renda": 50.8,
+        "salario": 1.4
+      },
+      {
+        "ordem_sorteio": 20,
+        "municipio": "Pedro Velho",
+        "ideb": 4.1,
+        "renda": 50.9,
+        "salario": 1.9
+      },
+      {
+        "ordem_sorteio": 25,
+        "municipio": "Pendências",
+        "ideb": 4.5,
+        "renda": 47.4,
+        "salario": 1.9
+      },
+      {
+        "ordem_sorteio": 27,
+        "municipio": "Pilões",
+        "ideb": 4.7,
+        "renda": 50.0,
+        "salario": 2.3
+      },
+      {
+        "ordem_sorteio": 4,
+        "municipio": "Riacho da Cruz",
+        "ideb": 5.2,
+        "renda": 50.1,
+        "salario": 1.8
+      },
+      {
+        "ordem_sorteio": 14,
+        "municipio": "Riachuelo",
+        "ideb": 4.4,
+        "renda": 51.5,
+        "salario": 2.9
+      },
+      {
+        "ordem_sorteio": 7,
+        "municipio": "Ruy Barbosa",
+        "ideb": 5.3,
+        "renda": 52.1,
+        "salario": 2.0
+      },
+      {
+        "ordem_sorteio": 1,
+        "municipio": "Santa Cruz",
+        "ideb": 4.9,
+        "renda": 49.0,
+        "salario": 1.6
+      },
+      {
+        "ordem_sorteio": 24,
+        "municipio": "São Francisco do Oeste",
+        "ideb": 5.8,
+        "renda": 44.8,
+        "salario": 1.7
+      },
+      {
+        "ordem_sorteio": 30,
+        "municipio": "São Tomé",
+        "ideb": 3.9,
+        "renda": 50.5,
+        "salario": 2.1
+      },
+      {
+        "ordem_sorteio": 23,
+        "municipio": "Serra Caiada",
+        "ideb": 4.3,
+        "renda": 52.4,
+        "salario": 1.6
+      },
+      {
+        "ordem_sorteio": 9,
+        "municipio": "Sítio Novo",
+        "ideb": 5.0,
+        "renda": 52.9,
+        "salario": 2.3
+      },
+      {
+        "ordem_sorteio": 3,
+        "municipio": "Taipu",
+        "ideb": 4.2,
+        "renda": 50.0,
+        "salario": 1.6
+      },
+      {
+        "ordem_sorteio": 17,
+        "municipio": "Tenente Laurentino Cruz",
+        "ideb": 4.9,
+        "renda": 48.8,
+        "salario": 2.0
+      },
+      {
+        "ordem_sorteio": 29,
+        "municipio": "Várzea",
+        "ideb": 3.9,
+        "renda": 47.2,
+        "salario": 1.6
+      },
+      {
+        "ordem_sorteio": 19,
+        "municipio": "Vera Cruz",
+        "ideb": 5.2,
+        "renda": 47.7,
+        "salario": 1.9
+      }
+    ]
+  }
+}

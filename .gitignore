@@ -4,3 +4,5 @@ __pycache__/
 
 # Arquivo temporário que o Excel cria enquanto a planilha está aberta
 ~$*
+
+.venv/
